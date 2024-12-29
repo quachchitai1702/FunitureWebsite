@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         price: DataTypes.DECIMAL,
     }, {
         sequelize,
-        modelName: 'CartDetailDetail',
+        modelName: 'CartDetail',
     });
     return CartDetail;
 };
