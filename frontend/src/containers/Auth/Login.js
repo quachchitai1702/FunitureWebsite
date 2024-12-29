@@ -10,8 +10,36 @@ import logo3 from '../../assets/logo/logo3.png';
 class Login extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            username: '',
+            password: '',
+            isShowPassword: false,
+        };
     }
 
+    handleOnChangeUsername = (event) => {
+        this.setState({
+            username: event.target.value
+        })
+    }
+
+    handleOnChangePassword = (event) => {
+        this.setState({
+            password: event.target.value
+        })
+    }
+
+    handleShowHidePassword = () => {
+        this.setState({
+            isShowPassword: !this.state.isShowPassword
+        })
+    }
+
+    handleLogin = (event) => {
+        event.preventDefault();
+        console.log('username: ', this.state.username, 'password: ', this.state.password);
+        console.log('all state: ', this.state);
+    }
 
     render() {
         //JSX
@@ -36,15 +64,31 @@ class Login extends Component {
                                 <input
                                     type="text"
                                     placeholder="Username"
-                                    className="input-field" />
-                                <input
-                                    type="password"
-                                    placeholder="Password"
-                                    className="input-field" />
+                                    className="input-field"
+                                    value={this.state.username}
+                                    onChange={(event) => this.handleOnChangeUsername(event)}
+                                />
+                                <div className='password-container' >
+                                    <input
+                                        className='input-field-password'
+                                        type={this.state.isShowPassword ? 'text' : 'password'}
+                                        placeholder="Password"
+                                        onChange={(event) => this.handleOnChangePassword(event)}
+                                        autoComplete='current-password'
+                                    />
+
+                                    <span
+                                        onClick={() => { this.handleShowHidePassword() }}
+                                    >
+                                        <i className={this.state.isShowPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'}></i>
+                                    </span>
+
+                                </div>
+
                                 <a href='#' className='forgotpassword'>Forgot pasword? </a>
                                 <button
                                     type="submit"
-                                    className="login-btn">Sign In</button>
+                                    className="login-btn" onClick={(event) => this.handleLogin(event)} >Sign In</button>
                                 <div className='text-16'>or</div>
                                 <button
                                     type="submit"
@@ -68,7 +112,7 @@ class Login extends Component {
                     </div>
                     <div className='space-50px'></div>
 
-                </div>
+                </div >
 
 
                 <div className="footer">
@@ -104,7 +148,7 @@ class Login extends Component {
                     </div>
                 </div>
 
-            </div>
+            </div >
         )
     }
 }

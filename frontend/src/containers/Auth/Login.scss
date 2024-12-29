@@ -117,6 +117,39 @@
 
                 }
 
+                .password-container {
+                    position: relative;
+
+                    .input-field-password {
+                        margin: 10px 0;
+                        padding: 10px;
+                        border-radius: 5px;
+                        border: 1px solid #ddd;
+                        font-size: $base-size;
+                        outline: none;
+                        font-family: $fontmain;
+                        width: 470px;
+                    }
+
+                    .fa-eye {
+                        position: absolute;
+                        box-sizing: border-box;
+                        top: 50%;
+                        right: 15px;
+                        transform: translateY(-50%);
+                        cursor: pointer;
+                    }
+
+                    .fa-eye-slash {
+                        position: absolute;
+                        box-sizing: border-box;
+                        top: 50%;
+                        right: 15px;
+                        transform: translateY(-50%);
+                        cursor: pointer;
+                    }
+                }
+
                 .forgotpassword {
                     font-family: $fontmain;
                     font-size: 16px;
