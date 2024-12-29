@@ -46,6 +46,16 @@ class Login extends Component {
                                     type="submit"
                                     className="login-btn">Sign In</button>
                                 <div className='text-16'>or</div>
+                                <button
+                                    type="submit"
+                                    className="google-btn">
+                                    <i className="fa-brands fa-google "></i>
+                                    <span className='text'>Sign in with Google</span>
+
+                                </button>
+                                <div>
+
+                                </div>
                                 <div className="signup-container">
                                     <p>
                                         <span>Don't have an account? </span>
@@ -56,8 +66,10 @@ class Login extends Component {
                         </div>
 
                     </div>
+                    <div className='space-50px'></div>
 
                 </div>
+
 
                 <div className="footer">
                     <div className="footer-container">
