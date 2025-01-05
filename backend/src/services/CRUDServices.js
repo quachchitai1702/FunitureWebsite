@@ -1,17 +1,18 @@
 import bcrypt from 'bcryptjs';
 import db from '../models/index';
-import account from '../models/account';
 
 
 
 const salt = bcrypt.genSaltSync(10);
 
 
-
 let createNewAccount = async (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let hashPasswordFromBcrypt = await hashCustomerPassword(data.password);
+            if (!data.password) {
+                throw new Error("Password is required in createNewAccount");
+            }
+            // let hashPasswordFromBcrypt = await hashPassword(data.password);
 
             const newAccount = await db.Account.create({
                 username: data.username,
@@ -19,7 +20,6 @@ let createNewAccount = async (data) => {
                 status: 'active',
                 role: data.role,
             });
-
             resolve(newAccount);
         } catch (e) {
             console.error('Error create new account:', e);
@@ -32,22 +32,23 @@ let createNewAccount = async (data) => {
 let createNewCustomer = async (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // Tạo tài khoản trước khi tạo customer
+            console.log('Data received in createNewCustomer:', data); // Kiểm tra dữ liệu
+            if (!data.password) {
+                throw new Error("Password is required in createNewCustomer");
+            }
+
             const newAccount = await createNewAccount({
                 username: data.email,
                 password: data.password,
                 role: 'customer',
             });
-
-            // Tạo customer mới với accountId là accountId vừa lấy
             await db.Customer.create({
                 name: data.name,
                 email: data.email,
-                password: data.password,
                 phone: data.phone,
                 address: data.address,
-                status: data.status,
-                imageUrl: data.imageUrl,
+                status: data.status || 'active',
+                imageUrl: data.imageUrl || null,
                 accountId: newAccount.id,
             });
             resolve('Create a new customer success');
@@ -61,17 +62,19 @@ let createNewCustomer = async (data) => {
 }
 
 
-
-let hashCustomerPassword = (password) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            var hashPassword = await bcrypt.hash(password, salt);
-            resolve(hashPassword);
-        } catch (e) {
-            reject(e);
-        }
-    })
-}
+// let hashPassword = (password) => {
+//     return new Promise(async (resolve, reject) => {
+//         try {
+//             if (!password) {
+//                 throw new Error("Password is required");
+//             }
+//             let hashPassword = await bcrypt.hash(password, salt);
+//             resolve(hashPassword);
+//         } catch (e) {
+//             reject(e);
+//         }
+//     })
+// }
 
 
 module.exports = {

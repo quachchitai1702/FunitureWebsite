@@ -14,11 +14,12 @@ module.exports = {
                 allowNull: false,
                 references: {
                     model: 'Customers',
-                    key: 'id'
+                    key: 'id',
                 },
+                onDelete: 'CASCADE',
                 onUpdate: 'CASCADE',
-                onDelete: 'CASCADE'
             },
+
             total: {
                 allowNull: false,
                 type: Sequelize.DECIMAL

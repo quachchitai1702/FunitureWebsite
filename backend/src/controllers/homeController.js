@@ -31,24 +31,11 @@ let getCRUD = (req, res) => {
 
 let postCRUD = async (req, res) => {
     try {
-        // const { name, email, password, phone, address, status } = req.body;
-        // const imageUrl = req.file ? req.file.path : null;  // Lấy đường dẫn ảnh từ multer
-
-        // // Gọi service để tạo customer, bao gồm đường dẫn ảnh
-        // let message = await CRUDServices.createNewCustomer({
-        //     name,
-        //     email,
-        //     password,
-        //     phone,
-        //     address,
-        //     status,
-        //     imageUrl,  // Gửi đường dẫn ảnh vào khi tạo customer
-        // });
         let message = await CRUDServices.createNewCustomer(req.body);
         console.log(message);
         return res.send('Post CRUD from server');
     } catch (error) {
-        console.error("Error in postCRUD:", error);  // In ra lỗi nếu có
+        console.error("Error in postCRUD:", error);
         return res.status(500).send('Something went wrong!');
     }
 };
