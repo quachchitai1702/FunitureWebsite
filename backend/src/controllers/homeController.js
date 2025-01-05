@@ -31,6 +31,9 @@ let getCRUD = (req, res) => {
 
 let postCRUD = async (req, res) => {
     try {
+        console.log("Data received in postCRUD:", req.body);  // Log dữ liệu nhận được
+
+
         let message = await CRUDServices.createNewCustomer(req.body);
         console.log(message);
         return res.send('Post CRUD from server');
