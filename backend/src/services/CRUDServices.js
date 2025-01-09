@@ -130,6 +130,25 @@ let updateCustomerInfo = (data) => {
     });
 }
 
+let deleteCustomerById = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let customer = await db.Customer.findOne({
+                where: { id: id },
+            });
+
+            if (customer) {
+                await customer.destroy();
+            }
+            resolve();
+
+        } catch (e) {
+            reject(e);
+        }
+    });
+
+}
+
 
 module.exports = {
     createNewCustomer: createNewCustomer,
@@ -138,4 +157,5 @@ module.exports = {
     getAllCustomer: getAllCustomer,
     getCustomerInfoById: getCustomerInfoById,
     updateCustomerInfo: updateCustomerInfo,
+    deleteCustomerById: deleteCustomerById,
 }

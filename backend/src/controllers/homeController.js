@@ -90,9 +90,6 @@ let displayGetCRUD = async (req, res) => {
     let data = await CRUDServices.getAllCustomer({
         raw: true,
     });
-    console.log('---------------------------------');
-    console.log(data);
-    console.log('---------------------------------');
 
     return res.render('displayCRUD.ejs', {
         dataTable: data,
@@ -145,6 +142,16 @@ let putCRUD = async (req, res) => {
     });
 }
 
+let deleteCRUD = async (req, res) => {
+    let id = req.query.id;
+    if (id) {
+        await CRUDServices.deleteCustomerById(id);
+        return res.send('Delete customer successfully!');
+    }
+    else {
+        return res.send('Customer ID is not found');
+    }
+}
 
 module.exports = {
     getHomePage: getHomePage,
@@ -154,4 +161,5 @@ module.exports = {
     displayGetCRUD: displayGetCRUD,
     getEditCRUD: getEditCRUD,
     putCRUD: putCRUD,
+    deleteCRUD: deleteCRUD,
 }
