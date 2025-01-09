@@ -1,55 +1,35 @@
 import bcrypt from 'bcryptjs';
 import db from '../models/index';
-
-
+import { promises } from 'dns';
+import { raw } from 'body-parser';
 
 const salt = bcrypt.genSaltSync(10);
 
-
-let createNewAccount = async (data) => {
+let createNewAccount = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.password) {
-                throw new Error("Password is required in createNewAccount");
-            }
-            let hashPasswordFromBcrypt = await hashPassword(data.password);
+            let hashPassword = await hashAccountPassword(data.password);
 
-            const newAccount = await db.Account.create({
-                username: data.username,
-                password: hashPasswordFromBcrypt,
-                status: 'active',
-                role: data.role,
+            let newAccount = await db.Account.create({
+                username: data.email,
+                password: hashPassword,
+                status: data.status || 'active',
+                role: data.role || 'customer',
             });
+
             resolve(newAccount);
         } catch (e) {
-            console.error('Error create new account:', e);
             reject(e);
         }
     });
 };
 
-
+// create new customer
 let createNewCustomer = async (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log("Data received in createNewCustomer:", data);  // Log dữ liệu nhận được
-
-            // Kiểm tra các trường cần thiết
-            if (!data || !data.name || !data.email || !data.phone || !data.password) {
-                console.error('Missing fields:', {
-                    name: !data.name,
-                    email: !data.email,
-                    phone: !data.phone,
-                    password: !data.password,
-                });
-                throw new Error("Missing required fields in createNewCustomer");
-            }
-
-            const newAccount = await createNewAccount({
-                username: data.email,
-                password: data.password,
-                role: 'customer',
-            });
+            // Create a new account first
+            let newAccount = await createNewAccount(data);
 
             await db.Customer.create({
                 name: data.name,
@@ -71,14 +51,11 @@ let createNewCustomer = async (data) => {
 
 
 
-
-let hashPassword = (password) => {
+// Hash password
+let hashAccountPassword = (password) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!password) {
-                throw new Error("Password is required");
-            }
-            let hashPassword = await bcrypt.hash(password, salt);
+            let hashPassword = await bcrypt.hashSync(password, salt);
             resolve(hashPassword);
         } catch (e) {
             reject(e);
@@ -86,8 +63,79 @@ let hashPassword = (password) => {
     })
 }
 
+let getAllCustomer = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let customer = db.Customer.findAll({
+                raw: true,
+            });
+            resolve(customer);
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let getCustomerInfoById = (customerId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let customer = await db.Customer.findOne({
+                where: { id: customerId },
+                raw: true,
+            });
+
+            if (customer) {
+                resolve(customer);
+            } else {
+                resolve({});
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+
+}
+
+let updateCustomerInfo = (data) => {
+    return new Promise(async (resolve, reject) => {
+        console.log('data from services:');
+        console.log(data);
+
+        try {
+            // Tìm khách hàng theo ID
+            let customer = await db.Customer.findOne({
+                where: { id: data.id },
+            });
+
+            if (customer) {
+                // Cập nhật thông tin khách hàng
+                customer.name = data.name || customer.name;
+                customer.address = data.address || customer.address;
+                customer.phone = data.phone || customer.phone;
+                customer.imageUrl = data.imageUrl || customer.imageUrl;
+
+                await customer.save();
+                let allCustomers = await db.Customer.findAll({
+                    raw: true,
+                });
+                resolve(allCustomers);
+            } else {
+                reject();
+            }
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
 
 module.exports = {
     createNewCustomer: createNewCustomer,
     createNewAccount: createNewAccount,
+    hashAccountPassword: hashAccountPassword,
+    getAllCustomer: getAllCustomer,
+    getCustomerInfoById: getCustomerInfoById,
+    updateCustomerInfo: updateCustomerInfo,
 }

@@ -31,7 +31,7 @@ module.exports = {
         defaultValue: 'active'
       },
       imageUrl: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING
       },
       accountId: {
