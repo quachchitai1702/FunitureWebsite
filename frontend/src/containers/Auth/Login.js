@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { push } from "connected-react-router";
 import * as actions from "../../store/actions";
 import './Login.scss';
-import { FormattedMessage } from 'react-intl';
+// import { FormattedMessage } from 'react-intl';
 import image1 from '../../assets/Image/signin.png';
 import logo3 from '../../assets/logo/logo3.png';
 
@@ -85,7 +85,7 @@ class Login extends Component {
 
                                 </div>
 
-                                <a href='#' className='forgotpassword'>Forgot pasword? </a>
+                                <button className='forgotpassword'>Forgot pasword? </button>
                                 <button
                                     type="submit"
                                     className="login-btn" onClick={(event) => this.handleLogin(event)} >Sign In</button>

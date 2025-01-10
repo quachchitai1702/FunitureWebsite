@@ -300,7 +300,7 @@
             .r2 {
                 display: flex;
                 flex: 1;
-                justify-content: end;
+                justify-content: flex-end;
                 align-items: center;
 
                 .left-footer {
@@ -342,11 +342,11 @@
             font-family: $fontmain;
             color: $color5;
             width: 100%;
-            text-align: end;
+            text-align: flex-end;
 
 
             .footer-text {
-                justify-content: end;
+                justify-content: flex-end;
             }
         }
 
