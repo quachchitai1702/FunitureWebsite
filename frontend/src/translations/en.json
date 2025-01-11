@@ -21,16 +21,16 @@
     },
     "login": {
         "login": "Login",
-        "username": "Username",
+        "customername": "Customername",
         "password": "Password",
-        "userpass-wrong": "Invalid username or password!"
+        "customerpass-wrong": "Invalid customername or password!"
     },
     "menu": {
         "system": {
             "header": "System",
             "system-administrator": {
                 "header": "System Administrator",
-                "user-manage": "User manage",
+                "customer-manage": "Customer manage",
                 "product-manage": "Package manage",
                 "register-package-group-or-account": "Register service package for group/account"
             },
@@ -40,31 +40,31 @@
         }
     },
     "system": {
-        "user-manage": {
-            "fail-to-load-fouser": "Fail to load system users list",
-            "user-id": "User ID",
-            "usertype": "User type",
-            "username": "Username",
+        "customer-manage": {
+            "fail-to-load-fouser": "Fail to load system customers list",
+            "customer-id": "Customer ID",
+            "customertype": "Customer type",
+            "customername": "Customername",
             "fullname": "Fullname",
             "mobile": "Phone",
             "email": "Email",
             "status": "Status",
-            "add-user": "Add user",
-            "edit-user": "Edit user information",
+            "add-customer": "Add Customer",
+            "edit-customer": "Edit Customer information",
             "password": "Password",
             "retype-password": "Retype password",
-            "add-user-success": "Add user successfully",
-            "edit-user-success": "Change user information successfully",
-            "add-user-fail": "Fail to add user",
-            "edit-user-fail": "Fail to change user information",
-            "del-user-success": "Delete user successfully",
-            "del-user-fail": "Fail to delete user",
+            "add-customer-success": "Add customer successfully",
+            "edit-customer-success": "Change customer information successfully",
+            "add-customer-fail": "Fail to add customer",
+            "edit-customer-fail": "Fail to change customer information",
+            "del-customer-success": "Delete customer successfully",
+            "del-customer-fail": "Fail to delete customer",
             "invalid-input": {
-                "username": "Please fill in username",
+                "customername": "Please fill in customername",
                 "fullname": "Please fill in fullname",
                 "password": "Please fill in password"
             },
-            "sure-delete-user": "Are you sure to delete this user?"
+            "sure-delete-customer": "Are you sure to delete this customer?"
         },
         "product-manage": {
             "fail-to-load-foprtype": "Fail to load packages list",
@@ -108,7 +108,7 @@
             "invalid-selected": {
                 "currentfoProduct": "Invalid package",
                 "currentAssignType": "Invalid assign type",
-                "currentFoUser": "Invalid customer/account group"
+                "currentFocustomer": "Invalid customer/account group"
             },
             "assign-service-package-to-customer-success": "Assign service package to customer successfully",
             "assign-service-package-to-customer-fail": "Fail to assign service package to customer",

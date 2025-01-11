@@ -9,13 +9,13 @@ let handleCustomerLogin = (email, password) => {
             let isExist = await checkCustomerEmail(email);
             if (isExist) {
                 let account = await db.Account.findOne({
-                    attributes: ['username', 'role', 'password'],
-                    where: { username: email },
+                    attributes: ['email', 'role', 'password'],
+                    where: { email: email },
                 });
 
                 if (account) {
                     if (!account.password) {
-                        customerData.errorCode = 2;
+                        customerData.errCode = 2;
                         customerData.errMessage = 'Password is not available';
                         resolve(customerData);
                     }
@@ -26,26 +26,26 @@ let handleCustomerLogin = (email, password) => {
                             raw: true,
 
                         });
-                        customerData.errorCode = 0;
-                        customerData.errMessage = 'OK';
+                        customerData.errCode = 0;
+                        customerData.errMessage = '';
                         // Trả về thông tin khách hàng cần thiết
                         customerData.customer = {
-                            username: account.username,
+                            email: account.email,
                             role: account.role,
                             email: customer.email,
                             name: customer.name,  // Nếu có trường name trong bảng Customer
                             // Thêm các trường khác từ bảng Customer nếu cần
                         };
                     } else {
-                        customerData.errorCode = 3;
+                        customerData.errCode = 3;
                         customerData.errMessage = 'Wrong password';
                     }
                 } else {
-                    customerData.errorCode = 2;
+                    customerData.errCode = 2;
                     customerData.errMessage = 'Account is not found!';
                 }
             } else {
-                customerData.errorCode = 1;
+                customerData.errCode = 1;
                 customerData.errMessage = 'Your email isn’t exist in system. Please try another email';
             }
 

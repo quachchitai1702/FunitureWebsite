@@ -4,9 +4,11 @@ import viewEngine from "./config/viewEngine";
 import initWebRoutes from "./route/web";
 import connectDB from "./config/connectDB";
 import multer from "multer";
+import cors from 'cors';
 require('dotenv').config();
 
 let app = express();
+app.use(cors({ credentials: true, origin: true }));
 
 // Cấu hình multer để xử lý tệp upload
 const storage = multer.diskStorage({

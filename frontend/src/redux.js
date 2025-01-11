@@ -16,6 +16,10 @@ let isDevelopment = environment === "development";
 //hide redux logs
 isDevelopment = false;
 
+// Sử dụng đúng môi trường để bật DevTools
+// isDevelopment = process.env.NODE_ENV === "development";
+
+
 
 export const history = createBrowserHistory({ basename: process.env.REACT_APP_ROUTER_BASE_NAME });
 

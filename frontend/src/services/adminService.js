@@ -6,7 +6,7 @@ const adminService = {
     /**
      * Đăng nhập hệ thống
      * {
-     *  "username": "string",
+     *  "Customername": "string",
      *  "password": "string"
      * }
      */

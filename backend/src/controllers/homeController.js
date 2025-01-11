@@ -33,7 +33,7 @@ let getHomePage = async (req, res) => {
                 {
                     model: db.Account,
                     as: 'account',
-                    attributes: ['username', 'password', 'role', 'status']
+                    attributes: ['email', 'password', 'role', 'status']
                 }
             ]
         });

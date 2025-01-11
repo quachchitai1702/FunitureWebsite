@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      username: {
+      email: {
         allowNull: false,
         type: Sequelize.STRING
       },
@@ -22,6 +22,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       status: {
+
         allowNull: false,
         type: Sequelize.ENUM('active', 'inactive', 'suspended'),
         defaultValue: 'active'

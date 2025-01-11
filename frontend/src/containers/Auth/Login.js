@@ -6,20 +6,23 @@ import './Login.scss';
 // import { FormattedMessage } from 'react-intl';
 import image1 from '../../assets/Image/signin.png';
 import logo3 from '../../assets/logo/logo3.png';
+import { handleLoginApi } from '../../services/customerService';
 
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
+            email: '',
             password: '',
             isShowPassword: false,
+            errMessage: '',
         };
     }
 
-    handleOnChangeUsername = (event) => {
+
+    handleOnChangeEmail = (event) => {
         this.setState({
-            username: event.target.value
+            email: event.target.value
         })
     }
 
@@ -35,10 +38,45 @@ class Login extends Component {
         })
     }
 
-    handleLogin = (event) => {
+    handleLogin = async (event) => {
+        this.setState({
+            errMessage: '',
+        })
         event.preventDefault();
-        console.log('username: ', this.state.username, 'password: ', this.state.password);
-        console.log('all state: ', this.state);
+        // console.log('email: ', this.state.email, 'password: ', this.state.password);
+        // console.log('all state: ', this.state);
+        try {
+            let data = await handleLoginApi(this.state.email, this.state.password)
+
+            // Log dữ liệu trả về từ API
+            // console.log('API response:', data);
+
+            if (data && data.errCode !== 0) {
+                this.setState({
+                    errMessage: data.message,
+                })
+            }
+
+            if (data && data.errCode === 0) {
+                // console.log('Customer data:', data.customer);
+
+                // Gọi action lưu vào Redux
+                this.props.customerLoginSuccess(data.customer);
+
+                // Chuyển hướng sau khi đăng nhập thành công
+                this.props.navigate('/customer-manage');
+            }
+
+
+        } catch (e) {
+            if (e.response) {
+                if (e.response.data) {
+                    this.setState({
+                        errMessage: e.response.data.message,
+                    })
+                }
+            }
+        }
     }
 
     render() {
@@ -62,11 +100,11 @@ class Login extends Component {
                             <div className='text-36'>Sign In</div>
                             <form className="login-form">
                                 <input
-                                    type="text"
-                                    placeholder="Username"
+                                    type="email"
+                                    placeholder="email"
                                     className="input-field"
-                                    value={this.state.username}
-                                    onChange={(event) => this.handleOnChangeUsername(event)}
+                                    value={this.state.email}
+                                    onChange={(event) => this.handleOnChangeEmail(event)}
                                 />
                                 <div className='password-container' >
                                     <input
@@ -86,6 +124,9 @@ class Login extends Component {
                                 </div>
 
                                 <button className='forgotpassword'>Forgot pasword? </button>
+                                <div style={{ color: 'red' }}>
+                                    {this.state.errMessage}
+                                </div>
                                 <button
                                     type="submit"
                                     className="login-btn" onClick={(event) => this.handleLogin(event)} >Sign In</button>
@@ -153,17 +194,30 @@ class Login extends Component {
     }
 }
 
-const mapStateToProps = state => {
+
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         navigate: (path) => dispatch(push(path)),
+//         // adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
+//         // customerLoginFail: () => dispatch(actions.adminLoginFail()),
+//         customerLoginSuccess: (customerInfor) => dispatch(actions.customerLoginSuccess(customerInfor)),
+//     };
+// };
+
+const mapDispatchToProps = (dispatch) => {
     return {
-        language: state.app.language
+        navigate: (path) => dispatch(push(path)),
+        customerLoginSuccess: (customerInfor) => dispatch(actions.customerLoginSuccess(customerInfor)),
     };
 };
 
-const mapDispatchToProps = dispatch => {
+
+const mapStateToProps = (state) => {
+    // console.log('Redux state:', state); // Di chuyển console.log vào đây
     return {
-        navigate: (path) => dispatch(push(path)),
-        adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
-        adminLoginFail: () => dispatch(actions.adminLoginFail()),
+        language: state.app.language,
+        // isLoggedIn: state.app.isLoggedIn,  // Đảm bảo lấy được giá trị isLoggedIn
+        // customerInfor: state.app.customerInfor,  // Lấy customerInfor từ state
     };
 };
 

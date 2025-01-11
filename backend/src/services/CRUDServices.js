@@ -11,7 +11,7 @@ let createNewAccount = (data) => {
             let hashPassword = await hashAccountPassword(data.password);
 
             let newAccount = await db.Account.create({
-                username: data.email,
+                email: data.email,
                 password: hashPassword,
                 status: data.status || 'active',
                 role: data.role || 'customer',
