@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import db from '../models/index';
+import { raw } from 'body-parser';
 
 let handleCustomerLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
@@ -74,7 +75,51 @@ let checkCustomerEmail = (customerEmail) => {
     });
 }
 
+let getAllCustomer = (customerId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let customers = '';
+            // console.log('Customer ID received:', customerId);
+
+            if (customerId === 'ALL') {
+                // console.log('Fetching all customers...');
+                customers = await db.Customer.findAll({
+                    include: {
+                        model: db.Account,
+                        as: 'account',
+                    },
+                    raw: true,
+                });
+            }
+            if (customerId && customerId !== 'ALL') {
+                // console.log(`Fetching customer with ID: ${customerId}`);
+                customers = await db.Customer.findOne({
+                    where: { id: customerId },
+                    include: {
+                        model: db.Account,
+                        as: 'account',
+                    },
+                    raw: true,
+
+                });
+            }
+
+            // if (customers) {
+            //     console.log('Customers found:', customers);
+            // } else {
+            //     console.log('No customers found.');
+            // }
+
+            resolve(customers);
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+
 module.exports = {
     handleCustomerLogin: handleCustomerLogin,
     checkCustomerEmail: checkCustomerEmail,
+    getAllCustomer: getAllCustomer,
 }
