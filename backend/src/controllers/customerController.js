@@ -1,4 +1,6 @@
 import customerService from '../services/customerService';
+const { uploadSingleImage } = require('../config/multerConfig');
+
 
 let handleLogin = async (req, res) => {
     console.log('Request body:', req.body);  // In toàn bộ req.body để kiểm tra
@@ -63,7 +65,57 @@ let handleGetAllCustomer = async (req, res) => {
     }
 }
 
+let handleCreateNewCustomer = async (req, res) => {
+    let message = await customerService.createNewCustomer(req.body);
+    return res.status(200).json(message);
+}
+
+let handleEditCustomer = async (req, res) => {
+    uploadSingleImage(req, res, async (err) => {
+        if (err) {
+            return res.status(400).json({
+                errCode: 1,
+                message: 'Image upload failed',
+            });
+        }
+
+        try {
+            let data = req.body;
+            let file = req.file;
+
+            // Kiểm tra xem có file ảnh hay không
+            if (file) {
+                data.imageUrl = file.filename;
+            }
+
+            let message = await customerService.updateCustomer(data);
+            return res.status(200).json(message);
+        } catch (error) {
+            return res.status(500).json({
+                errCode: 2,
+                message: 'Internal server error',
+            });
+        }
+    });
+};
+
+
+let handleDeleteCustomer = async (req, res) => {
+    if (!req.body.id) {
+        return res.status(200).json({
+            errCode: 1,
+            errMessage: 'Missing required paramaters!'
+        })
+    }
+    let message = await customerService.deleteCustomer(req.body.id);
+    return res.status(200).json(message);
+}
+
 module.exports = {
     handleLogin: handleLogin,
     handleGetAllCustomer: handleGetAllCustomer,
+
+    handleCreateNewCustomer: handleCreateNewCustomer,
+    handleEditCustomer: handleEditCustomer,
+    handleDeleteCustomer: handleDeleteCustomer,
 }

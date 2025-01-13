@@ -2,6 +2,7 @@ import express from "express";
 import homeController from "../controllers/homeController";
 import customerController from "../controllers/customerController.js";
 
+
 let router = express.Router();
 
 let initWebRoute = (app) => {
@@ -19,6 +20,11 @@ let initWebRoute = (app) => {
 
     router.post('/api/login', customerController.handleLogin);
     router.get('/api/get-all-customers', customerController.handleGetAllCustomer);
+
+    router.post('/api/create-new-customer', customerController.handleCreateNewCustomer);
+    router.put('/api/edit-customer', customerController.handleEditCustomer);
+    router.delete('/api/delete-customer', customerController.handleDeleteCustomer);
+
 
     //rest API
     return app.use('/', router);

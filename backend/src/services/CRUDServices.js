@@ -50,7 +50,6 @@ let createNewCustomer = async (data) => {
 };
 
 
-
 // Hash password
 let hashAccountPassword = (password) => {
     return new Promise(async (resolve, reject) => {
