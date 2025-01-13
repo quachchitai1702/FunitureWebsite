@@ -88,6 +88,9 @@ let getAllCustomer = (customerId) => {
                         model: db.Account,
                         as: 'account',
                     },
+                    attributes: {
+                        exclude: ['password']
+                    },
                     raw: true,
                 });
             }
@@ -98,6 +101,9 @@ let getAllCustomer = (customerId) => {
                     include: {
                         model: db.Account,
                         as: 'account',
+                    },
+                    attributes: {
+                        exclude: ['password']
                     },
                     raw: true,
 

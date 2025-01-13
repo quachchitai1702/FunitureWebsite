@@ -151,7 +151,6 @@ class Login extends Component {
                         </div>
 
                     </div>
-                    <div className='space-50px'></div>
 
                 </div >
 

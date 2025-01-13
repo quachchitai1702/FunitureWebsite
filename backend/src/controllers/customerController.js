@@ -25,7 +25,7 @@ let handleLogin = async (req, res) => {
 }
 
 let handleGetAllCustomer = async (req, res) => {
-    let id = req.body.id; // Nếu không có id, mặc định là 'ALL'
+    let id = req.query.id;
 
     if (!id) {
         return res.status(200).json({
@@ -50,7 +50,7 @@ let handleGetAllCustomer = async (req, res) => {
         return res.status(200).json({
             errCode: 0,
             errMessage: 'Customer is found',
-            customers: customers,  // Trả về mảng rỗng nếu không tìm thấy
+            customers: customers,
         });
 
     } catch (error) {

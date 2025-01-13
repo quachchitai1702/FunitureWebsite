@@ -1,15 +1,42 @@
 export const adminMenu = [
     { //hệ thống
-        name: 'menu.system.header', menus: [
+        name: 'Management', menus: [
             {
-                name: 'menu.system.system-administrator.header',
-                subMenus: [
-                    { name: 'menu.system.system-administrator.customer-manage', link: '/system/customer-manage' },
-                    { name: 'menu.system.system-administrator.product-manage', link: '/system/product-manage' },
-                    { name: 'menu.system.system-administrator.register-package-group-or-account', link: '/system/register-package-group-or-account' },
-                ]
+                name: 'Account Information',
+                link: '/system/register-package-group-or-account',
+                icon: 'fa-solid fa-house'
             },
-            // { name: 'menu.system.system-parameter.header', link: '/system/system-parameter' },
+            {
+                name: 'Staff Management',
+                link: '/system/register-package-group-or-account',
+                icon: 'fa-solid fa-users'
+            },
+            {
+                name: 'Customer Management',
+                link: '/system/customer-manage',
+                icon: 'fa-solid fa-user'
+            },
+            {
+                name: 'Categories Management',
+                link: '/system/register-package-group-or-account',
+                icon: 'fa-solid fa-list'
+            },
+            {
+                name: 'Product Management',
+                link: '/system/product-manage',
+                icon: 'fa-solid fa-couch'
+            },
+            {
+                name: 'Order Management',
+                link: '/system/register-package-group-or-account',
+                icon: 'fa-solid fa-cart-shopping'
+            },
+            {
+                name: 'Analytic',
+                link: '/system/customer-manage',
+                icon: 'fa-solid fa-chart-simple'
+            },
+
         ]
     },
 ];

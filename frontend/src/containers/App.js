@@ -18,6 +18,7 @@ import System from '../routes/System';
 
 import { CustomToastCloseButton } from '../components/CustomToast';
 import ConfirmModal from '../components/ConfirmModal';
+import Footer from './Footer/Footer';
 
 class App extends Component {
 
@@ -61,6 +62,9 @@ class App extends Component {
                             pauseOnFocusLoss={true} closeOnClick={false} draggable={false}
                             closeButton={<CustomToastCloseButton />}
                         />
+
+                        {this.props.isLoggedIn && <Footer />}
+
                     </div>
                 </Router>
             </Fragment>

@@ -1,0 +1,77 @@
+@import '../styles/variables';
+@import '../styles/base';
+
+.manage-navigator-menu {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+
+    .menu-group {
+        margin-bottom: 20px;
+
+        .menu-group-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: $color1;
+        }
+
+        .menu-list {
+            padding-left: 20px;
+            margin: 0;
+
+            .menu-item {
+                margin-bottom: 5px;
+
+                .menu-link {
+                    display: flex; // Dùng flex để sắp xếp icon và text
+                    align-items: center; // Căn chỉnh icon và text theo chiều dọc
+                    padding: 8px 10px;
+                    color: $color1 ;
+                    text-decoration: none;
+                    background-color: $color5;
+                    border-radius: 4px;
+                    transition: background-color 0.3s;
+
+                    i {
+                        margin-right: 8px; // Khoảng cách giữa icon và tên
+                        font-size: 18px; // Điều chỉnh kích thước icon
+                    }
+
+                    &:hover {
+                        background-color: $color44;
+                        color: $color5;
+                    }
+                }
+            }
+        }
+    }
+
+    .btn-logout {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        background-color: $color5;
+        color: $color7;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+
+        i {
+            font-size: 20px; // Điều chỉnh kích thước icon logout
+            margin-right: 8px; // Khoảng cách giữa icon và text
+        }
+
+        span {
+            margin-left: 8px; // Khoảng cách giữa icon và chữ "Logout"
+        }
+
+        &:hover {
+            background-color: $color7;
+            color: $color5;
+        }
+    }
+
+
+
+}
