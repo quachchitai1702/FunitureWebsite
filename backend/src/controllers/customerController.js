@@ -13,7 +13,7 @@ let handleLogin = async (req, res) => {
     if (!email || !password) {
         return res.status(500).json({
             errCode: 1,
-            message: 'Missing input parameter!',
+            errMessage: 'Missing input parameter!',
         })
     }
 
@@ -21,7 +21,7 @@ let handleLogin = async (req, res) => {
 
     return res.status(200).json({
         errCode: customerData.errCode,
-        message: customerData.errMessage,
+        errMessage: customerData.errMessage,
         customer: customerData.customer ? customerData.customer : {}
     })
 }
@@ -66,8 +66,8 @@ let handleGetAllCustomer = async (req, res) => {
 }
 
 let handleCreateNewCustomer = async (req, res) => {
-    let message = await customerService.createNewCustomer(req.body);
-    return res.status(200).json(message);
+    let errMessage = await customerService.createNewCustomer(req.body);
+    return res.status(200).json(errMessage);
 }
 
 let handleEditCustomer = async (req, res) => {
@@ -75,7 +75,7 @@ let handleEditCustomer = async (req, res) => {
         if (err) {
             return res.status(400).json({
                 errCode: 1,
-                message: 'Image upload failed',
+                errMessage: 'Image upload failed',
             });
         }
 
@@ -88,12 +88,12 @@ let handleEditCustomer = async (req, res) => {
                 data.imageUrl = file.filename;
             }
 
-            let message = await customerService.updateCustomer(data);
-            return res.status(200).json(message);
+            let errMessage = await customerService.updateCustomer(data);
+            return res.status(200).json(errMessage);
         } catch (error) {
             return res.status(500).json({
                 errCode: 2,
-                message: 'Internal server error',
+                errMessage: 'Internal server error',
             });
         }
     });
@@ -107,8 +107,8 @@ let handleDeleteCustomer = async (req, res) => {
             errMessage: 'Missing required paramaters!'
         })
     }
-    let message = await customerService.deleteCustomer(req.body.id);
-    return res.status(200).json(message);
+    let errMessage = await customerService.deleteCustomer(req.body.id);
+    return res.status(200).json(errMessage);
 }
 
 module.exports = {

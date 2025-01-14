@@ -15,5 +15,10 @@ const getAllCustomers = (inputId) => {
     // });
 }
 
+const createNewCustomerService = (data) => {
+    console.log('check data from service: ', data)
+    return axios.post('/api/create-new-customer', data);
+};
 
-export { handleLoginApi, getAllCustomers }
+
+export { handleLoginApi, getAllCustomers, createNewCustomerService }

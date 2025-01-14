@@ -187,7 +187,7 @@ let createNewCustomer = (data) => {
             if (!isValidPassword(data.password)) {
                 return resolve({
                     errCode: 3,
-                    message: 'Password must be at least 8 characters long!'
+                    errMessage: 'Password must be at least 8 characters long!'
                 });
             }
 
@@ -196,7 +196,7 @@ let createNewCustomer = (data) => {
             if (!isValidPhoneNumber(data.phone)) {
                 return resolve({
                     errCode: 4,
-                    message: 'Phone number must start with 0 and have 10 digits!'
+                    errMessage: 'Phone number must start with 0 and have 10 digits!'
                 });
             }
             //check email
@@ -204,7 +204,7 @@ let createNewCustomer = (data) => {
             if (check === true) {
                 resolve({
                     errCode: 1,
-                    message: 'This email is already used!'
+                    errMessage: 'This email is already used!'
 
                 })
             }
@@ -224,11 +224,10 @@ let createNewCustomer = (data) => {
 
             resolve({
                 errCode: 0,
-                message: 'OK',
+                errMessage: 'Customer created successfully!',
             });
 
         } catch (e) {
-            // console.error('Error create new customer:', e);
             reject(e);
         }
     })
@@ -278,7 +277,7 @@ let updateCustomer = (data, file) => {
             if (!isValidPhoneNumber(data.phone)) {
                 return resolve({
                     errCode: 4,
-                    message: 'Phone number must start with 0 and have 10 digits!'
+                    errMessage: 'Phone number must start with 0 and have 10 digits!'
                 });
             }
 
@@ -324,44 +323,7 @@ let updateCustomer = (data, file) => {
     })
 }
 
-// let searchAndFilterCustomers = (query, status) => {
-//     return new Promise(async (resolve, reject) => {
-//         try {
-//             // Kiểm tra có tìm kiếm không
-//             let whereCondition = {};
-//             if (query) {
-//                 whereCondition = {
-//                     [Op.or]: [
-//                         { name: { [Op.like]: `%${query}%` } },
-//                         { phone: { [Op.like]: `%${query}%` } },
-//                     ],
-//                 };
-//             }
 
-//             // Kiểm tra có lọc theo trạng thái không
-//             if (status) {
-//                 whereCondition.status = status;
-//             }
-
-//             // Tìm kiếm và lọc dữ liệu
-//             let customers = await db.Customer.findAll({
-//                 where: whereCondition,
-//                 include: {
-//                     model: db.Account,
-//                     as: 'account',
-//                 },
-//                 attributes: {
-//                     exclude: ['password'],
-//                 },
-//                 raw: true,
-//             });
-
-//             resolve(customers);
-//         } catch (e) {
-//             reject(e);
-//         }
-//     });
-// };
 
 
 
@@ -379,6 +341,5 @@ module.exports = {
     deleteCustomer: deleteCustomer,
     updateCustomer: updateCustomer,
 
-    // searchAndFilterCustomers: searchAndFilterCustomers,
 
 }

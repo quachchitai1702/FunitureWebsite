@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import ManageNavigator from '../../components/ManageNavigator';
 import { adminMenu } from '../Header/menuApp';
 
-import { getAllCustomers } from '../../services/customerService';
+import { getAllCustomers, createNewCustomerService } from '../../services/customerService';
 import ModalAddCustomer from './ModalAddCustomer';
 
 import './CustomerManage.scss';
@@ -23,15 +23,7 @@ class CustomerManage extends Component {
     }
 
     async componentDidMount() {
-
-        let response = await getAllCustomers('ALL');
-
-        if (response && response.errCode === 0) {
-            this.setState({
-                arrCustomers: response.customers
-            });
-
-        }
+        await this.getAllCustomerFromReact();
     }
 
 
@@ -54,10 +46,35 @@ class CustomerManage extends Component {
         this.setState({ selectedOption: index });
     };
 
+    getAllCustomerFromReact = async () => {
+        let response = await getAllCustomers('ALL');
+        if (response && response.errCode === 0) {
+            this.setState({
+                arrCustomers: response.customers
+            });
+
+        }
+    }
+
     handleAddNewCustomer = () => {
         this.toggleModal();  // Mở modal khi click
     }
 
+    createNewCustomer = async (data) => {
+        try {
+            let response = await createNewCustomerService(data);
+            if (response && response.errCode !== 0) {
+                alert(response.errMessage);
+            } else {
+                await this.getAllCustomerFromReact();
+                this.setState({
+                    modalOpen: false
+                })
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
 
     render() {
@@ -68,12 +85,13 @@ class CustomerManage extends Component {
                 <ModalAddCustomer
                     modalOpen={modalOpen}
                     toggle={this.toggleModal}
+                    createNewCustomer={this.createNewCustomer}
                 />
                 <div className='body'>
-                    <div class="left-side">
+                    <div className="left-side">
                         <ManageNavigator menus={adminMenu} onLinkClick={this.handleOptionClick} />
                     </div>
-                    <div class="right-side">
+                    <div className="right-side">
                         {/* Thanh phía trên bảng dữ liệu */}
                         <div className="top-bar">
                             <h2 className="title">Customer</h2>
@@ -124,7 +142,7 @@ class CustomerManage extends Component {
 
                                             <td>{item.status}</td>
                                             <td>
-                                                <button className="btn-edit" > <i class="fa-solid fa-pen-to-square"></i> </button>
+                                                <button className="btn-edit" > <i className="fa-solid fa-pen-to-square"></i> </button>
                                             </td>
                                             <td>
                                                 <button className="btn-delete" >Delete</button>
