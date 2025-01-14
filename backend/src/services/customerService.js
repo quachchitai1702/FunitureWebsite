@@ -9,6 +9,17 @@ const path = require('path');
 
 const salt = bcrypt.genSaltSync(10);
 
+// Helper function to validate phone number format
+const isValidPhoneNumber = (phone) => {
+    const phoneRegex = /^0\d{9}$/; // Số điện thoại phải bắt đầu bằng 0 và có 10 chữ số
+    return phoneRegex.test(phone);
+};
+
+// Helper function to validate password length
+const isValidPassword = (password) => {
+    return password && password.length >= 8;
+};
+
 
 
 
@@ -37,15 +48,21 @@ let handleCustomerLogin = (email, password) => {
                             raw: true,
 
                         });
+
+                        // Kiểm tra trạng thái của khách hàng
+                        if (customer.status !== 'active') {
+                            customerData.errCode = 4;
+                            customerData.errMessage = 'Your account has been deactivated. Please contact support.';
+                            resolve(customerData);
+                        }
+
                         customerData.errCode = 0;
                         customerData.errMessage = '';
-                        // Trả về thông tin khách hàng cần thiết
                         customerData.customer = {
                             email: account.email,
                             role: account.role,
                             email: customer.email,
-                            name: customer.name,  // Nếu có trường name trong bảng Customer
-                            // Thêm các trường khác từ bảng Customer nếu cần
+                            name: customer.name,
                         };
                     } else {
                         customerData.errCode = 3;
@@ -166,6 +183,22 @@ let createNewAccount = (data) => {
 let createNewCustomer = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
+            //check password
+            if (!isValidPassword(data.password)) {
+                return resolve({
+                    errCode: 3,
+                    message: 'Password must be at least 8 characters long!'
+                });
+            }
+
+            //check phone number
+
+            if (!isValidPhoneNumber(data.phone)) {
+                return resolve({
+                    errCode: 4,
+                    message: 'Phone number must start with 0 and have 10 digits!'
+                });
+            }
             //check email
             let check = await checkCustomerEmail(data.email);
             if (check === true) {
@@ -213,17 +246,13 @@ let deleteCustomer = (customerid) => {
                     errMessage: 'Customer is not exist'
                 })
             }
-            if (foundCustomer) {
 
-                await db.Account.destroy({
-                    where: { id: foundCustomer.accountId },
-                });
+            customer.status = 'inactive';
+            customer.account.status = 'inactive';
 
-                await db.Customer.destroy({
-                    where: { id: customerid },
-                })
+            await customer.save();
+            await customer.account.save();
 
-            }
             resolve({
                 errCode: 0,
                 errMessage: 'Customer is deleted'
@@ -245,6 +274,15 @@ let updateCustomer = (data, file) => {
                     errMessage: 'Missing required parameters'
                 })
             }
+
+            if (!isValidPhoneNumber(data.phone)) {
+                return resolve({
+                    errCode: 4,
+                    message: 'Phone number must start with 0 and have 10 digits!'
+                });
+            }
+
+
             let customer = await db.Customer.findOne({
                 where: { id: data.id },
                 raw: false
@@ -259,7 +297,6 @@ let updateCustomer = (data, file) => {
                 // Kiểm tra nếu có ảnh mới
                 if (data.imageUrl) {
                     // Kiểm tra nếu có ảnh cũ, xóa ảnh cũ trong thư mục
-
                     if (customer.imageUrl) {
                         const oldImagePath = path.join(uploadPath, customer.imageUrl);
                         if (fs.existsSync(oldImagePath)) {
@@ -287,6 +324,45 @@ let updateCustomer = (data, file) => {
     })
 }
 
+// let searchAndFilterCustomers = (query, status) => {
+//     return new Promise(async (resolve, reject) => {
+//         try {
+//             // Kiểm tra có tìm kiếm không
+//             let whereCondition = {};
+//             if (query) {
+//                 whereCondition = {
+//                     [Op.or]: [
+//                         { name: { [Op.like]: `%${query}%` } },
+//                         { phone: { [Op.like]: `%${query}%` } },
+//                     ],
+//                 };
+//             }
+
+//             // Kiểm tra có lọc theo trạng thái không
+//             if (status) {
+//                 whereCondition.status = status;
+//             }
+
+//             // Tìm kiếm và lọc dữ liệu
+//             let customers = await db.Customer.findAll({
+//                 where: whereCondition,
+//                 include: {
+//                     model: db.Account,
+//                     as: 'account',
+//                 },
+//                 attributes: {
+//                     exclude: ['password'],
+//                 },
+//                 raw: true,
+//             });
+
+//             resolve(customers);
+//         } catch (e) {
+//             reject(e);
+//         }
+//     });
+// };
+
 
 
 module.exports = {
@@ -302,5 +378,7 @@ module.exports = {
     createNewAccount: createNewAccount,
     deleteCustomer: deleteCustomer,
     updateCustomer: updateCustomer,
+
+    // searchAndFilterCustomers: searchAndFilterCustomers,
 
 }

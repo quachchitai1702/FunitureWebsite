@@ -5,8 +5,15 @@ const handleLoginApi = (email, password) => {
 }
 
 const getAllCustomers = (inputId) => {
-    //template string
     return axios.get(`/api/get-all-customers?id=${inputId}`);
+
+    // return axios.get(`/api/get-all-customers`, {
+    //     params: {
+    //         query: query,
+    //         status: status
+    //     }
+    // });
 }
+
 
 export { handleLoginApi, getAllCustomers }

@@ -6,6 +6,7 @@ import ManageNavigator from '../../components/ManageNavigator';
 import { adminMenu } from '../Header/menuApp';
 
 import { getAllCustomers } from '../../services/customerService';
+import ModalAddCustomer from './ModalAddCustomer';
 
 import './CustomerManage.scss';
 
@@ -15,21 +16,31 @@ class CustomerManage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            arrCustomers: []
+            arrCustomers: [],
+            modalOpen: false
 
         }
     }
 
     async componentDidMount() {
+
         let response = await getAllCustomers('ALL');
+
         if (response && response.errCode === 0) {
             this.setState({
                 arrCustomers: response.customers
+            });
 
-            })
         }
-
     }
+
+
+    toggleModal = () => {
+        this.setState(prevState => ({
+            modalOpen: !prevState.modalOpen
+        }));
+    };
+
 
     /** life cycle
      * run component:
@@ -43,18 +54,51 @@ class CustomerManage extends Component {
         this.setState({ selectedOption: index });
     };
 
+    handleAddNewCustomer = () => {
+        this.toggleModal();  // Mở modal khi click
+    }
+
+
 
     render() {
         console.log('check render', this.state)
-        let arrCustomers = this.state.arrCustomers;
+        const { arrCustomers, modalOpen } = this.state;
         return (
             <div className="page-container">
+                <ModalAddCustomer
+                    modalOpen={modalOpen}
+                    toggle={this.toggleModal}
+                />
                 <div className='body'>
                     <div class="left-side">
                         <ManageNavigator menus={adminMenu} onLinkClick={this.handleOptionClick} />
                     </div>
                     <div class="right-side">
-                        <h1>Welcome to the Admin Dashboard</h1>
+                        {/* Thanh phía trên bảng dữ liệu */}
+                        <div className="top-bar">
+                            <h2 className="title">Customer</h2>
+                            <div className="search-filter">
+                                {/* Thanh tìm kiếm */}
+                                <div className="search-filter">
+                                    <input
+                                        type="text"
+                                        placeholder="Search by name or phone..."
+                                        className="search-input"
+                                        onChange={this.handleSearch}
+                                    />
+                                    <select className="status-filter" onChange={this.handleFilterStatus}>
+                                        <option value="">All Status</option>
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+
+                                {/* Nút tạo khách hàng mới */}
+                                <button className="btn-create" onClick={() => this.handleAddNewCustomer()}>
+                                    Create New Customer
+                                </button>
+                            </div>
+                        </div>
                         <table className='information-table' >
                             <thead>
                                 <tr>
@@ -65,7 +109,6 @@ class CustomerManage extends Component {
                                     <th>Status</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
-
 
                                 </tr>
                             </thead>
@@ -102,8 +145,10 @@ class CustomerManage extends Component {
 
         );
     }
-
 }
+
+
+
 
 const mapStateToProps = state => {
     return {
