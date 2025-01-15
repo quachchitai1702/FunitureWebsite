@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import { debounce } from 'lodash';
+
 
 import ManageNavigator from '../../components/ManageNavigator';
 import { adminMenu } from '../Header/menuApp';
 
-import { getAllCustomers, createNewCustomerService } from '../../services/customerService';
+import { getAllCustomers, createNewCustomerService, deleteCustomerService } from '../../services/customerService';
 import ModalAddCustomer from './ModalAddCustomer';
+import { emitter } from '../../utils/emitter';
 
 import './CustomerManage.scss';
 
@@ -17,7 +20,9 @@ class CustomerManage extends Component {
         super(props);
         this.state = {
             arrCustomers: [],
-            modalOpen: false
+            modalOpen: false,
+            searchQuery: ''
+
 
         }
     }
@@ -47,14 +52,14 @@ class CustomerManage extends Component {
     };
 
     getAllCustomerFromReact = async () => {
-        let response = await getAllCustomers('ALL');
+        let response = await getAllCustomers('ALL', '', '');
         if (response && response.errCode === 0) {
             this.setState({
                 arrCustomers: response.customers
             });
-
         }
     }
+
 
     handleAddNewCustomer = () => {
         this.toggleModal();  // Mở modal khi click
@@ -70,11 +75,58 @@ class CustomerManage extends Component {
                 this.setState({
                     modalOpen: false
                 })
+
+                emitter.emit('EVENT_CLEAR_MODAL_DATA')
             }
         } catch (e) {
             console.log(e);
         }
     }
+
+
+    handleDelelteCustomer = async (customer) => {
+        try {
+            let res = await deleteCustomerService(customer.id)
+            if (res && res.errCode === 0) {
+                await this.getAllCustomerFromReact();
+            } else {
+                alert(res.errMessage)
+            }
+        } catch (e) {
+            console.log(e);
+
+        }
+    }
+
+    handleFilterStatus = async (e) => {
+        const status = e.target.value;
+        console.log('Selected status:', status);
+        let response = await getAllCustomers('ALL', status, '');
+        if (response && response.errCode === 0) {
+            this.setState({
+                arrCustomers: response.customers
+            });
+        }
+    }
+
+    handleSearch = debounce(async (e) => {
+        const searchQuery = e.target.value.trim();
+
+        this.setState({ searchQuery });
+
+        let response = await getAllCustomers('ALL', '', searchQuery);
+        if (response && response.errCode === 0) {
+            this.setState({
+                arrCustomers: response.customers
+            });
+        } else {
+            this.setState({
+                arrCustomers: []
+            });
+        }
+    }, 500);
+
+
 
 
     render() {
@@ -101,7 +153,6 @@ class CustomerManage extends Component {
                                     <input
                                         type="text"
                                         placeholder="Search by name or phone..."
-                                        className="search-input"
                                         onChange={this.handleSearch}
                                     />
                                     <select className="status-filter" onChange={this.handleFilterStatus}>
@@ -132,20 +183,22 @@ class CustomerManage extends Component {
                             </thead>
                             <tbody>
                                 {arrCustomers && arrCustomers.map((item, index) => {
-                                    console.log('check map', item, index);
                                     return (
                                         <tr key={index}>
                                             <td>{item.id}</td>
                                             <td>{item.name}</td>
                                             <td>{item.phone}</td>
                                             <td>{item.address}</td>
-
                                             <td>{item.status}</td>
                                             <td>
-                                                <button className="btn-edit" > <i className="fa-solid fa-pen-to-square"></i> </button>
+                                                <button className="btn-edit">
+                                                    <i className="fa-solid fa-pen-to-square"></i>
+                                                </button>
                                             </td>
                                             <td>
-                                                <button className="btn-delete" >Delete</button>
+                                                <button className="btn-delete"
+                                                    onClick={() => this.handleDelelteCustomer(item)}
+                                                >Delete</button>
                                             </td>
                                         </tr>
                                     );

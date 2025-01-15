@@ -27,20 +27,19 @@ let handleLogin = async (req, res) => {
 }
 
 let handleGetAllCustomer = async (req, res) => {
-    let id = req.query.id;
+    let { id, status, searchQuery } = req.query;
 
     if (!id) {
         return res.status(200).json({
             errCode: 1,
-            errMessage: 'Missing reuired parameters',
+            errMessage: 'Missing required parameters (id)',
             customers: []
-        })
+        });
     }
 
     try {
-        let customers = await customerService.getAllCustomer(id);
+        let customers = await customerService.getAllCustomer(id, status, searchQuery);
 
-        // Kiểm tra nếu không tìm thấy khách hàng
         if (!customers || (Array.isArray(customers) && customers.length === 0)) {
             return res.status(404).json({
                 errCode: 1,
@@ -51,7 +50,7 @@ let handleGetAllCustomer = async (req, res) => {
 
         return res.status(200).json({
             errCode: 0,
-            errMessage: 'Customer is found',
+            errMessage: 'Customer found',
             customers: customers,
         });
 
@@ -63,7 +62,9 @@ let handleGetAllCustomer = async (req, res) => {
             customers: []
         });
     }
-}
+};
+
+
 
 let handleCreateNewCustomer = async (req, res) => {
     let errMessage = await customerService.createNewCustomer(req.body);
@@ -108,6 +109,7 @@ let handleDeleteCustomer = async (req, res) => {
         })
     }
     let errMessage = await customerService.deleteCustomer(req.body.id);
+
     return res.status(200).json(errMessage);
 }
 

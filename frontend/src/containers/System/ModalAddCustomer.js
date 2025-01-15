@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { emitter } from '../../utils/emitter';
 
 class ModalAddCustomer extends React.Component {
 
@@ -13,6 +14,21 @@ class ModalAddCustomer extends React.Component {
             address: '',
         }
 
+        this.listenToEmitter();
+
+    }
+
+    listenToEmitter() {
+        emitter.on('EVENT_CLEAR_MODAL_DATA', () => {
+            //reset modal
+            this.setState({
+                email: '',
+                password: '',
+                name: '',
+                phone: '',
+                address: '',
+            })
+        })
     }
 
     componentDidMount() {

@@ -2,6 +2,8 @@ import bcrypt from 'bcryptjs';
 import db from '../models/index';
 import { raw } from 'body-parser';
 import multer from 'multer';
+const { Op } = require('sequelize');
+
 
 const { uploadSingleImage } = require('../config/multerConfig');
 const fs = require('fs');
@@ -102,15 +104,32 @@ let checkCustomerEmail = (customerEmail) => {
     });
 }
 
-let getAllCustomer = (customerId) => {
+const getAllCustomer = (id, status, searchQuery) => {
     return new Promise(async (resolve, reject) => {
         try {
             let customers = '';
-            // console.log('Customer ID received:', customerId);
+            let whereCondition = {};
 
-            if (customerId === 'ALL') {
-                // console.log('Fetching all customers...');
+            // Kiểm tra giá trị searchQuery
+            console.log("searchQuery in backend:", searchQuery);
+
+            if (searchQuery) {
+                whereCondition = {
+                    [Op.or]: [
+                        { name: { [Op.like]: `%${searchQuery}%` } },  // Tìm kiếm theo tên
+                        { phone: { [Op.like]: `%${searchQuery}%` } }  // Tìm kiếm theo số điện thoại
+                    ]
+                };
+                console.log("whereCondition in backend:", whereCondition);
+            }
+
+            // Kiểm tra nếu có điều kiện tìm kiếm, nó sẽ áp dụng vào query
+            if (id === 'ALL') {
                 customers = await db.Customer.findAll({
+                    where: {
+                        ...whereCondition,  // Điều kiện tìm kiếm
+                        ...(status && { status: status })  // Lọc theo trạng thái nếu có
+                    },
                     include: {
                         model: db.Account,
                         as: 'account',
@@ -120,11 +139,9 @@ let getAllCustomer = (customerId) => {
                     },
                     raw: true,
                 });
-            }
-            if (customerId && customerId !== 'ALL') {
-                // console.log(`Fetching customer with ID: ${customerId}`);
+            } else {
                 customers = await db.Customer.findOne({
-                    where: { id: customerId },
+                    where: { id: id },
                     include: {
                         model: db.Account,
                         as: 'account',
@@ -133,22 +150,17 @@ let getAllCustomer = (customerId) => {
                         exclude: ['password']
                     },
                     raw: true,
-
                 });
             }
-
-            // if (customers) {
-            //     console.log('Customers found:', customers);
-            // } else {
-            //     console.log('No customers found.');
-            // }
-
             resolve(customers);
         } catch (e) {
             reject(e);
         }
     });
 };
+
+
+
 
 let hashAccountPassword = (password) => {
     return new Promise(async (resolve, reject) => {
@@ -238,31 +250,45 @@ let deleteCustomer = (customerid) => {
         try {
             let foundCustomer = await db.Customer.findOne({
                 where: { id: customerid },
-            })
+                include: [{
+                    model: db.Account,
+                    as: 'account'
+                }]
+            });
+
             if (!foundCustomer) {
                 resolve({
                     errCode: 2,
-                    errMessage: 'Customer is not exist'
-                })
+                    errMessage: 'Customer does not exist'
+                });
+                return;
             }
 
-            customer.status = 'inactive';
-            customer.account.status = 'inactive';
+            if (foundCustomer.account) {
+                foundCustomer.account.status = 'inactive';
+                await foundCustomer.account.save();
+            }
 
-            await customer.save();
-            await customer.account.save();
+            foundCustomer.status = 'inactive';
+            await foundCustomer.save();
 
             resolve({
                 errCode: 0,
-                errMessage: 'Customer is deleted'
-            })
+                errMessage: 'Customer status updated to inactive'
+            });
+
 
         } catch (e) {
-            reject(e);
-
+            console.log('Error deleting customer:', e);
+            reject({
+                errCode: 1,
+                errMessage: 'An error occurred while updating the customer'
+            });
         }
-    })
+    });
 }
+
+
 
 let updateCustomer = (data, file) => {
     return new Promise(async (resolve, reject) => {
