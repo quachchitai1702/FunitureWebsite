@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { emitter } from '../../utils/emitter';
+import './ModalAddCustomer.scss';
 
 class ModalAddCustomer extends React.Component {
 
@@ -72,7 +73,7 @@ class ModalAddCustomer extends React.Component {
     render() {
         return (
             <Modal
-                isOpen={this.props.modalOpen}
+                isOpen={this.props.isOpenAddModal}
                 toggle={this.props.toggle}
                 className='modal-customer-container'
                 size='lg'

@@ -72,33 +72,43 @@ let handleCreateNewCustomer = async (req, res) => {
 }
 
 let handleEditCustomer = async (req, res) => {
-    uploadSingleImage(req, res, async (err) => {
-        if (err) {
+    try {
+        let data = req.body;  // Lấy dữ liệu từ body gửi lên
+
+        // Kiểm tra các trường dữ liệu bắt buộc
+        if (!data.id || !data.name || !data.phone || !data.address || !data.status) {
             return res.status(400).json({
-                errCode: 1,
-                errMessage: 'Image upload failed',
-            });
-        }
-
-        try {
-            let data = req.body;
-            let file = req.file;
-
-            // Kiểm tra xem có file ảnh hay không
-            if (file) {
-                data.imageUrl = file.filename;
-            }
-
-            let errMessage = await customerService.updateCustomer(data);
-            return res.status(200).json(errMessage);
-        } catch (error) {
-            return res.status(500).json({
                 errCode: 2,
-                errMessage: 'Internal server error',
+                errMessage: 'Missing required fields!',
             });
         }
-    });
+
+        console.log('Received data for update:', data);  // Log dữ liệu nhận được
+
+        // Kiểm tra lại id có giá trị hợp lệ
+        if (!data.id) {
+            return res.status(400).json({
+                errCode: 2,
+                errMessage: 'Customer ID is missing!',
+            });
+        }
+
+        // Gọi service cập nhật khách hàng
+
+        let errMessage = await customerService.updateCustomer(data);
+        return res.status(200).json(errMessage);
+    } catch (error) {
+        console.error('Error during customer update:', error); // Log lỗi chi tiết
+
+        return res.status(500).json({
+            errCode: 3,
+            errMessage: 'Internal server error',
+        });
+    }
 };
+
+
+
 
 
 let handleDeleteCustomer = async (req, res) => {

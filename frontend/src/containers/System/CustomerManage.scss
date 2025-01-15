@@ -1,6 +1,7 @@
 @import '../styles/variables';
 @import '../styles/base';
 
+//Page
 .page-container {
     background-color: $color2;
     display: flex;
@@ -114,7 +115,7 @@
                     border-radius: 4px;
                 }
 
-                .btn-create {
+                .btn-create-new {
                     padding: 8px 16px;
                     background-color: $color4;
                     color: white;
@@ -124,7 +125,13 @@
                     font-weight: bold;
                 }
 
-                .btn-create:hover {
+                .inputSearch {
+                    padding: 8px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                }
+
+                .btn-create-new:hover {
                     background-color: $color44;
                 }
             }
@@ -186,66 +193,4 @@
         }
 
     }
-}
-
-.modal-customer-container {
-    .modal-content {
-        .modal-header {
-            background-color: $color4;
-
-            button {
-                background-color: transparent;
-                border: none;
-                font-size: 20px;
-                color: $color5;
-            }
-        }
-
-    }
-
-    .modal-customer-body {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-
-
-        .input-container {
-            display: flex;
-            flex-direction: column;
-            width: 49%;
-
-
-            &.input-m-width {
-                width: 100%;
-            }
-
-
-            input {
-                border-radius: 3px;
-                height: 30px;
-                border: 1px solid gray;
-                padding-left: 5px;
-                padding-right: 5px;
-            }
-        }
-    }
-
-    .Btn-cancel {
-        padding-left: 7px;
-        padding-right: 7px;
-        border: 1px;
-        background-color: $color5;
-        color: $color4;
-        outline: 1px solid #532E1C;
-
-    }
-
-    .Btn-create {
-        padding-left: 10px;
-        padding-right: 10px;
-        background-color: $color4;
-
-
-    }
-
 }

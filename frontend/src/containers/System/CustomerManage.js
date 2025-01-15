@@ -7,8 +7,14 @@ import { debounce } from 'lodash';
 import ManageNavigator from '../../components/ManageNavigator';
 import { adminMenu } from '../Header/menuApp';
 
-import { getAllCustomers, createNewCustomerService, deleteCustomerService } from '../../services/customerService';
+import {
+    getAllCustomers,
+    createNewCustomerService,
+    deleteCustomerService,
+    editCustomerService
+} from '../../services/customerService';
 import ModalAddCustomer from './ModalAddCustomer';
+import ModalEditCustomer from './ModalEditCustomer';
 import { emitter } from '../../utils/emitter';
 
 import './CustomerManage.scss';
@@ -20,8 +26,10 @@ class CustomerManage extends Component {
         super(props);
         this.state = {
             arrCustomers: [],
-            modalOpen: false,
-            searchQuery: ''
+            isOpenAddModal: false,
+            isOpenEditModal: false,
+            searchQuery: '',
+            customerEdit: {},
 
 
         }
@@ -34,7 +42,15 @@ class CustomerManage extends Component {
 
     toggleModal = () => {
         this.setState(prevState => ({
-            modalOpen: !prevState.modalOpen
+            isOpenAddModal: !prevState.isOpenAddModal,
+
+        }));
+    };
+
+    toggleEditModal = () => {
+        this.setState(prevState => ({
+            isOpenEditModal: !prevState.isOpenEditModal,
+
         }));
     };
 
@@ -73,7 +89,7 @@ class CustomerManage extends Component {
             } else {
                 await this.getAllCustomerFromReact();
                 this.setState({
-                    modalOpen: false
+                    isOpenAddModal: false
                 })
 
                 emitter.emit('EVENT_CLEAR_MODAL_DATA')
@@ -126,19 +142,58 @@ class CustomerManage extends Component {
         }
     }, 500);
 
+    handleEditCustomer = (customer) => {
+        console.log('customer: ', customer);
+        this.setState({
+            isOpenEditModal: true,
+            customerEdit: customer,
+        })
+
+    }
+
+    doEditCustomer = async (customer) => {
+        try {
+            let res = await editCustomerService(customer);
+            if (res && res.errCode === 0) {
+                this.setState({
+                    isOpenEditModal: false
+                })
+
+                await this.getAllCustomerFromReact();
+            } else {
+                alert(res.errMessage);
+            }
+        } catch (e) {
+            console.log(e)
+        }
+
+    }
+
 
 
 
     render() {
-        console.log('check render', this.state)
-        const { arrCustomers, modalOpen } = this.state;
+        // console.log('check render', this.state)
+        const { arrCustomers, isOpenAddModal, isOpenEditModal } = this.state;
         return (
             <div className="page-container">
                 <ModalAddCustomer
-                    modalOpen={modalOpen}
+                    isOpenAddModal={isOpenAddModal}
                     toggle={this.toggleModal}
                     createNewCustomer={this.createNewCustomer}
                 />
+
+                {
+                    this.state.isOpenEditModal &&
+                    <ModalEditCustomer
+                        isOpenEditModal={isOpenEditModal}
+                        toggle={this.toggleEditModal}
+                        currentCustomer={this.state.customerEdit}
+                        editCustomer={this.doEditCustomer}
+                    />
+                }
+
+
                 <div className='body'>
                     <div className="left-side">
                         <ManageNavigator menus={adminMenu} onLinkClick={this.handleOptionClick} />
@@ -163,7 +218,7 @@ class CustomerManage extends Component {
                                 </div>
 
                                 {/* Nút tạo khách hàng mới */}
-                                <button className="btn-create" onClick={() => this.handleAddNewCustomer()}>
+                                <button className="btn-create-new" onClick={() => this.handleAddNewCustomer()}>
                                     Create New Customer
                                 </button>
                             </div>
@@ -192,7 +247,9 @@ class CustomerManage extends Component {
                                             <td>{item.status}</td>
                                             <td>
                                                 <button className="btn-edit">
-                                                    <i className="fa-solid fa-pen-to-square"></i>
+                                                    <i className="fa-solid fa-pen-to-square"
+                                                        onClick={() => this.handleEditCustomer(item)}
+                                                    ></i>
                                                 </button>
                                             </td>
                                             <td>

@@ -1,0 +1,150 @@
+@import '../styles/variables';
+@import '../styles/base';
+
+//Add Custoner Modal
+.modal-customer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .modal-customer-body {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        padding: 20px;
+
+        .form-section {
+            width: 60%;
+            /* Phần chỉnh sửa thông tin khách hàng */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            .input-container {
+                margin-bottom: 15px;
+                width: 100%;
+
+                &.input-m-width {
+                    width: 100%;
+                }
+
+                label {
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                }
+
+                input {
+                    width: 100%;
+                    padding: 10px;
+                    font-size: 16px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    box-sizing: border-box;
+                }
+
+                select {
+                    width: 100%;
+                    padding: 6px;
+                    font-size: 16px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                }
+
+                select {
+                    padding: 10px;
+                }
+            }
+
+            .input-m-width {
+                width: 50%;
+                /* Giới hạn chiều rộng của trường địa chỉ */
+            }
+        }
+
+        .image-preview-section {
+            width: 35%;
+            /* Phần hiển thị ảnh bên phải */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+
+            label {
+                font-weight: bold;
+            }
+
+            input[type="file"] {
+                margin-top: 10px;
+            }
+
+            .Btn-upload {
+                background-color: #007bff;
+                color: white;
+                font-size: 16px;
+                padding: 8px 15px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #0056b3;
+                }
+            }
+
+            .image-preview-container {
+                margin-top: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                max-width: 150px;
+
+                .preview-image {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 8px;
+                }
+
+                p {
+                    color: #888;
+                }
+            }
+        }
+    }
+
+    .Btn-cancel {
+        padding-left: 7px;
+        padding-right: 7px;
+        border: 1px;
+        background-color: $color5;
+        color: $color4;
+        outline: 1px solid #532E1C;
+    }
+
+    .Btn-create {
+        width: 100px;
+        font-size: 16px;
+        margin: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .Btn-cancel {
+        background-color: #f8f9fa;
+        border: 1px solid #ccc;
+    }
+
+    .Btn-submit {
+        padding-left: 10px;
+        padding-right: 10px;
+        background-color: $color4;
+    }
+
+    // .Btn-submit:hover {
+    //     background-color: #218838;
+    // }
+
+    // .Btn-cancel:hover {
+    //     background-color: #e2e6ea;
+    // }
+}

@@ -290,64 +290,95 @@ let deleteCustomer = (customerid) => {
 
 
 
-let updateCustomer = (data, file) => {
+let updateCustomer = (data) => {
     return new Promise(async (resolve, reject) => {
+        const transaction = await db.sequelize.transaction();
         try {
+
+            // console.log('data id:', data.id)
+
             if (!data.id) {
-                resolve({
+                console.log('Missing customer ID:', data);
+                return resolve({
                     errCode: 2,
-                    errMessage: 'Missing required parameters'
-                })
+                    errMessage: 'Missing required parameters',
+                });
             }
 
             if (!isValidPhoneNumber(data.phone)) {
                 return resolve({
                     errCode: 4,
-                    errMessage: 'Phone number must start with 0 and have 10 digits!'
+                    errMessage: 'Phone number must start with 0 and have 10 digits!',
                 });
             }
-
 
             let customer = await db.Customer.findOne({
                 where: { id: data.id },
-                raw: false
-            })
-            if (customer) {
+                raw: false,
+            });
+
+            // console.log('customer: ', customer)
 
 
-                // Cập nhật thông tin khách hàng, bao gồm ảnh mới nếu có
-                customer.name = data.name;
-                customer.phone = data.phone;
-                customer.address = data.address;
-                // Kiểm tra nếu có ảnh mới
-                if (data.imageUrl) {
-                    // Kiểm tra nếu có ảnh cũ, xóa ảnh cũ trong thư mục
-                    if (customer.imageUrl) {
-                        const oldImagePath = path.join(uploadPath, customer.imageUrl);
-                        if (fs.existsSync(oldImagePath)) {
-                            fs.unlinkSync(oldImagePath); // Xóa ảnh cũ
-                        }
-                    }
-                    customer.imageUrl = data.imageUrl;
-                }
-                await customer.save()
-
-                resolve({
-                    errCode: 0,
-                    errMessage: 'Update succeeds'
-                });
-            }
-            else {
-                resolve({
+            if (!customer) {
+                await transaction.rollback();  // Rollback transaction
+                return resolve({
                     errCode: 1,
-                    errMessage: 'Customer not found!'
+                    errMessage: 'Customer not found!',
                 });
             }
+
+            // Tìm Account liên kết với Customer
+            let account = await db.Account.findOne({
+                where: { id: customer.accountId },
+                raw: false,
+            });
+
+            // console.log('account: ', account)
+
+
+            if (!account) {
+                await transaction.rollback();  // Rollback transaction
+                return resolve({
+                    errCode: 3,
+                    errMessage: 'Account not found!',
+                });
+            }
+
+            // Cập nhật thông tin Customer
+            customer.name = data.name;
+            customer.phone = data.phone;
+            customer.address = data.address;
+            customer.status = data.status;
+
+            // Cập nhật trạng thái trong Account
+            account.status = data.status;
+
+            // Cập nhật ảnh nếu có
+            if (data.imageUrl) {
+                customer.imageUrl = data.imageUrl;  // Chỉ cập nhật giá trị imageUrl từ dữ liệu nhận được
+            }
+
+            // Lưu cả Customer và Account
+            await customer.save({ transaction });
+            await account.save({ transaction });
+
+            // Hoàn thành transaction
+            await transaction.commit();
+
+            return resolve({
+                errCode: 0,
+                errMessage: 'Update succeeds',
+            });
         } catch (e) {
+            await transaction.rollback();  // Rollback transaction
+            console.error('Error during customer update:', e);
             reject(e);
         }
-    })
-}
+    });
+};
+
+
 
 
 
