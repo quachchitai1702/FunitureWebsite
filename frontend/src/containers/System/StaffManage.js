@@ -8,35 +8,35 @@ import ManageNavigator from '../../components/StaffNavigator';
 import { adminMenu } from '../Header/menuApp';
 
 import {
-    getAllCustomers,
-    createNewCustomerService,
-    deleteCustomerService,
-    editCustomerService
-} from '../../services/customerService';
-import ModalAddCustomer from './ModalAddCustomer';
-import ModalEditCustomer from './ModalEditCustomer';
+    getAllStaffs,
+    createNewStaffService,
+    deleteStaffService,
+    editStaffService
+} from '../../services/staffService';
+import ModalAddStaff from './ModalAddStaff';
+import ModalEditStaff from './ModalEditStaff';
 import { emitter } from '../../utils/emitter';
 
-import './CustomerManage.scss';
+import './StaffManage.scss';
 
 
-class CustomerManage extends Component {
+class StaffManage extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            arrCustomers: [],
+            arrStaffs: [],
             isOpenAddModal: false,
             isOpenEditModal: false,
             searchQuery: '',
-            customerEdit: {},
+            staffEdit: {},
 
 
         }
     }
 
     async componentDidMount() {
-        await this.getAllCustomerFromReact();
+        await this.getAllStaffFromReact();
     }
 
 
@@ -67,27 +67,27 @@ class CustomerManage extends Component {
         this.setState({ selectedOption: index });
     };
 
-    getAllCustomerFromReact = async () => {
-        let response = await getAllCustomers('ALL', '', '');
+    getAllStaffFromReact = async () => {
+        let response = await getAllStaffs('ALL', '', '');
         if (response && response.errCode === 0) {
             this.setState({
-                arrCustomers: response.customers
+                arrStaffs: response.staffs
             });
         }
     }
 
 
-    handleAddNewCustomer = () => {
+    handleAddNewStaff = () => {
         this.toggleModal();  // Mở modal khi click
     }
 
-    createNewCustomer = async (data) => {
+    createNewStaff = async (data) => {
         try {
-            let response = await createNewCustomerService(data);
+            let response = await createNewStaffService(data);
             if (response && response.errCode !== 0) {
                 alert(response.errMessage);
             } else {
-                await this.getAllCustomerFromReact();
+                await this.getAllStaffFromReact();
                 this.setState({
                     isOpenAddModal: false
                 })
@@ -100,11 +100,11 @@ class CustomerManage extends Component {
     }
 
 
-    handleDelelteCustomer = async (customer) => {
+    handleDelelteStaff = async (staff) => {
         try {
-            let res = await deleteCustomerService(customer.id)
+            let res = await deleteStaffService(staff.id)
             if (res && res.errCode === 0) {
-                await this.getAllCustomerFromReact();
+                await this.getAllStaffFromReact();
             } else {
                 alert(res.errMessage)
             }
@@ -117,10 +117,10 @@ class CustomerManage extends Component {
     handleFilterStatus = async (e) => {
         const status = e.target.value;
         console.log('Selected status:', status);
-        let response = await getAllCustomers('ALL', status, '');
+        let response = await getAllStaffs('ALL', status, '');
         if (response && response.errCode === 0) {
             this.setState({
-                arrCustomers: response.customers
+                arrStaffs: response.staffs
             });
         }
     }
@@ -130,36 +130,36 @@ class CustomerManage extends Component {
 
         this.setState({ searchQuery });
 
-        let response = await getAllCustomers('ALL', '', searchQuery);
+        let response = await getAllStaffs('ALL', '', searchQuery);
         if (response && response.errCode === 0) {
             this.setState({
-                arrCustomers: response.customers
+                arrStaffs: response.staffs
             });
         } else {
             this.setState({
-                arrCustomers: []
+                arrStaffs: []
             });
         }
     }, 500);
 
-    handleEditCustomer = (customer) => {
-        console.log('customer: ', customer);
+    handleEditStaff = (staff) => {
+        console.log('staff: ', staff);
         this.setState({
             isOpenEditModal: true,
-            customerEdit: customer,
+            staffEdit: staff,
         })
 
     }
 
-    doEditCustomer = async (customer) => {
+    doEditStaff = async (staff) => {
         try {
-            let res = await editCustomerService(customer);
+            let res = await editStaffService(staff);
             if (res && res.errCode === 0) {
                 this.setState({
                     isOpenEditModal: false
                 })
 
-                await this.getAllCustomerFromReact();
+                await this.getAllStaffFromReact();
             } else {
                 alert(res.errMessage);
             }
@@ -174,22 +174,22 @@ class CustomerManage extends Component {
 
     render() {
         // console.log('check render', this.state)
-        const { arrCustomers, isOpenAddModal, isOpenEditModal } = this.state;
+        const { arrStaffs, isOpenAddModal, isOpenEditModal } = this.state;
         return (
             <div className="page-container">
-                <ModalAddCustomer
+                <ModalAddStaff
                     isOpenAddModal={isOpenAddModal}
                     toggle={this.toggleModal}
-                    createNewCustomer={this.createNewCustomer}
+                    createNewStaff={this.createNewStaff}
                 />
 
                 {
                     this.state.isOpenEditModal &&
-                    <ModalEditCustomer
+                    <ModalEditStaff
                         isOpenEditModal={isOpenEditModal}
                         toggle={this.toggleEditModal}
-                        currentCustomer={this.state.customerEdit}
-                        editCustomer={this.doEditCustomer}
+                        currentStaff={this.state.staffEdit}
+                        editStaff={this.doEditStaff}
                     />
                 }
 
@@ -201,7 +201,7 @@ class CustomerManage extends Component {
                     <div className="right-side">
                         {/* Thanh phía trên bảng dữ liệu */}
                         <div className="top-bar">
-                            <h2 className="title">Customer</h2>
+                            <h2 className="title">Staff</h2>
                             <div className="search-filter">
                                 {/* Thanh tìm kiếm */}
                                 <div className="search-filter">
@@ -218,8 +218,8 @@ class CustomerManage extends Component {
                                 </div>
 
                                 {/* Nút tạo khách hàng mới */}
-                                <button className="btn-create-new" onClick={() => this.handleAddNewCustomer()}>
-                                    Create New Customer
+                                <button className="btn-create-new" onClick={() => this.handleAddNewStaff()}>
+                                    Create New Staff
                                 </button>
                             </div>
                         </div>
@@ -237,7 +237,7 @@ class CustomerManage extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {arrCustomers && arrCustomers.map((item, index) => {
+                                {arrStaffs && arrStaffs.map((item, index) => {
                                     return (
                                         <tr key={index}>
                                             <td>{item.id}</td>
@@ -248,13 +248,13 @@ class CustomerManage extends Component {
                                             <td>
                                                 <button className="btn-edit">
                                                     <i className="fa-solid fa-pen-to-square"
-                                                        onClick={() => this.handleEditCustomer(item)}
+                                                        onClick={() => this.handleEditStaff(item)}
                                                     ></i>
                                                 </button>
                                             </td>
                                             <td>
                                                 <button className="btn-delete"
-                                                    onClick={() => this.handleDelelteCustomer(item)}
+                                                    onClick={() => this.handleDelelteStaff(item)}
                                                 >Delete</button>
                                             </td>
                                         </tr>
@@ -288,4 +288,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CustomerManage);
+export default connect(mapStateToProps, mapDispatchToProps)(StaffManage);

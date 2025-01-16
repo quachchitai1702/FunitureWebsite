@@ -6,12 +6,16 @@ import { history } from '../redux'
 import { ToastContainer } from 'react-toastify';
 
 
-import { customerIsAuthenticated, customerIsNotAuthenticated } from '../hoc/authentication';
+import { customerIsAuthenticated, customerIsNotAuthenticated, staffIsAuthenticated, staffIsNotAuthenticated } from '../hoc/authentication';
 
 import { path } from '../utils'
 
 import Home from '../routes/Home';
+import HomeCustomer from '../routes/HomeCustomer';
+
+import StaffLogin from './Auth/StaffLogin';
 import Login from './Auth/Login';
+
 
 import Header from './Header/Header';
 import System from '../routes/System';
@@ -51,8 +55,10 @@ class App extends Component {
                         <span className="content-container">
                             <Switch>
                                 <Route path={path.HOME} exact component={(Home)} />
+                                <Route path={path.HOMECUSTOMER} exact component={(HomeCustomer)} />
+                                <Route path={path.STAFFLOGIN} component={staffIsNotAuthenticated(StaffLogin)} />
                                 <Route path={path.LOGIN} component={customerIsNotAuthenticated(Login)} />
-                                <Route path={path.SYSTEM} component={customerIsAuthenticated(System)} />
+                                <Route path={path.SYSTEM} component={staffIsAuthenticated(System)} />
                             </Switch>
                         </span>
 

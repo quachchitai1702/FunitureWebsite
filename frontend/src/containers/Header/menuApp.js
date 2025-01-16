@@ -3,12 +3,12 @@ export const adminMenu = [
         name: 'Management', menus: [
             {
                 name: 'Account Information',
-                link: '/system/register-package-group-or-account',
+                link: '/system/account-information',
                 icon: 'fa-solid fa-house'
             },
             {
                 name: 'Staff Management',
-                link: '/system/register-package-group-or-account',
+                link: '/system/staff-manage',
                 icon: 'fa-solid fa-users'
             },
             {
@@ -18,7 +18,7 @@ export const adminMenu = [
             },
             {
                 name: 'Categories Management',
-                link: '/system/register-package-group-or-account',
+                link: '/system/category-manage',
                 icon: 'fa-solid fa-list'
             },
             {
@@ -28,12 +28,12 @@ export const adminMenu = [
             },
             {
                 name: 'Order Management',
-                link: '/system/register-package-group-or-account',
+                link: '/system/order-manage',
                 icon: 'fa-solid fa-cart-shopping'
             },
             {
                 name: 'Analytic',
-                link: '/system/customer-manage',
+                link: '/system/analytic',
                 icon: 'fa-solid fa-chart-simple'
             },
 

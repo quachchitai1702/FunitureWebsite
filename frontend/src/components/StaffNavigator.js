@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import './ManageNavigator.scss';
+import './StaffNavigator.scss';
 import { connect } from 'react-redux';  // Kết nối với Redux
 import * as actions from "../store/actions";
 
-class ManageNavigator extends Component {
+class StaffNavigator extends Component {
 
     render() {
         const { menus, onLinkClick, processLogout } = this.props;
@@ -16,7 +16,7 @@ class ManageNavigator extends Component {
                     <span className="user-name">{user.name}</span>
                 </div> */}
 
-                <ul className="manage-navigator-menu list-unstyled">
+                <ul className="staff-navigator-menu list-unstyled">
                     {
                         menus.map((menuGroup, groupIndex) => (
                             <Fragment key={groupIndex}>
@@ -67,4 +67,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManageNavigator);
+export default connect(mapStateToProps, mapDispatchToProps)(StaffNavigator);

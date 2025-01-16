@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from "connected-react-router";
 import * as actions from "../../store/actions";
-import './Login.scss';
+import './StaffLogin.scss';
 // import { FormattedMessage } from 'react-intl';
 import image1 from '../../assets/Image/signin.png';
 import logo3 from '../../assets/logo/logo3.png';
-import { handleLoginApi } from '../../services/customerService';
+import { handleStaffLoginApi } from '../../services/staffService';
 
-class Login extends Component {
+class StaffLogin extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -38,41 +38,46 @@ class Login extends Component {
         })
     }
 
-    handleLogin = async (event) => {
+    handleStaffLogin = async (event) => {
         this.setState({
-            errMessage: '',  // Đặt lại thông báo lỗi trước khi gửi yêu cầu
-        });
+            errMessage: '',
+        })
         event.preventDefault();
+        // console.log('email: ', this.state.email, 'password: ', this.state.password);
+        // console.log('all state: ', this.state);
         try {
-            let data = await handleLoginApi(this.state.email, this.state.password);
+            let data = await handleStaffLoginApi(this.state.email, this.state.password)
 
             // Log dữ liệu trả về từ API
-            console.log('API response:', data);
+            // console.log('API response:', data);
 
             if (data && data.errCode !== 0) {
-                // Cập nhật lại trạng thái với thông báo lỗi khi errCode khác 0
                 this.setState({
-                    errMessage: data.errMessage,  // Sử dụng errMessage trả về từ API
-                });
+                    errMessage: data.message,
+                })
             }
 
             if (data && data.errCode === 0) {
-                // Gọi action lưu vào Redux khi đăng nhập thành công
-                this.props.customerLoginSuccess(data.customer);
+                // console.log('Staff data:', data.staff);
+
+                // Gọi action lưu vào Redux
+                this.props.staffLoginSuccess(data.staff);
 
                 // Chuyển hướng sau khi đăng nhập thành công
-                this.props.navigate('/customer-manage');
+                this.props.navigate('/account-information');
             }
 
+
         } catch (e) {
-            if (e.response && e.response.data) {
-                this.setState({
-                    errMessage: e.response.data.message,  // Xử lý thông báo lỗi từ server
-                });
+            if (e.response) {
+                if (e.response.data) {
+                    this.setState({
+                        errMessage: e.response.data.message,
+                    })
+                }
             }
         }
     }
-
 
     render() {
         //JSX
@@ -89,11 +94,11 @@ class Login extends Component {
                 <div className='body'>
                     <div className='body-container'>
                         <div className="image-container">
-                            <img src={image1} alt="Login Illustration" className="login-image" />
+                            <img src={image1} alt="StaffLogin Illustration" className="stafflogin-image" />
                         </div>
-                        <div className="login-form-container">
-                            <div className='text-36'>Sign In</div>
-                            <form className="login-form">
+                        <div className="stafflogin-form-container">
+                            <div className='text-36'>Staff Sign In</div>
+                            <form className="stafflogin-form">
                                 <input
                                     type="email"
                                     placeholder="email"
@@ -118,22 +123,13 @@ class Login extends Component {
 
                                 </div>
 
-                                <div>
-                                    {/* Thêm dòng hiển thị thông báo lỗi dưới trường mật khẩu */}
-
-                                    {this.state.errMessage && (
-                                        <div style={{ color: 'red', marginTop: '10px' }}>
-                                            {this.state.errMessage}
-                                        </div>
-                                    )}
-                                </div>
-
-
                                 <button className='forgotpassword'>Forgot pasword? </button>
-
+                                <div style={{ color: 'red' }}>
+                                    {this.state.errMessage}
+                                </div>
                                 <button
                                     type="submit"
-                                    className="login-btn" onClick={(event) => this.handleLogin(event)} >Sign In</button>
+                                    className="stafflogin-btn" onClick={(event) => this.handleStaffLogin(event)} >Sign In</button>
                                 <div className='text-16'>or</div>
                                 <button
                                     type="submit"
@@ -198,19 +194,11 @@ class Login extends Component {
 }
 
 
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         navigate: (path) => dispatch(push(path)),
-//         // adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
-//         // customerLoginFail: () => dispatch(actions.adminLoginFail()),
-//         customerLoginSuccess: (customerInfor) => dispatch(actions.customerLoginSuccess(customerInfor)),
-//     };
-// };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         navigate: (path) => dispatch(push(path)),
-        customerLoginSuccess: (customerInfor) => dispatch(actions.customerLoginSuccess(customerInfor)),
+        staffLoginSuccess: (staffInfor) => dispatch(actions.staffLoginSuccess(staffInfor)),
     };
 };
 
@@ -220,8 +208,8 @@ const mapStateToProps = (state) => {
     return {
         language: state.app.language,
         // isLoggedIn: state.app.isLoggedIn,  // Đảm bảo lấy được giá trị isLoggedIn
-        // customerInfor: state.app.customerInfor,  // Lấy customerInfor từ state
+        // staffInfor: state.app.staffInfor,  // Lấy staffInfor từ state
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(StaffLogin);

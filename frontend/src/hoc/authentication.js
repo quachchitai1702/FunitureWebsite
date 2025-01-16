@@ -16,3 +16,17 @@ export const customerIsNotAuthenticated = connectedRouterRedirect({
     redirectPath: (state, ownProps) => locationHelper.getRedirectQueryParam(ownProps) || '/',
     allowRedirectBack: false
 });
+
+
+export const staffIsAuthenticated = connectedRouterRedirect({
+    authenticatedSelector: state => state.staff.isLoggedIn,  // Kiểm tra trạng thái đăng nhập của quản lý
+    wrapperDisplayName: 'StaffIsAuthenticated',  // Tên hiển thị cho HOC
+    redirectPath: '/staff-login'  // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
+});
+
+export const staffIsNotAuthenticated = connectedRouterRedirect({
+    authenticatedSelector: state => !state.staff.isLoggedIn,  // Kiểm tra nếu quản lý chưa đăng nhập
+    wrapperDisplayName: 'StaffIsNotAuthenticated',  // Tên hiển thị cho HOC
+    redirectPath: (state, ownProps) => locationHelper.getRedirectQueryParam(ownProps) || '/account-information',  // Chuyển hướng về trang trước nếu có, hoặc trang chủ của quản lý
+    allowRedirectBack: false  // Không cho phép quay lại trang trước nếu đã đăng nhập
+});
