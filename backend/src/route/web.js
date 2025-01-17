@@ -4,6 +4,7 @@ import customerController from "../controllers/customerController.js";
 import staffController from "../controllers/staffController.js";
 import categoryController from "../controllers/categoryController.js";
 import productController from "../controllers/productController.js";
+import cartController from "../controllers/cartController.js";
 
 
 
@@ -52,6 +53,16 @@ let initWebRoute = (app) => {
     router.get('/api/get-all-products', productController.handleGetAllProducts);
     router.put('/api/update-products', productController.handleUpdateProduct);
     router.delete('/api/delete-products', productController.handleDeleteProduct);
+
+    //cart
+    router.post('/api/create-cart', cartController.handleCreateCart);
+    router.get('/api/get-cart-by-customerId', cartController.handleGetCartByCustomerId);
+    router.delete('/api/delete-cart', cartController.handleDeleteCart);
+
+    //cart details
+    router.post('/api/add-product-to-cart', cartController.handleAddProductToCart);
+    router.put('/api/update-cart-detail', cartController.handleUpdateCartDetail);
+    router.delete('/api/remove-product-from-cart', cartController.handleRemoveProductFromCart);
 
     //rest API
     return app.use('/', router);

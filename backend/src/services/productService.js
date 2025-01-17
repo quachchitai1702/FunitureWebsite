@@ -154,8 +154,6 @@ const getAllProducts = (id, status, searchQuery) => {
     });
 };
 
-
-
 const updateProduct = (data) => {
     return new Promise(async (resolve, reject) => {
         // console.log('data from frontend: ', data);  // Kiểm tra dữ liệu từ frontend
