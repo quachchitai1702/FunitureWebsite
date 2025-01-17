@@ -27,7 +27,6 @@ module.exports = (sequelize, DataTypes) => {
         status: DataTypes.ENUM('pending', 'paid', 'shipped', 'completed', 'cancelled'),
         paymentMethod: DataTypes.STRING,
         shippingAddress: DataTypes.STRING,
-        description: DataTypes.STRING,
         orderDate: DataTypes.DATE,
     }, {
         sequelize,

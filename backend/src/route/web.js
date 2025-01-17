@@ -5,6 +5,9 @@ import staffController from "../controllers/staffController.js";
 import categoryController from "../controllers/categoryController.js";
 import productController from "../controllers/productController.js";
 import cartController from "../controllers/cartController.js";
+import paymentController from "../controllers/paymentController.js";
+import orderController from "../controllers/orderController.js";
+
 
 
 
@@ -63,6 +66,20 @@ let initWebRoute = (app) => {
     router.post('/api/add-product-to-cart', cartController.handleAddProductToCart);
     router.put('/api/update-cart-detail', cartController.handleUpdateCartDetail);
     router.delete('/api/remove-product-from-cart', cartController.handleRemoveProductFromCart);
+
+    //payment method
+    router.post('/api/create-payment-method', paymentController.handleCreatePaymentMethod);
+    router.get('/api/get-payment-method', paymentController.handleGetPaymentMethods);
+    router.delete('/api/delete-payment-method', paymentController.handleDeletePaymentMethod);
+
+
+    //order
+    router.post('/api/create-order', orderController.handleCreateOrder);
+    router.get('/api/get-order-by-customerID-status', orderController.handleGetOrderByCustomerIdStatus);
+    router.put('/api/update-order-status', orderController.handleUpdateOrderStatus);
+    router.delete('/api/delete-order', orderController.handleDeleteOrder);
+
+
 
     //rest API
     return app.use('/', router);
