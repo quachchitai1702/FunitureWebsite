@@ -11,10 +11,9 @@ class ModalEditStaff extends React.Component {
         this.state = {
             id: '',
             email: '',
-            password: '',
+            // password: '',
             name: '',
             phone: '',
-            address: '',
             imageUrl: '',
             status: '',
             previewImageUrl: '',
@@ -26,23 +25,22 @@ class ModalEditStaff extends React.Component {
 
 
     componentDidMount() {
-        let customer = this.props.currentCustomer;
-        if (customer && !_.isEmpty(customer)) {
-            console.log('Customer data:', customer);  // Kiểm tra dữ liệu hiện tại
+        let staff = this.props.currentStaff;
+        if (staff && !_.isEmpty(staff)) {
+            console.log('Staff data:', staff);  // Kiểm tra dữ liệu hiện tại
 
             this.setState({
-                id: customer.id,
-                email: customer.email,
-                password: 'harcode',
-                name: customer.name,
-                phone: customer.phone,
-                address: customer.address,
-                imageUrl: customer.imageUrl,
-                previewImageUrl: customer.imageUrl,
-                status: customer.status,
+                id: staff.id,
+                email: staff.email,
+                // password: 'harcode',
+                name: staff.name,
+                phone: staff.phone,
+                imageUrl: staff.imageUrl,
+                previewImageUrl: staff.imageUrl,
+                status: staff.status,
             })
         }
-        console.log('dimount edit modal:', this.props.currentCustomer)
+        console.log('dimount edit modal:', this.props.currentStaff)
     }
 
     handleFileChange = (event) => {
@@ -56,42 +54,6 @@ class ModalEditStaff extends React.Component {
             });
         }
     };
-
-    // handleUploadFile = async () => {
-    //     if (!this.state.selectedFile) {
-    //         alert('Please select an image to upload!');
-    //         return;
-    //     }
-
-    //     console.log('Uploading file:', this.state.selectedFile); // Kiểm tra tệp đã chọn
-
-
-    //     // Giả lập quá trình upload lên server
-    //     let formData = new FormData();
-    //     formData.append('imageUrl', this.state.selectedFile); // Đảm bảo tên trường 'imageUrl'
-
-    //     try {
-    //         let response = await fetch('https://your-server.com/upload', {
-    //             method: 'POST',
-    //             body: formData,
-    //         });
-    //         let data = await response.json();
-
-    //         if (data && data.imageUrl) {
-    //             this.setState({
-    //                 imageUrl: data.imageUrl,
-    //                 previewImageUrl: data.imageUrl,
-    //             });
-    //             alert('Upload successful!');
-    //         } else {
-    //             alert('Upload failed!');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error uploading file:', error);
-    //         alert('An error occurred while uploading the file.');
-    //     }
-    // };
-
 
 
     handleOnchangeInput = (event, id) => {
@@ -110,7 +72,7 @@ class ModalEditStaff extends React.Component {
 
     checkValideInput = () => {
         let isValid = true;
-        let arrInput = ['email', 'password', 'name', 'phone', 'address'];
+        let arrInput = ['name', 'phone'];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
                 isValid = false;
@@ -121,10 +83,10 @@ class ModalEditStaff extends React.Component {
         return isValid;
     };
 
-    handleEditCustomer = async () => {
+    handleEditStaff = async () => {
         let isValid = this.checkValideInput();
         if (isValid === true) {
-            this.props.editCustomer(this.state);
+            this.props.editStaff(this.state);
         }
     };
 
@@ -137,12 +99,12 @@ class ModalEditStaff extends React.Component {
             <Modal
                 isOpen={this.props.isOpenEditModal}
                 toggle={this.props.toggle}
-                className='modal-customer-container'
+                className='modal-staff-container'
                 size='lg'
             >
-                <ModalHeader toggle={this.props.toggle}>Edit Customer Detail</ModalHeader>
+                <ModalHeader toggle={this.props.toggle}>Edit Staff Detail</ModalHeader>
                 <ModalBody>
-                    <div className="modal-customer-body">
+                    <div className="modal-staff-body">
                         {/* Phần chỉnh sửa bên trái */}
                         <div className="form-section">
                             <div className="input-container">
@@ -154,7 +116,7 @@ class ModalEditStaff extends React.Component {
                                     disabled
                                 />
                             </div>
-                            <div className="input-container">
+                            {/* <div className="input-container">
                                 <label>Password</label>
                                 <input
                                     type="password"
@@ -162,7 +124,7 @@ class ModalEditStaff extends React.Component {
                                     value={this.state.password}
                                     disabled
                                 />
-                            </div>
+                            </div> */}
                             <div className="input-container">
                                 <label>Name</label>
                                 <input
@@ -179,14 +141,7 @@ class ModalEditStaff extends React.Component {
                                     value={this.state.phone}
                                 />
                             </div>
-                            <div className="input-container input-m-width">
-                                <label>Address</label>
-                                <input
-                                    type="text"
-                                    onChange={(event) => this.handleOnchangeInput(event, 'address')}
-                                    value={this.state.address}
-                                />
-                            </div>
+
                             <div className="input-container">
                                 <label>Status</label>
                                 <select
@@ -206,7 +161,7 @@ class ModalEditStaff extends React.Component {
                                 {this.state.previewImageUrl ? (
                                     <img
                                         src={this.state.previewImageUrl}
-                                        alt="Customer Preview"
+                                        alt="Staff Preview"
                                         className="preview-image"
                                     />
                                 ) : (
@@ -228,7 +183,7 @@ class ModalEditStaff extends React.Component {
                     <Button
                         color="primary"
                         className='Btn-submit'
-                        onClick={() => { this.handleEditCustomer() }}
+                        onClick={() => { this.handleEditStaff() }}
                     >Save</Button>
                 </ModalFooter>
             </Modal>

@@ -27,6 +27,6 @@ export const staffIsAuthenticated = connectedRouterRedirect({
 export const staffIsNotAuthenticated = connectedRouterRedirect({
     authenticatedSelector: state => !state.staff.isLoggedIn,  // Kiểm tra nếu quản lý chưa đăng nhập
     wrapperDisplayName: 'StaffIsNotAuthenticated',  // Tên hiển thị cho HOC
-    redirectPath: (state, ownProps) => locationHelper.getRedirectQueryParam(ownProps) || '/account-information',  // Chuyển hướng về trang trước nếu có, hoặc trang chủ của quản lý
+    redirectPath: (state, ownProps) => locationHelper.getRedirectQueryParam(ownProps) || '/',  // Chuyển hướng về trang trước nếu có, hoặc trang chủ của quản lý
     allowRedirectBack: false  // Không cho phép quay lại trang trước nếu đã đăng nhập
 });

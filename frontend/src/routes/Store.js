@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-class HomeCustomer extends Component {
+class Store extends Component {
 
     render() {
         const { isLoggedIn } = this.props;
-        let linkToRedirect = isLoggedIn ? '/system/account-information' : '/login';
+        let linkToRedirect = isLoggedIn ? '/storesystem/home' : '/login';
 
         return (
             <Redirect to={linkToRedirect} />
@@ -26,4 +26,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeCustomer);
+export default connect(mapStateToProps, mapDispatchToProps)(Store);

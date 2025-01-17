@@ -4,19 +4,26 @@ import { connect } from 'react-redux';
 import { debounce } from 'lodash';
 
 
+//điều hướnghướng
 import ManageNavigator from '../../components/StaffNavigator';
+
+//header
 import { adminMenu } from '../Header/menuApp';
 
+//ApiApi
 import {
     getAllCustomers,
     createNewCustomerService,
     deleteCustomerService,
     editCustomerService
 } from '../../services/customerService';
+
+//modalmodal
 import ModalAddCustomer from './ModalAddCustomer';
 import ModalEditCustomer from './ModalEditCustomer';
 import { emitter } from '../../utils/emitter';
 
+//scssscss
 import './CustomerManage.scss';
 
 
@@ -53,14 +60,6 @@ class CustomerManage extends Component {
 
         }));
     };
-
-
-    /** life cycle
-     * run component:
-     * 1. run constructor -> init state
-     * 2. did mount (set state) :lấy API và set state (lưu trữ giá trị)
-     * 3. render
-     */
 
     // Hàm xử lý khi click vào một mục
     handleOptionClick = (index) => {
@@ -168,8 +167,6 @@ class CustomerManage extends Component {
         }
 
     }
-
-
 
 
     render() {

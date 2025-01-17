@@ -54,7 +54,9 @@ class Footer extends Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.customer.isLoggedIn
+        isLoggedIn: state.customer.isLoggedIn,
+        isLoggedIn: state.staff.isLoggedIn
+
     };
 };
 

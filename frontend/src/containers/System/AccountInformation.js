@@ -1,32 +1,73 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-class ProductManage extends Component {
 
-    state = {
+// Điều hướng
+import StaffNavigator from '../../components/StaffNavigator';
 
+// Header
+import { adminMenu } from '../Header/menuApp';
+
+// SCSS
+import './AccountInformation.scss';
+
+class AccountInformation extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedOption: null,
+        };
     }
 
-    componentDidMount() {
-    }
-
+    // Hàm xử lý khi click vào một mục
+    handleOptionClick = (index) => {
+        this.setState({ selectedOption: index });
+    };
 
     render() {
-        return (
-            <div className="text-center" >Manage products</div>
-        )
-    }
+        const { isLoggedIn, staffInfo } = this.props;
 
+        // Kiểm tra nếu staffInfo có dữ liệu hợp lệ
+        const userInfo = staffInfo || {};
+        const { name, id, role, email } = userInfo;
+
+        return (
+            <div className="page-container">
+                <div className="body">
+                    <div className="left-side">
+                        <StaffNavigator menus={adminMenu} onLinkClick={this.handleOptionClick} />
+                    </div>
+
+                    <div className="right-side">
+
+                        <div className="page-title">
+                            <h1 className="title">Staff Profile</h1>
+                            <h2 className="subtitle">Manage and protect your account</h2>
+                        </div>
+
+                        <div className='infor'>
+                            {isLoggedIn ? (
+                                <div className="user-info">
+                                    <p><strong>Name:</strong> {name}</p>
+                                    <p><strong>Role:</strong> {role}</p>
+                                    <p><strong>Email:</strong> {email}</p>
+                                </div>
+                            ) : (
+                                <p>You are not logged in.</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 }
 
 const mapStateToProps = state => {
     return {
+        isLoggedIn: state.staff.isLoggedIn, // Kiểm tra trạng thái đăng nhập
+        staffInfo: state.staff.staffInfor,  // Lấy thông tin người dùng từ Redux
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProductManage);
+export default connect(mapStateToProps)(AccountInformation);

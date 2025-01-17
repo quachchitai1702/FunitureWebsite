@@ -11,7 +11,7 @@ class ModalEditCustomer extends React.Component {
         this.state = {
             id: '',
             email: '',
-            password: '',
+            // password: '',
             name: '',
             phone: '',
             address: '',
@@ -28,12 +28,12 @@ class ModalEditCustomer extends React.Component {
     componentDidMount() {
         let customer = this.props.currentCustomer;
         if (customer && !_.isEmpty(customer)) {
-            console.log('Customer data:', customer);  // Kiểm tra dữ liệu hiện tại
+            console.log('Customer data:', customer);
 
             this.setState({
                 id: customer.id,
                 email: customer.email,
-                password: 'harcode',
+                // password: customer.password,
                 name: customer.name,
                 phone: customer.phone,
                 address: customer.address,
@@ -52,45 +52,10 @@ class ModalEditCustomer extends React.Component {
             this.setState({
                 selectedFile: file,
                 previewImageUrl: previewUrl,
-                imageUrl: previewUrl, // Cập nhật trực tiếp vào trường imageUrl
+                imageUrl: previewUrl,
             });
         }
     };
-
-    // handleUploadFile = async () => {
-    //     if (!this.state.selectedFile) {
-    //         alert('Please select an image to upload!');
-    //         return;
-    //     }
-
-    //     console.log('Uploading file:', this.state.selectedFile); // Kiểm tra tệp đã chọn
-
-
-    //     // Giả lập quá trình upload lên server
-    //     let formData = new FormData();
-    //     formData.append('imageUrl', this.state.selectedFile); // Đảm bảo tên trường 'imageUrl'
-
-    //     try {
-    //         let response = await fetch('https://your-server.com/upload', {
-    //             method: 'POST',
-    //             body: formData,
-    //         });
-    //         let data = await response.json();
-
-    //         if (data && data.imageUrl) {
-    //             this.setState({
-    //                 imageUrl: data.imageUrl,
-    //                 previewImageUrl: data.imageUrl,
-    //             });
-    //             alert('Upload successful!');
-    //         } else {
-    //             alert('Upload failed!');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error uploading file:', error);
-    //         alert('An error occurred while uploading the file.');
-    //     }
-    // };
 
 
 
@@ -110,7 +75,7 @@ class ModalEditCustomer extends React.Component {
 
     checkValideInput = () => {
         let isValid = true;
-        let arrInput = ['email', 'password', 'name', 'phone', 'address'];
+        let arrInput = ['name', 'phone', 'address'];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
                 isValid = false;
@@ -154,15 +119,15 @@ class ModalEditCustomer extends React.Component {
                                     disabled
                                 />
                             </div>
-                            <div className="input-container">
+                            {/* <div className="input-container">
                                 <label>Password</label>
                                 <input
-                                    type="password"
+                                    type="text"
                                     onChange={(event) => this.handleOnchangeInput(event, 'password')}
                                     value={this.state.password}
                                     disabled
                                 />
-                            </div>
+                            </div> */}
                             <div className="input-container">
                                 <label>Name</label>
                                 <input

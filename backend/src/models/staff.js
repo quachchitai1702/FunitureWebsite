@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
   Staff.init({
     name: DataTypes.STRING,
     email: DataTypes.STRING,
+    phone: DataTypes.STRING,
     role: DataTypes.STRING,
     status: DataTypes.ENUM('active', 'inactive', 'suspended'),
     imageUrl: DataTypes.STRING,

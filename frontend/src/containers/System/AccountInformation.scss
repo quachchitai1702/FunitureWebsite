@@ -1,0 +1,71 @@
+@import '../styles/variables';
+@import '../styles/base';
+
+
+.page-container {
+    background-color: $color2;
+    display: flex;
+    /* Sử dụng Flexbox để căn chỉnh các phần tử */
+    height: 100vh;
+    /* Đảm bảo chiều cao của toàn bộ trang */
+
+    .body {
+        display: flex;
+        flex-direction: row;
+        /* Căn chỉnh left-side và right-side nằm trên một dòng */
+        flex: 1;
+        margin: 0px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+
+        .left-side {
+            width: 250px;
+            background-color: $color5;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .right-side {
+            flex: 1;
+            // padding: 20px;
+            background-color: $color2;
+            gap: 10px;
+
+
+            .page-title {
+                background-color: $color5;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+                padding: 10px;
+                display: block;
+                flex-wrap: wrap;
+                align-items: center;
+
+                .title {
+                    color: $color4;
+                    font-family: 'Segoe UI';
+                    font-weight: bolder;
+                    text-align: left;
+                    font-size: large;
+                }
+
+                .subtitle {
+                    color: $color4;
+                    font-family: 'Segoe UI';
+                    font-size: medium;
+                    font-weight: normal;
+                }
+            }
+
+            .infor {
+                background-color: $color5;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+                padding: 10px;
+                display: flex;
+
+            }
+
+
+        }
+    }
+
+}

@@ -121,21 +121,20 @@ let getAllStaff = (id, status, searchQuery) => {
             let staffs = '';
             let whereCondition = {};
 
-            // Kiểm tra giá trị searchQuery
             if (searchQuery) {
                 whereCondition = {
                     [Op.or]: [
-                        { name: { [Op.like]: `%${searchQuery}%` } },  // Tìm kiếm theo tên
+                        { name: { [Op.like]: `%${searchQuery}%` } },
+                        { phone: { [Op.like]: `%${searchQuery}%` } },  // Cho phép tìm kiếm theo phone
                     ]
                 };
             }
 
-            // Kiểm tra nếu có điều kiện tìm kiếm, nó sẽ áp dụng vào query
             if (id === 'ALL') {
                 staffs = await db.Staff.findAll({
                     where: {
-                        ...whereCondition,  // Điều kiện tìm kiếm
-                        ...(status && { status: status })  // Lọc theo trạng thái nếu có
+                        ...whereCondition,
+                        ...(status && { status: status })
                     },
                     include: {
                         model: db.Account,
@@ -165,6 +164,7 @@ let getAllStaff = (id, status, searchQuery) => {
         }
     });
 };
+
 
 
 let hashAccountPassword = (password) => {
@@ -208,14 +208,21 @@ let createNewStaff = (data) => {
                 });
             }
 
-
             // Kiểm tra email
             let check = await checkStaffEmail(data.email);
             if (check === true) {
-                resolve({
+                return resolve({
                     errCode: 1,
                     errMessage: 'This email is already used!'
-                })
+                });
+            }
+
+            // Kiểm tra số điện thoại
+            if (!isValidPhoneNumber(data.phone)) {
+                return resolve({
+                    errCode: 4,
+                    errMessage: 'Invalid phone number format! Phone must start with 0 and be 10 digits long.'
+                });
             }
 
             // Tạo tài khoản mới
@@ -225,6 +232,7 @@ let createNewStaff = (data) => {
             await db.Staff.create({
                 name: data.name,
                 email: data.email,
+                phone: data.phone,  // Thêm trường phone
                 role: data.role || 'staff',
                 status: data.status || 'active',
                 imageUrl: data.imageUrl || null,
@@ -240,8 +248,9 @@ let createNewStaff = (data) => {
             console.error('Error creating new staff:', e);
             reject(e);
         }
-    })
+    });
 };
+
 
 let deleteStaff = (staffId) => {
     return new Promise(async (resolve, reject) => {
@@ -294,18 +303,13 @@ let updateStaff = (data) => {
     return new Promise(async (resolve, reject) => {
         const transaction = await db.sequelize.transaction();
         try {
-            // Kiểm tra ID của staff
             if (!data.id) {
-                console.log('Missing staff ID:', data);
                 return resolve({
                     errCode: 2,
                     errMessage: 'Missing required parameters',
                 });
             }
 
-            // console.log('staff id:', data.id);
-
-            // Tìm staff theo ID
             let staff = await db.Staff.findOne({
                 where: { id: data.id },
                 raw: false,
@@ -318,7 +322,6 @@ let updateStaff = (data) => {
                 });
             }
 
-            // Tìm Account liên kết với Staff
             let account = await db.Account.findOne({
                 where: { id: staff.accountId },
                 raw: false,
@@ -331,19 +334,24 @@ let updateStaff = (data) => {
                 });
             }
 
-            // Cập nhật thông tin Staff
-            staff.name = data.name || staff.name;
-            staff.status = data.status || staff.status;
-            staff.imageUrl = data.imageUrl || staff.imageUrl;  // Cập nhật ảnh nếu có
+            // Kiểm tra số điện thoại hợp lệ trước khi cập nhật
+            if (data.phone && !isValidPhoneNumber(data.phone)) {
+                return resolve({
+                    errCode: 4,
+                    errMessage: 'Invalid phone number format! Phone must start with 0 and be 10 digits long.'
+                });
+            }
 
-            // Cập nhật trạng thái trong Account
+            staff.name = data.name || staff.name;
+            staff.phone = data.phone || staff.phone;  // Cập nhật phone
+            staff.status = data.status || staff.status;
+            staff.imageUrl = data.imageUrl || staff.imageUrl;
+
             account.status = data.status || account.status;
 
-            // Lưu cả Staff và Account
             await staff.save({ transaction });
             await account.save({ transaction });
 
-            // Commit transaction
             await transaction.commit();
 
             return resolve({
@@ -351,7 +359,7 @@ let updateStaff = (data) => {
                 errMessage: 'Update successful',
             });
         } catch (e) {
-            await transaction.rollback();  // Rollback transaction nếu có lỗi
+            await transaction.rollback();
             console.error('Error during staff update:', e);
             reject({
                 errCode: 4,
@@ -360,6 +368,8 @@ let updateStaff = (data) => {
         }
     });
 };
+
+
 
 
 

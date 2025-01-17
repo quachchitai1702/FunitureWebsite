@@ -126,9 +126,6 @@ let handleEditStaff = async (req, res) => {
 
 
 
-
-
-
 let handleDeleteStaff = async (req, res) => {
     // Kiểm tra id trong body
     if (!req.body.id) {

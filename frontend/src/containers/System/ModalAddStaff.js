@@ -58,16 +58,14 @@ class ModalAddStaff extends React.Component {
         return isValid;
     }
 
-    handleAddNewCustomer = async () => {
+    handleAddNewStaff = async () => {
         let isValid = this.checkValideInput();
         if (isValid === true) {
             //call Api
-            this.props.createNewCustomer(this.state);
+            this.props.createNewStaff(this.state);
 
         }
     }
-
-
 
 
     render() {
@@ -75,12 +73,12 @@ class ModalAddStaff extends React.Component {
             <Modal
                 isOpen={this.props.isOpenAddModal}
                 toggle={this.props.toggle}
-                className='modal-customer-container'
+                className='modal-staff-container'
                 size='lg'
             >
-                <ModalHeader toggle={this.props.toggle}>Create New Customer</ModalHeader>
+                <ModalHeader toggle={this.props.toggle}>Create New Staff</ModalHeader>
                 <ModalBody>
-                    <div className='modal-customer-body'>
+                    <div className='modal-staff-body'>
                         <div className='input-container'>
                             <label>Email</label>
                             <input type='text'
@@ -135,7 +133,7 @@ class ModalAddStaff extends React.Component {
                     <Button
                         color="primary"
                         className='Btn-create'
-                        onClick={() => { this.handleAddNewCustomer() }}
+                        onClick={() => { this.handleAddNewStaff() }}
                     >Create</Button>
                 </ModalFooter>
             </Modal>

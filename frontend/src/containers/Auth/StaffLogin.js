@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { push } from "connected-react-router";
 import * as actions from "../../store/actions";
 import './StaffLogin.scss';
+
 // import { FormattedMessage } from 'react-intl';
 import image1 from '../../assets/Image/signin.png';
 import logo3 from '../../assets/logo/logo3.png';
@@ -207,7 +208,7 @@ const mapStateToProps = (state) => {
     // console.log('Redux state:', state); // Di chuyển console.log vào đây
     return {
         language: state.app.language,
-        // isLoggedIn: state.app.isLoggedIn,  // Đảm bảo lấy được giá trị isLoggedIn
+        isLoggedIn: state.staff.isLoggedIn,  // Đảm bảo lấy được giá trị isLoggedIn
         // staffInfor: state.app.staffInfor,  // Lấy staffInfor từ state
     };
 };

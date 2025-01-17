@@ -5,20 +5,25 @@ import { ConnectedRouter as Router } from 'connected-react-router';
 import { history } from '../redux'
 import { ToastContainer } from 'react-toastify';
 
+import './App.scss'
 
 import { customerIsAuthenticated, customerIsNotAuthenticated, staffIsAuthenticated, staffIsNotAuthenticated } from '../hoc/authentication';
 
 import { path } from '../utils'
 
 import Home from '../routes/Home';
-import HomeCustomer from '../routes/HomeCustomer';
+import Store from '../routes/Store';
 
 import StaffLogin from './Auth/StaffLogin';
 import Login from './Auth/Login';
 
 
-import Header from './Header/Header';
+import StoreHeader from './Header/StoreHeader';
+import StaffHeader from './Header/StaffHeader';
+
 import System from '../routes/System';
+import StoreSystem from '../routes/StoreSystem';
+
 
 import { CustomToastCloseButton } from '../components/CustomToast';
 import ConfirmModal from '../components/ConfirmModal';
@@ -45,22 +50,28 @@ class App extends Component {
     }
 
     render() {
+        const { isCustomerLoggedIn, isStaffLoggedIn } = this.props;
+
         return (
             <Fragment>
                 <Router history={history}>
                     <div className="main-container">
                         <ConfirmModal />
-                        {this.props.isLoggedIn && <Header />}
 
-                        <span className="content-container">
+                        {/* Hiển thị header phù hợp cho từng loại người dùng */}
+                        {isCustomerLoggedIn && !isStaffLoggedIn && <StoreHeader />}
+                        {isStaffLoggedIn && !isCustomerLoggedIn && <StaffHeader />}
+
+                        <div className="content-container">
                             <Switch>
-                                <Route path={path.HOME} exact component={(Home)} />
-                                <Route path={path.HOMECUSTOMER} exact component={(HomeCustomer)} />
+                                <Route path={path.HOME} exact component={Home} />
+                                <Route path={path.HOMECUSTOMER} exact component={Store} />
                                 <Route path={path.STAFFLOGIN} component={staffIsNotAuthenticated(StaffLogin)} />
-                                <Route path={path.LOGIN} component={customerIsNotAuthenticated(Login)} />
                                 <Route path={path.SYSTEM} component={staffIsAuthenticated(System)} />
+                                <Route path={path.LOGIN} component={customerIsNotAuthenticated(Login)} />
+                                <Route path={path.STORESYSTEM} component={customerIsAuthenticated(StoreSystem)} />
                             </Switch>
-                        </span>
+                        </div>
 
                         <ToastContainer
                             className="toast-container" toastClassName="toast-item" bodyClassName="toast-item-body"
@@ -69,7 +80,7 @@ class App extends Component {
                             closeButton={<CustomToastCloseButton />}
                         />
 
-                        {this.props.isLoggedIn && <Footer />}
+                        {(isCustomerLoggedIn || isStaffLoggedIn) && <Footer />}
 
                     </div>
                 </Router>
@@ -81,7 +92,9 @@ class App extends Component {
 const mapStateToProps = state => {
     return {
         started: state.app.started,
-        isLoggedIn: state.customer.isLoggedIn
+        isCustomerLoggedIn: state.customer.isLoggedIn,
+        isStaffLoggedIn: state.staff.isLoggedIn
+
     };
 };
 

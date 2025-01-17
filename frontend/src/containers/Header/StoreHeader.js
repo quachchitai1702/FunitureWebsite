@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 import * as actions from "../../store/actions";
 import Navigator from '../../components/Navigator';
 import { adminMenu } from './menuApp';
-import './Header.scss';
+import './StoreHeader.scss';
 
 import logo3 from '../../assets/logo/logo3.png';
 
 
-class Header extends Component {
+class StoreHeader extends Component {
 
     render() {
-        const { processLogout } = this.props;
+        // const { processLogout } = this.props;
 
         return (
             <div className='header'>
@@ -26,9 +26,9 @@ class Header extends Component {
                     </div>
 
                     {/* nút logout */}
-                    <div className="btn btn-logout" onClick={processLogout}>
+                    {/* <div className="btn btn-logout" onClick={processLogout}>
                         <i className="fas fa-sign-out-alt"></i>
-                    </div>
+                    </div> */}
 
                 </div>
             </div>
@@ -40,14 +40,14 @@ class Header extends Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.customer.isLoggedIn
+        isLoggedIn: state.staff.isLoggedIn
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        processLogout: () => dispatch(actions.processLogout()),
+        // processLogout: () => dispatch(actions.processLogout()),
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(StoreHeader);

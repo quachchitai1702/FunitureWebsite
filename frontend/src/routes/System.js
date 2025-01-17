@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from 'react-router-dom';
+
 import CustomerManage from '../containers/System/CustomerManage';
 import StaffManage from '../containers/System/StaffManage';
 import CategoryManage from '../containers/System/CategoryManage';
 import OrderManage from '../containers/System/OrderManage';
 import Analytic from '../containers/System/Analytic';
 import AccountInformation from '../containers/System/AccountInformation';
-
-
-
 import ProductManage from '../containers/System/ProductManage';
 import RegisterPackageGroupOrAcc from '../containers/System/RegisterPackageGroupOrAcc';
 

@@ -13,6 +13,7 @@ import {
     deleteStaffService,
     editStaffService
 } from '../../services/staffService';
+
 import ModalAddStaff from './ModalAddStaff';
 import ModalEditStaff from './ModalEditStaff';
 import { emitter } from '../../utils/emitter';
@@ -228,8 +229,8 @@ class StaffManage extends Component {
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
+                                    <th>Email</th>
                                     <th>Phone</th>
-                                    <th>Address</th>
                                     <th>Status</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
@@ -242,8 +243,8 @@ class StaffManage extends Component {
                                         <tr key={index}>
                                             <td>{item.id}</td>
                                             <td>{item.name}</td>
+                                            <td>{item.email}</td>
                                             <td>{item.phone}</td>
-                                            <td>{item.address}</td>
                                             <td>{item.status}</td>
                                             <td>
                                                 <button className="btn-edit">
