@@ -29,16 +29,6 @@ class ModalEditCategory extends React.Component {
         }
     }
 
-
-    // componentDidUpdate(prevProps) {
-    //     if (prevProps.currentStaff !== this.props.currentStaff && this.props.currentStaff) {
-    //         const { id, name, description, imageUrl } = this.props.currentStaff;
-    //         this.setState({
-    //             id, name, description, imageUrl, previewImageUrl: imageUrl
-    //         });
-    //     }
-    // }
-
     handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -69,11 +59,12 @@ class ModalEditCategory extends React.Component {
         return true;
     };
 
-    handleEditStaff = async () => {
+    handleEditCategory = async () => {
         if (this.checkValideInput()) {
             this.props.updateCategory(this.state);
         }
     };
+
 
     render() {
         const { isOpenEditModal, toggle } = this.props;
@@ -129,7 +120,7 @@ class ModalEditCategory extends React.Component {
                     <Button color="secondary" className='Btn-cancel' onClick={toggle}>
                         Cancel
                     </Button>
-                    <Button color="primary" className='Btn-submit' onClick={this.handleEditStaff}>
+                    <Button color="primary" className='Btn-submit' onClick={this.handleEditCategory}>
                         Save
                     </Button>
                 </ModalFooter>

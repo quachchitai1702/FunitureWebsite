@@ -7,12 +7,27 @@ const { Op } = require('sequelize');
 const salt = bcrypt.genSaltSync(10);
 
 const createProduct = (data) => {
+    // console.log('Data received in service:', data); // Kiểm tra dữ liệu
+
+
     return new Promise(async (resolve, reject) => {
-        const { name, price, categoryId, material, stock, description, status, productTypes, productImages, productColors } = data;
+        const {
+            name,
+            price,
+            categoryId,
+            material,
+            stock,
+            description,
+            status,
+            productTypes,
+            productImages,
+            productColors } = data;
 
         try {
+
+            const categoryIdInt = parseInt(categoryId, 10);  // Chuyển categoryId sang số
             // Kiểm tra xem categoryId có hợp lệ hay không
-            const category = await db.Category.findOne({ where: { id: categoryId } });
+            const category = await db.Category.findOne({ where: { id: categoryIdInt } });
             if (!category) {
                 return reject({
                     errCode: 2,
@@ -82,10 +97,10 @@ const getAllProducts = (id, status, searchQuery) => {
             if (searchQuery && searchQuery.trim()) {
                 whereCondition = {
                     [Op.or]: [
-                        { name: { [Op.like]: `%${searchQuery}%` } },  // Tìm kiếm theo tên
-                        { material: { [Op.like]: `%${searchQuery}%` } },  // Tìm kiếm theo chất liệu
-                        { category: { [Op.like]: `%${searchQuery}%` } },  // Tìm kiếm theo tên danh mục
-                        { '$colors.color$': { [Op.like]: `%${searchQuery}%` } },  // Tìm kiếm theo màu sắc
+                        { name: { [Op.like]: `%${searchQuery}%` } },
+                        { material: { [Op.like]: `%${searchQuery}%` } },
+                        { category: { [Op.like]: `%${searchQuery}%` } },
+                        { '$colors.color$': { [Op.like]: `%${searchQuery}%` } },
                     ]
                 };
             }
@@ -95,27 +110,29 @@ const getAllProducts = (id, status, searchQuery) => {
                 whereCondition.status = status;
             }
 
-            // Nếu id có giá trị cụ thể (không phải 'ALL' hoặc null/undefined), tìm sản phẩm theo id
             let products;
             if (id && id !== 'ALL') {
-                // Lọc theo id nếu id có giá trị cụ thể
                 products = await db.Product.findOne({
                     where: { id: id },
                     include: [
                         {
                             model: db.ProductColor,
                             as: 'colors',
-                            required: false, // Không cần thiết phải có dữ liệu của ProductColor
+                            required: false,
                         },
                         {
                             model: db.Category,
                             as: 'productCategory',
-                            required: false, // Không cần thiết phải có dữ liệu của Category
+                            required: false,
+                        },
+                        {
+                            model: db.ProductImage,
+                            as: 'images',
+                            required: false,
                         }
                     ]
                 });
             } else {
-                // Nếu không có id hoặc id = 'ALL', lấy tất cả sản phẩm theo các điều kiện đã cung cấp
                 products = await db.Product.findAll({
                     where: whereCondition,
                     include: [
@@ -133,16 +150,32 @@ const getAllProducts = (id, status, searchQuery) => {
                             model: db.Category,
                             as: 'productCategory',
                             required: false,
+                        },
+                        {
+                            model: db.ProductImage,
+                            as: 'images',
+                            required: false,
                         }
                     ]
                 });
             }
 
-            // Trả kết quả về
+            // Trích xuất imageUrl từ bảng ProductImage nếu có
+            const updatedProducts = products.map(product => {
+                // Lấy ảnh đầu tiên từ danh sách images (nếu có)
+                const imageUrl = product.images && product.images.length > 0 ? product.images[0].imageUrl : null;
+
+                // Thêm trường imageUrl vào sản phẩm
+                return {
+                    ...product.dataValues,
+                    imageUrl,  // Trường imageUrl mới
+                };
+            });
+
             resolve({
                 errCode: 0,
                 errMessage: "Fetched products successfully!",
-                products
+                products: updatedProducts
             });
         } catch (error) {
             console.error("Error in getAllProducts:", error);
@@ -154,13 +187,13 @@ const getAllProducts = (id, status, searchQuery) => {
     });
 };
 
+
 const updateProduct = (data) => {
     return new Promise(async (resolve, reject) => {
-        // console.log('data from frontend: ', data);  // Kiểm tra dữ liệu từ frontend
+        console.log('data from frontend: ', data);
 
         try {
 
-            // Kiểm tra nếu sản phẩm có tồn tại trong cơ sở dữ liệu
             const product = await db.Product.findOne({
                 where: { id: data.id }  // Tìm sản phẩm dựa trên id trong data
             });

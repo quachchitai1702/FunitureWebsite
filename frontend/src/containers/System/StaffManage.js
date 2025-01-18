@@ -56,12 +56,6 @@ class StaffManage extends Component {
     };
 
 
-    /** life cycle
-     * run component:
-     * 1. run constructor -> init state
-     * 2. did mount (set state) :lấy API và set state (lưu trữ giá trị)
-     * 3. render
-     */
 
     // Hàm xử lý khi click vào một mục
     handleOptionClick = (index) => {

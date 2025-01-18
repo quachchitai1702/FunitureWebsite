@@ -64,7 +64,6 @@ const handleUpdateProduct = async (req, res) => {
 const handleDeleteProduct = async (req, res) => {
     try {
         let data = req.body;
-        // const { id } = req.params; // Chuyển từ req.body sang req.params nếu sử dụng id trong URL
         const response = await productService.deleteProduct(data);
         if (response.errCode !== 0) {
             return res.status(400).json(response);
