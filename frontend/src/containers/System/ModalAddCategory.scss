@@ -1,0 +1,104 @@
+@import '../styles/variables';
+@import '../styles/base';
+
+//Add Custoner Modal
+.modal-category-container {
+
+    .modal-header {
+        background-color: $color4; // Màu nền cho tiêu đề modal
+        border-bottom: 1px solid #ddd;
+        font-size: 20px;
+        font-weight: bold;
+
+
+
+        button.close {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: large;
+        }
+    }
+
+    .modal-body {
+        padding: 20px;
+
+        .modal-category-body {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+
+            .input-container {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 10px;
+
+                label {
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: #333;
+                }
+
+                input {
+                    padding: 10px;
+                    font-size: 14px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    margin-top: 5px;
+
+                    &:focus {
+                        border-color: $color4; // Màu viền khi focus vào input
+                        outline: none;
+                    }
+                }
+            }
+        }
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: right;
+        padding: 15px;
+        border-top: 1px solid #ddd;
+        gap: 10px;
+
+        .Btn-cancel {
+            background-color: #6c757d;
+            color: white;
+            padding-left: 10px;
+            padding-right: 10px;
+
+            &:hover {
+                background-color: #5a6268;
+            }
+        }
+
+        .Btn-create {
+            background-color: $color4;
+            color: white;
+            padding-left: 10px;
+            padding-right: 10px;
+
+            &:hover {
+                background-color: $color44;
+            }
+        }
+    }
+}
+
+// Các kiểu cho modal ở chế độ mở
+.modal-category-container.show {
+    .modal-header {
+        background-color: $color4; // Màu nền cho header khi modal mở
+    }
+
+    .modal-body {
+        .modal-category-body {
+            .input-container {
+                input {
+                    background-color: #f8f9fa; // Màu nền input khi modal mở
+                }
+            }
+        }
+    }
+}

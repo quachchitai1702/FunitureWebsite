@@ -126,9 +126,7 @@ class CustomerManage extends Component {
 
     handleSearch = debounce(async (e) => {
         const searchQuery = e.target.value.trim();
-
         this.setState({ searchQuery });
-
         let response = await getAllCustomers('ALL', '', searchQuery);
         if (response && response.errCode === 0) {
             this.setState({

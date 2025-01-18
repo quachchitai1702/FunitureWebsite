@@ -7,102 +7,117 @@ const { Op } = require('sequelize');
 const salt = bcrypt.genSaltSync(10);
 
 const createCategory = (data) => {
-    return new Promise((resolve, reject) => {
-        if (!data.name || !data.description) {
-            return resolve({
-                errCode: 1,
-                errMessage: "Missing required fields!"
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Kiểm tra dữ liệu bắt buộc
+            if (!data.name || !data.description) {
+                return resolve({
+                    errCode: 1,
+                    errMessage: "Missing required fields!"
+                });
+            }
+
+            // Kiểm tra xem danh mục đã tồn tại chưa
+            const existingCategory = await db.Category.findOne({
+                where: { name: data.name }
+            });
+
+            if (existingCategory) {
+                return resolve({
+                    errCode: 2,
+                    errMessage: "Category name already exists!"
+                });
+            }
+
+            // Kiểm tra và chỉ nhận imageUrl là chuỗi
+            let imageUrl = null;
+            if (typeof data.imageUrl === "string" && data.imageUrl.trim() !== "") {
+                imageUrl = data.imageUrl.trim();
+            }
+
+            // Tạo danh mục mới
+            const category = await db.Category.create({
+                name: data.name,
+                description: data.description,
+                imageUrl: imageUrl
+            });
+
+            resolve({
+                errCode: 0,
+                errMessage: "Category created successfully!",
+                category
+            });
+        } catch (error) {
+            console.error("Error creating category:", error);
+            reject({
+                errCode: 3,
+                errMessage: "Error creating category!"
             });
         }
-
-        // Kiểm tra xem danh mục đã tồn tại chưa
-        db.Category.findOne({
-            where: { name: data.name }
-        })
-            .then((existingCategory) => {
-                if (existingCategory) {
-                    return resolve({
-                        errCode: 2,
-                        errMessage: "Category name already exists!"
-                    });
-                }
-
-                // Tạo danh mục mới nếu không bị trùng
-                return db.Category.create({
-                    name: data.name,
-                    description: data.description,
-                    imageUrl: data.imageUrl
-                });
-            })
-            .then((category) => {
-                resolve({
-                    errCode: 0,
-                    errMessage: "Category created successfully!",
-                    category
-                });
-            })
-            .catch((error) => {
-                console.error("Error creating category:", error);
-                reject({
-                    errCode: 3,
-                    errMessage: "Error creating category!"
-                });
-            });
     });
 };
 
 
-const getAllCategories = () => {
-    return new Promise((resolve, reject) => {
-        db.Category.findAll()
-            .then((categories) => {
-                resolve({
-                    errCode: 0,
-                    errMessage: "Success",
-                    categories
-                });
-            })
-            .catch(() => {
-                reject({
-                    errCode: 2,
-                    errMessage: "Error fetching categories!"
-                });
-            });
-    });
-};
 
-const getCategoriesBySearch = (searchQuery) => {
-    return new Promise((resolve, reject) => {
-        db.Category.findAll({
-            where: {
-                name: {
-                    [Op.like]: `%${searchQuery}%`
-                }
-            }
-        })
-            .then((categories) => {
-                if (categories.length === 0) {
-                    return resolve({
+
+const getAllCategories = (searchQuery = "", id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let categories;
+
+            // console.log("Received search query:", searchQuery); // Kiểm tra giá trị searchQuery
+
+            // Nếu có ID, tìm danh mục theo ID
+            if (id) {
+                categories = await db.Category.findByPk(id);
+                if (!categories) {
+                    return reject({
                         errCode: 1,
-                        errMessage: "No categories found!",
-                        categories: []
+                        errMessage: "Category not found!"
                     });
                 }
-                resolve({
+                return resolve({
+                    errCode: 0,
+                    errMessage: "Success",
+                    categories: [categories] // Trả về mảng chứa 1 phần tử
+                });
+            } else {
+                // Nếu không có ID, kiểm tra nếu có searchQuery
+                if (searchQuery.trim()) {
+                    categories = await db.Category.findAll({
+                        where: {
+                            name: { [Op.like]: `%${searchQuery}%` }  // ✅ Đã sửa lỗi cú pháp
+                        }
+                    });
+                } else {
+                    // Nếu không có searchQuery, tìm tất cả danh mục
+                    categories = await db.Category.findAll();
+                }
+
+                if (!categories || categories.length === 0) {
+                    return resolve({  // Thay vì reject, dùng resolve để tránh lỗi Promise
+                        errCode: 1,
+                        errMessage: "No categories found!"
+                    });
+                }
+
+                return resolve({
                     errCode: 0,
                     errMessage: "Success",
                     categories
                 });
-            })
-            .catch((error) => {
-                console.error("Error in service:", error);
-                reject({
-                    errCode: 2,
-                    errMessage: "Error fetching categories!"
-                });
+            }
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+            return reject({
+                errCode: 2,
+                errMessage: "Error fetching categories!"
             });
+        }
     });
 };
+
+
 
 const updateCategory = (data) => {
     return new Promise((resolve, reject) => {
@@ -164,9 +179,8 @@ const updateCategory = (data) => {
 
 const deleteCategory = (id) => {
     return new Promise((resolve, reject) => {
-        console.log("Attempting to delete category with id:", id);
+        // console.log("Attempting to delete category with id:", id);
 
-        // Tìm danh mục cần xóa
         db.Category.findOne({
             where: { id: id }
         })
@@ -206,17 +220,18 @@ const deleteCategory = (id) => {
                 console.error("Error deleting category:", error);
                 reject({
                     errCode: 3,
-                    errMessage: "Error deleting category!"
+                    errMessage: `Error deleting category: ${error.message || error}`
                 });
             });
     });
 };
 
 
+
+
 module.exports = {
     createCategory,
     getAllCategories,
-    getCategoriesBySearch,
     updateCategory,
     deleteCategory
 };

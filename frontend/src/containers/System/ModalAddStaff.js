@@ -27,7 +27,6 @@ class ModalAddStaff extends React.Component {
                 password: '',
                 name: '',
                 phone: '',
-                address: '',
             })
         })
     }
@@ -48,7 +47,7 @@ class ModalAddStaff extends React.Component {
 
     checkValideInput = () => {
         let isValid = true;
-        let arrInput = ['email', 'password', 'name', 'phone', 'address'];
+        let arrInput = ['email', 'password', 'name', 'phone'];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
                 isValid = false;
@@ -111,13 +110,7 @@ class ModalAddStaff extends React.Component {
 
                             ></input>
                         </div>
-                        <div className='input-container input-m-width'>
-                            <label>Address</label>
-                            <input type='text'
-                                onChange={((event) => { this.handleOnchangeInput(event, "address") })}
-                                value={this.state.address}
-                            ></input>
-                        </div>
+
                     </div>
 
 

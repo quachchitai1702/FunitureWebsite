@@ -46,7 +46,6 @@ let initWebRoute = (app) => {
     //category
     router.post("/api/create-new-categories", categoryController.handleCreateCategory);
     router.get("/api/get-all-categories", categoryController.handleGetAllCategories);
-    router.get("/api/get-categories-by-search", categoryController.handleGetCategoriesBySearch);
     router.put("/api/edit-categories", categoryController.handelUpdateCategory);
     router.delete("/api/delete-categories", categoryController.handelDeleteCategory);
 

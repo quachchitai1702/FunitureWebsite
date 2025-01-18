@@ -3,101 +3,70 @@ const { uploadSingleImage } = require('../config/multerConfig');
 
 
 const handleCreateCategory = async (req, res) => {
-    const response = await categoryService.createCategory(req.body);
-    return res.status(200).json(response);
+    try {
+        const data = req.body;
+        console.log('data from react: ', data)
+        const response = await categoryService.createCategory(data);
+        return res.status(response.errCode === 0 ? 200 : 400).json(response);
+    } catch (error) {
+        console.error("Error in createCategory controller:", error);
+        return res.status(500).json({
+            errCode: 3,
+            errMessage: "Error creating category!"
+        });
+    }
 };
 
 const handleGetAllCategories = async (req, res) => {
-    const response = await categoryService.getAllCategories();
-    return res.status(200).json(response);
-};
-
-const handleGetCategoriesBySearch = async (req, res) => {
-    const { searchQuery } = req.body;
-
-    // Log kiểm tra searchQuery
-    console.log('data:', searchQuery);
-
-    if (!searchQuery) {
-        return res.status(400).json({
-            errCode: 1,
-            errMessage: "Search query is required!"
-        });
-    }
-
-    // Gọi service tìm kiếm theo query
     try {
-        const response = await categoryService.getCategoriesBySearch(searchQuery);
-        return res.status(200).json(response);
+        const { searchQuery, id } = req.query;
+
+        const response = await categoryService.getAllCategories(searchQuery, id);
+        return res.status(response.errCode === 0 ? 200 : 400).json(response);
     } catch (error) {
-        console.error("Error in controller:", error);
+        console.error("Error in getAllCategories controller:", error);
         return res.status(500).json({
             errCode: 2,
-            errMessage: "Error in category search!"
+            errMessage: "Error fetching categories!"
         });
     }
 };
+
 
 const handelUpdateCategory = async (req, res) => {
     try {
-        let data = req.body; // Lấy dữ liệu từ body gửi lên
-
-        // Kiểm tra các trường dữ liệu bắt buộc
-        if (!data.id || !data.name || !data.description) {
-            return res.status(400).json({
-                errCode: 2,
-                errMessage: 'Missing required fields!',
-            });
-        }
-
-        console.log('Received data for update:', data); // Log dữ liệu nhận được
-
-        // Kiểm tra lại id có giá trị hợp lệ
-        if (!data.id) {
-            return res.status(400).json({
-                errCode: 2,
-                errMessage: 'Category ID is missing!',
-            });
-        }
-
-        // Gọi service để cập nhật danh mục
-        let errMessage = await categoryService.updateCategory(data);
-        return res.status(200).json(errMessage);
+        const data = req.body;
+        const response = await categoryService.updateCategory(data);
+        return res.status(response.errCode === 0 ? 200 : 400).json(response);
     } catch (error) {
-        console.error('Error during category update:', error); // Log lỗi chi tiết
-
+        console.error("Error in updateCategory controller:", error);
         return res.status(500).json({
             errCode: 3,
-            errMessage: 'Internal server error',
+            errMessage: "Error updating category!"
         });
     }
 };
-
 
 const handelDeleteCategory = async (req, res) => {
-    // Kiểm tra id trong body
-    if (!req.body.id) {
-        return res.status(200).json({
-            errCode: 1,
-            errMessage: 'Missing required parameters!'
-        });
-    }
     try {
-        const response = await categoryService.deleteCategory(req.body.id);
-        return res.status(200).json(response);
+        let { id } = req.body;  // Lấy trực tiếp 'id' từ body request
+        const response = await categoryService.deleteCategory(id);
+        return res.status(response.errCode === 0 ? 200 : 400).json(response);
     } catch (error) {
-        console.error("Error in delete category:", error);
+        console.error("Error in deleteCategory controller:", error);
         return res.status(500).json({
-            errCode: 2,
-            errMessage: "Error occurred while deleting category!"
+            errCode: 3,
+            errMessage: "Error deleting category: " + (error.message || error)
         });
     }
 };
+
+
+
 
 module.exports = {
     handleCreateCategory,
     handleGetAllCategories,
-    handleGetCategoriesBySearch,
     handelUpdateCategory,
     handelDeleteCategory,
 };
