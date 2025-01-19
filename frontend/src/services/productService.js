@@ -29,24 +29,30 @@ const deleteProduct = (id) => {
 
 
 const getCartByCustomerId = async (customerId) => {
-    // console.log('check data from service: ', id);
-    return axios.post('/api/get-cart-by-customerId', {
-        data: {
-            customerId: customerId,
+    console.log('check data from service: ', customerId);
+
+    // Sử dụng params trong axios để truyền tham số
+    return axios.get('/api/get-cart-by-customerId', {
+        params: {
+            customerId: customerId
         }
+    });
+};
+
+
+
+const addProductToCart = async (customerId, productId, quantity) => {
+    console.log('check data from service: ', customerId, productId, quantity);
+    return axios.post('/api/add-product-to-cart', {
+
+        customerId: customerId,
+        productId: productId,
+        quantity: quantity
+
+
     });
 }
 
-const addProductToCart = async (customerId, productId, quantity) => {
-    // console.log('check data from service: ', id);
-    return axios.post('/api/add-product-to-cart', {
-        params: {
-            customerId: customerId,
-            productId: productId,
-            quantity: quantity
-        }
-    });
-}
 
 const updateCartDetail = async (cartDetailId, newQuantity) => {
     // console.log('check data from service: ', id);
@@ -61,7 +67,7 @@ const updateCartDetail = async (cartDetailId, newQuantity) => {
 const removeProductFromCart = async (cartDetailId) => {
     // console.log('check data from service: ', id);
     return axios.post('/api/remove-product-from-cart', {
-        data: {
+        params: {
             cartDetailId: cartDetailId
         }
     });

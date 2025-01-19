@@ -1,0 +1,93 @@
+@import '../styles/variables';
+
+
+.cart-container {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0px 100px;
+    gap: 30px;
+
+
+    .cart-table {
+        width: 100%;
+        border-collapse: collapse;
+        justify-content: center;
+        text-align: center;
+
+        .cart-table th,
+        .cart-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .cart-table th {
+            background-color: #f4f4f4;
+        }
+
+        .cart-table th {
+            background-color: #f4f4f4;
+        }
+
+        .cart-table th {
+            background-color: #f4f4f4;
+        }
+
+        .btn-delete {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+
+            .btn-delete:hover {
+                background-color: darkred;
+            }
+
+        }
+
+    }
+
+
+
+
+
+    .cart-summary {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        padding: 40px 0px;
+
+        .payment-method {
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+
+        .total {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .btn-checkout {
+            background-color: $color4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            width: fit-content;
+
+            .btn-checkout:hover {
+                background-color: darkgreen;
+            }
+        }
+
+
+    }
+
+
+
+}

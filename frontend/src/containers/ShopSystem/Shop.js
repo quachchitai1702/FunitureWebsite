@@ -18,17 +18,12 @@ class Shop extends Component {
             productDetail: {},
             searchQuery: '',
             quantity: 1, //default
-            customerId: '',
+            customerId: this.props.customerInfor ? this.props.customerInfor.id : '',  // Lưu customerId từ customerInfor
 
         };
     }
 
     async componentDidMount() {
-        if (this.props.id) {
-            console.log("User is already logged in with ID:", this.props.id);
-        } else {
-            console.log("No user logged in.");
-        }
         await this.getAllProductFromReact();
     }
 
@@ -69,8 +64,25 @@ class Shop extends Component {
     };
 
     handleAddToCart = async (product) => {
-        const { customerId } = this.props;
+        const { customerId } = this.state;
         const { quantity } = this.state;
+
+        if (!customerId) {
+            alert("You must be logged in to add items to the cart!");
+            return;
+        }
+        console.log('customerId: ', customerId)
+
+        const response = await addProductToCart(customerId, product.id, quantity);
+        if (response && response.errCode === 0) {
+            alert("Product added to cart successfully!");
+        } else {
+            alert(response.errMessage);
+        }
+    };
+
+    handleAddToCartModal = async (product, quantity) => {
+        const { customerId } = this.state;  // Lấy customerId từ state
 
         if (!customerId) {
             alert("You must be logged in to add items to the cart!");
@@ -85,7 +97,15 @@ class Shop extends Component {
         }
     };
 
+
+
     render() {
+        // const { customerInfor } = this.props;
+        // const userInfo = customerInfor || {};
+        // const { name, id, role, email } = userInfo;
+
+        // console.log('user:, ', userInfo);
+
         const { arrProduct, isOpenProductModal, productDetail } = this.state;
         return (
             <div className="product-list-container">
@@ -104,6 +124,7 @@ class Shop extends Component {
                         isOpen={isOpenProductModal}
                         toggleModal={this.toggleProductDetailModal}
                         product={productDetail}
+                        handleAddToCart={this.handleAddToCartModal}  // Truyền handleAddToCart vào ModalProductDetail
                     />
                 )}
 
@@ -116,18 +137,24 @@ class Shop extends Component {
                             />
                             <div className="product-info">
                                 <h3>{product.name}</h3>
-                                <p>Color: {product.color}</p>
-                                <p>Category: {product.category}</p>
+                                {/* Kiểm tra và hiển thị nếu có */}
+                                <p>Color: {product.colors && product.colors.length > 0 ? product.colors.map(c => c.color).join(', ') : 'N/A'}</p>
+                                <p>Category: {product.productCategory?.name || 'N/A'}</p>
                                 <p>{product.description}</p>
                                 <p className="product-price">${product.price}</p>
                                 <div className="product-actions">
-                                    <button className="btn-add-to-cart">Add to Cart</button>
+                                    <button
+                                        className="btn-add-to-cart"
+                                        onClick={() => this.handleAddToCart(product)} >
+                                        Add to Cart
+                                    </button>
                                     <button
                                         className="btn-view-detail fa-solid fa-plus"
                                         onClick={() => this.toggleProductDetailModal(product)}
                                     ></button>
                                 </div>
                             </div>
+
                         </div>
                     ))}
                 </div>
@@ -138,9 +165,11 @@ class Shop extends Component {
 
 const mapStateToProps = state => {
     return {
-        id: state.customer.id,
+        customerInfor: state.customer.customerInfor
     };
 };
+
+
 
 const mapDispatchToProps = dispatch => {
     return {};

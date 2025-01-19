@@ -17,7 +17,9 @@ const handleCreateCart = async (req, res) => {
 
 const handleGetCartByCustomerId = async (req, res) => {
     try {
-        const { customerId } = req.body;
+        const { customerId } = req.query;
+        console.log('Received customerId:', customerId);  // Log giá trị customerId
+
         const response = await cartService.getCartByCustomerId(customerId);
         return res.status(200).json(response);
     } catch (error) {

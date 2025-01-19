@@ -34,7 +34,7 @@ let handleStaffLogin = (email, password) => {
             let isExist = await checkStaffEmail(email);
             if (isExist) {
                 let account = await db.Account.findOne({
-                    attributes: ['email', 'role', 'password'],
+                    attributes: ['id', 'email', 'role', 'password'],
                     where: { email: email },
                 });
 
@@ -65,6 +65,7 @@ let handleStaffLogin = (email, password) => {
                         staffData.errCode = 0;
                         staffData.errMessage = '';
                         staffData.staff = {
+                            id: staff.id,
                             email: account.email,
                             role: account.role,
                             name: staff.name,

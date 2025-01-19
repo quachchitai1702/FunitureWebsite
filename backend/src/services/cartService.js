@@ -32,6 +32,8 @@ const createCart = async (customerId, total) => {
 const getCartByCustomerId = async (customerId) => {
     return new Promise(async (resolve, reject) => {
         try {
+
+            console.log('Id: ', customerId)
             const cart = await db.Cart.findOne({
                 where: { customerId },
                 include: [{
@@ -40,9 +42,35 @@ const getCartByCustomerId = async (customerId) => {
                     include: [{
                         model: db.Product,
                         as: 'product',
+                        include: [
+                            {
+                                model: db.ProductColor,
+                                as: 'colors',
+                                attributes: ['id', 'color']
+                            },
+                            {
+                                model: db.ProductType,
+                                as: 'types',
+                                attributes: ['id', 'type']
+                            },
+                            {
+                                model: db.ProductImage,
+                                as: 'images',
+                                attributes: ['id', 'imageUrl']
+                            },
+                            {
+                                model: db.Category,
+                                as: 'productCategory',
+                                attributes: ['id', 'name']
+                            }
+                        ]
                     }]
                 }]
             });
+
+
+
+            console.log('cart: ', cart)
 
             if (!cart) {
                 return reject({
@@ -50,6 +78,7 @@ const getCartByCustomerId = async (customerId) => {
                     errMessage: "Cart not found!"
                 });
             }
+            console.log('cart: ', cart)
 
             resolve({
                 errCode: 0,
@@ -63,6 +92,9 @@ const getCartByCustomerId = async (customerId) => {
         }
     });
 };
+
+
+
 
 
 const deleteCart = async (cartId) => {
@@ -96,6 +128,13 @@ const deleteCart = async (cartId) => {
 const addProductToCart = async (customerId, productId, quantity) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log('data from FE: ', customerId, productId, quantity)
+
+            // Kiểm tra dữ liệu trước khi thực hiện thao tác
+            if (!customerId || !productId || !quantity) {
+                throw new Error('Missing parameters');
+            }
+
             let cart = await db.Cart.findOne({
                 where: { customerId }
             });
