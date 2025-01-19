@@ -1,54 +1,65 @@
 @import "../../styles/common.scss";
-@import '../styles/base';
+// @import '../styles/base';
 
 
 .header {
-    background-color: $color5;
-    flex-shrink: 0;
-    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #fff;
 
     .header-container {
         display: flex;
-        justify-content: space-between; // Đảm bảo các phần tử có không gian đều
-
-        background-color: $color5;
-        margin-left: 100px;
-        margin-right: 100px;
-        margin-top: 20px;
-        margin-bottom: 20px;
+        justify-content: space-between;
+        width: 100%;
         align-items: center;
 
-        .logo {
-            flex-grow: 1;
-        }
+        .logo-container {
+            display: flex;
+            align-items: center;
 
-        .website-name {
-            flex-grow: 2;
-            margin-left: 10px;
-            font-size: 24px;
+            .logo {
+                width: 50px;
+                height: 50px;
+            }
+
+
+            .website-name {
+                margin-left: 10px;
+                font-size: 24px;
+                font-weight: bold;
+            }
+
         }
 
         .header-tabs-container {
-            flex-grow: 3;
-        }
-
-        .btn-logout {
             display: flex;
-            align-items: center; // Căn giữa cho nút logout
-            color: $color7;
-            line-height: 40px;
-            height: 40px;
-            padding: 0 10px;
-            cursor: pointer;
-
-
-            &:hover {
-                background-color: darken($color11, 5);
-            }
-
-            i {
-                font-size: $base-size + 1px;
-            }
+            justify-content: center;
         }
+
+
+
     }
+
+}
+
+
+
+
+
+.user-cart-container {
+    display: flex;
+    align-items: center;
+}
+
+.menu-link {
+    margin-left: 20px;
+    font-size: 18px;
+    color: #333;
+    text-decoration: none;
+}
+
+.menu-link:hover {
+    color: #007bff;
 }

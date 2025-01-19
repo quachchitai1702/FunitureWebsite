@@ -18,7 +18,7 @@ const handleCreateOrder = async (req, res) => {
 };
 
 const handleGetOrderByCustomerIdStatus = async (req, res) => {
-    const { customerId, status } = req.body;
+    const { customerId, status } = req.query;
 
     try {
         const result = await orderService.getOrderByCustomerIdStatus(customerId, status);
@@ -53,7 +53,7 @@ const handleUpdateOrderStatus = async (req, res) => {
 
 //customer
 const handleDeleteOrder = async (req, res) => {
-    const { orderId } = req.body;
+    const { orderId } = req.query;
 
     try {
         const result = await orderService.deleteOrder(orderId);

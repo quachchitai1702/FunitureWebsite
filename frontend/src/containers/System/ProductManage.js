@@ -274,8 +274,6 @@ class ProductManage extends Component {
                                                     <span>No Image</span>
                                                 )}
                                             </td>
-
-
                                             <td>{item.status}</td>
 
                                             <td>

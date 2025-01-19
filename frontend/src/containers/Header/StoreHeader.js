@@ -1,41 +1,41 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import * as actions from "../../store/actions";
 import Navigator from '../../components/Navigator';
-import { adminMenu } from './menuApp';
-import './StoreHeader.scss';
+import { storeMenu } from './storeApp';
+import { Link } from 'react-router-dom';
 
+import './StoreHeader.scss';
 import logo3 from '../../assets/logo/logo3.png';
 
-
 class StoreHeader extends Component {
-
     render() {
-        // const { processLogout } = this.props;
-
         return (
             <div className='header'>
                 <div className='header-container'>
-                    <img className="logo" src={logo3} alt="Logo" />
-                    <span className="website-name">HARMONI DECOR</span>
-
-                    {/* thanh navigator */}
-                    <div className="header-tabs-container">
-                        <Navigator menus={adminMenu} />
+                    {/* Logo bên trái */}
+                    <div className='logo-container'>
+                        <img className="logo" src={logo3} alt="Logo" />
+                        <span className="website-name">HARMONI DECOR</span>
                     </div>
 
-                    {/* nút logout */}
-                    {/* <div className="btn btn-logout" onClick={processLogout}>
-                        <i className="fas fa-sign-out-alt"></i>
-                    </div> */}
+                    {/* Thanh điều hướng chính */}
+                    <div className="header-tabs-container">
+                        <Navigator menus={storeMenu} />
+                    </div>
 
+                    {/* Giỏ hàng và thông tin người dùng */}
+                    <div className="user-cart-container">
+                        <Link to="/storesystem/profile/purchase" className="menu-link">
+                            <i className="fas fa-shopping-cart" />
+                        </Link>
+                        <Link to="/storesystem/profile" className="menu-link">
+                            <i className="fas fa-user" />
+                        </Link>
+                    </div>
                 </div>
             </div>
-
         );
     }
-
 }
 
 const mapStateToProps = state => {
@@ -45,9 +45,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-    return {
-        // processLogout: () => dispatch(actions.processLogout()),
-    };
+    return {};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(StoreHeader);

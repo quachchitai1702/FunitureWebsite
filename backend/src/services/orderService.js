@@ -93,16 +93,24 @@ const createOrder = (customerId, paymentMethod) => {
 const getOrderByCustomerIdStatus = (customerId, status) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // Nếu customerId là 'ALL', không lọc theo customerId
+            console.log('customerId:', customerId, 'status:', status);
+
+            // Loại bỏ khoảng trắng thừa
+            const trimmedStatus = status.trim();
+
             const whereConditions = {};
-            if (customerId !== 'ALL') {
+
+            // Nếu customerId là 'ALL', không lọc theo customerId
+            if (customerId && customerId !== 'ALL') {
                 whereConditions.customerId = customerId;
             }
 
             // Nếu status là 'ALL', không lọc theo status
-            if (status !== 'ALL') {
-                whereConditions.status = status;
+            if (trimmedStatus && trimmedStatus !== 'ALL') {
+                whereConditions.status = trimmedStatus;
             }
+
+            console.log('Where conditions:', whereConditions);  // Log điều kiện truy vấn
 
             const orders = await db.Order.findAll({
                 where: whereConditions,
@@ -135,10 +143,12 @@ const getOrderByCustomerIdStatus = (customerId, status) => {
 
 
 
+
 const updateOrderStatus = (orderId, newStatus) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // Kiểm tra xem orderId và newStatus có hợp lệ không
+            console.log('data from FE: ', orderId, newStatus);
+
             if (!orderId || !newStatus) {
                 return reject({
                     errCode: 2,
@@ -155,6 +165,8 @@ const updateOrderStatus = (orderId, newStatus) => {
             }
 
             order.status = newStatus;
+            console.log('new status: ', order.status);
+
             await order.save();
 
             resolve({

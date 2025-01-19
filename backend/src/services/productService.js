@@ -88,6 +88,9 @@ const createProduct = (data) => {
     });
 };
 
+
+
+
 const getAllProducts = (id, status, searchQuery) => {
     return new Promise(async (resolve, reject) => {
         try {

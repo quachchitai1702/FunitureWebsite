@@ -8,6 +8,9 @@ class Home extends Component {
     }
 
     componentDidMount() {
+        console.log('ID from Redux:', this.props.id);
+        console.log('Customer Info from Redux:', this.props.customerInfor);
+
     }
 
 
@@ -20,7 +23,13 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => {
+    console.log('Redux state:', state);  // Thêm log này để kiểm tra trạng thái Redux
     return {
+        language: state.app.language,
+        isLoggedIn: state.customer.isLoggedIn,
+        id: state.customer.id,  // Lấy id từ Redux
+        customerInfor: state.customer.customerInfor,  // Lấy customerInfor từ Redux
+
     };
 };
 
