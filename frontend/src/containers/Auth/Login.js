@@ -13,6 +13,7 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: '',
             email: '',
             password: '',
             isShowPassword: false,
@@ -41,34 +42,30 @@ class Login extends Component {
 
     handleLogin = async (event) => {
         this.setState({
-            errMessage: '',  // Đặt lại thông báo lỗi trước khi gửi yêu cầu
+            errMessage: '',
         });
         event.preventDefault();
         try {
             let data = await handleLoginApi(this.state.email, this.state.password);
 
-            // Log dữ liệu trả về từ API
             console.log('API response:', data);
 
             if (data && data.errCode !== 0) {
-                // Cập nhật lại trạng thái với thông báo lỗi khi errCode khác 0
                 this.setState({
-                    errMessage: data.errMessage,  // Sử dụng errMessage trả về từ API
+                    errMessage: data.errMessage,
                 });
             }
 
             if (data && data.errCode === 0) {
-                // Gọi action lưu vào Redux khi đăng nhập thành công
                 this.props.customerLoginSuccess(data.customer);
 
-                // Chuyển hướng sau khi đăng nhập thành công
                 this.props.navigate('/home');
             }
 
         } catch (e) {
             if (e.response && e.response.data) {
                 this.setState({
-                    errMessage: e.response.data.message,  // Xử lý thông báo lỗi từ server
+                    errMessage: e.response.data.message,
                 });
             }
         }
@@ -76,7 +73,6 @@ class Login extends Component {
 
 
     render() {
-        //JSX
         return (
             <div className="page-container">
                 <div className='header'>
@@ -199,14 +195,6 @@ class Login extends Component {
 }
 
 
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         navigate: (path) => dispatch(push(path)),
-//         // adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
-//         // customerLoginFail: () => dispatch(actions.adminLoginFail()),
-//         customerLoginSuccess: (customerInfor) => dispatch(actions.customerLoginSuccess(customerInfor)),
-//     };
-// };
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -217,7 +205,7 @@ const mapDispatchToProps = (dispatch) => {
 
 
 const mapStateToProps = (state) => {
-    // console.log('Redux state:', state); // Di chuyển console.log vào đây
+    console.log('Redux state:', state); // Di chuyển console.log vào đây
     return {
         language: state.app.language,
         isLoggedIn: state.customer.isLoggedIn,  // Đảm bảo lấy được giá trị isLoggedIn

@@ -33,7 +33,7 @@ let handleCustomerLogin = (email, password) => {
             let isExist = await checkCustomerEmail(email);
             if (isExist) {
                 let account = await db.Account.findOne({
-                    attributes: ['email', 'role', 'password'],
+                    attributes: ['id', 'email', 'role', 'password'],
                     where: { email: email },
                 });
 
@@ -59,8 +59,11 @@ let handleCustomerLogin = (email, password) => {
                         }
 
                         customerData.errCode = 0;
+
                         customerData.errMessage = '';
+
                         customerData.customer = {
+                            id: customer.id,
                             email: account.email,
                             role: account.role,
                             email: customer.email,
