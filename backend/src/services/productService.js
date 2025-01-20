@@ -8,8 +8,6 @@ const salt = bcrypt.genSaltSync(10);
 
 const createProduct = (data) => {
     // console.log('Data received in service:', data); // Kiểm tra dữ liệu
-
-
     return new Promise(async (resolve, reject) => {
         const {
             name,

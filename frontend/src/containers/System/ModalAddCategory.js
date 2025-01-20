@@ -10,7 +10,8 @@ class ModalAddCategory extends React.Component {
         this.state = {
             name: '',
             description: '',
-            imageUrl: null, // Lưu trữ ảnh được chọn
+            imageUrl: '', // Lưu trữ ảnh được chọn
+            previewImageUrl: '', // Lưu trữ ảnh preview
         }
 
         this.listenToEmitter();
@@ -22,7 +23,8 @@ class ModalAddCategory extends React.Component {
             this.setState({
                 name: '',
                 description: '',
-                imageUrl: null, // Reset ảnh
+                imageUrl: '', // Reset ảnh
+                previewImageUrl: '', // Reset ảnh preview
             })
         })
     }
@@ -39,7 +41,11 @@ class ModalAddCategory extends React.Component {
     handleOnChangeImage = (event) => {
         const file = event.target.files[0];
         if (file) {
-            this.setState({ imageUrl: file });
+            const previewUrl = URL.createObjectURL(file); // Tạo URL tạm thời cho ảnh
+            this.setState({
+                imageUrl: previewUrl,
+                previewImageUrl: previewUrl // Lưu preview ảnh
+            });
         }
     }
 
@@ -65,12 +71,7 @@ class ModalAddCategory extends React.Component {
         }
     }
 
-
-
     render() {
-        // const { isOpenAddModal } = this.state;
-        // console.log("isOpenAddModal in CategoryManage:", isOpenAddModal);
-
         return (
             <Modal
                 isOpen={this.props.isOpenAddModal}
@@ -106,6 +107,17 @@ class ModalAddCategory extends React.Component {
                                 onChange={this.handleOnChangeImage}
                             />
                         </div>
+
+                        {/* Preview ảnh sau khi chọn */}
+                        {this.state.previewImageUrl && (
+                            <div className="image-preview-container">
+                                <img
+                                    src={this.state.previewImageUrl}
+                                    alt="Preview"
+                                    className="image-preview"
+                                />
+                            </div>
+                        )}
                     </div>
                 </ModalBody>
                 <ModalFooter>

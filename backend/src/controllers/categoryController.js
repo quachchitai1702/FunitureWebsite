@@ -17,6 +17,36 @@ const handleCreateCategory = async (req, res) => {
     }
 };
 
+// const handleCreateCategory = (req, res) => {
+//     uploadSingleImage(req, res, async (err) => {
+//         if (err) {
+//             return res.status(400).json({
+//                 errCode: 5,
+//                 errMessage: 'Error uploading image: ' + err.message
+//             });
+//         }
+
+//         try {
+//             let data = req.body;
+
+//             // Nếu có file ảnh, gán đường dẫn ảnh vào database
+//             if (req.file) {
+//                 data.imageUrl = `/uploads/${req.file.filename}`;
+//             }
+
+//             const response = await categoryService.createCategory(data);
+//             return res.status(response.errCode === 0 ? 200 : 400).json(response);
+//         } catch (error) {
+//             console.error("Error in createCategory controller:", error);
+//             return res.status(500).json({
+//                 errCode: 3,
+//                 errMessage: "Error creating category!"
+//             });
+//         }
+//     });
+// };
+
+
 const handleGetAllCategories = async (req, res) => {
     try {
         const { searchQuery, id } = req.query;
@@ -56,7 +86,7 @@ const handelDeleteCategory = async (req, res) => {
         console.error("Error in deleteCategory controller:", error);
         return res.status(500).json({
             errCode: 3,
-            errMessage: "Error deleting category: " + (error.message || error)
+            errMessage: "Error deleting category: " + (error.errMessage || error)
         });
     }
 };

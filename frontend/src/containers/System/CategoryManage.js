@@ -47,18 +47,11 @@ class CategoryManage extends Component {
         await this.getAllCategories();
     }
 
-    // componentDidUpdate(prevProps, prevState) {
-    //     if (prevState.searchQuery !== this.state.searchQuery) {
-    //         // Gọi lại getAllCategories khi searchQuery thay đổi
-    //         this.getAllCategories(this.state.searchQuery);
-    //     }
-    // }
-
 
     // Lấy danh sách tất cả các danh mục (hỗ trợ tìm kiếm)
-    getAllCategories = async (searchQuery = '') => {
+    getAllCategories = async () => {
         try {
-            let response = await getAllCategories(searchQuery);
+            let response = await getAllCategories(this.state.searchQuery);
             if (response && response.errCode === 0) {
                 this.setState({
                     categories: response.categories
@@ -78,19 +71,25 @@ class CategoryManage extends Component {
             try {
                 let response = await deleteCategory(categoryId);
                 if (response && response.errCode === 0) {
-                    await this.getAllCategories(this.state.searchQuery);
+                    // Cập nhật lại trạng thái categories để loại bỏ danh mục đã xóa
+                    this.setState((prevState) => ({
+                        categories: prevState.categories.filter(category => category.id !== categoryId)
+                    }));
+
+                    // Nếu muốn chắc chắn rằng các danh mục luôn được cập nhật từ server
+                    // await this.getAllCategories();
+
+                    alert(response.errMessage);
                 } else {
                     console.error('Error:', response.errMessage);
-                    alert(response.errMessage);
-
+                    alert(response ? response.errMessage : 'Unknown error');
                 }
             } catch (error) {
                 console.error("Error deleting category:", error);
             }
         }
-
-
     };
+
 
     // Xử lý tìm kiếm danh mục
     handleSearch = debounce(async (e) => {
@@ -155,6 +154,9 @@ class CategoryManage extends Component {
     handleUpdateCategory = async (categoryData) => {
         try {
             let response = await updateCategory(categoryData);
+
+            console.log('image', response)
+
             if (response && response.errCode === 0) {
                 this.setState(prevState => ({
                     categories: prevState.categories.map(category =>
@@ -173,6 +175,9 @@ class CategoryManage extends Component {
 
     render() {
         const { categories, isOpenAddModal, isOpenEditModal, selectedCategory } = this.state;
+
+        console.log("Categories in state:", categories);  // Kiểm tra lại giá trị của categories trong state
+
 
         return (
             <div className="page-container">
@@ -239,7 +244,7 @@ class CategoryManage extends Component {
                                             <td>{category.description}</td>
                                             <td>
                                                 {category.imageUrl ? (
-                                                    <img src={category.imageUrl} alt={category.name} width="50" />
+                                                    <img src={category.imageUrl} width="50" />
                                                 ) : "No Image"}
                                             </td>
                                             <td>

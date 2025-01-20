@@ -29,17 +29,17 @@ const createCategory = (data) => {
                 });
             }
 
-            // Kiểm tra và chỉ nhận imageUrl là chuỗi
-            let imageUrl = null;
-            if (typeof data.imageUrl === "string" && data.imageUrl.trim() !== "") {
-                imageUrl = data.imageUrl.trim();
-            }
+            // // Kiểm tra và chỉ nhận imageUrl là chuỗi
+            // let imageUrl = null;
+            // if (typeof data.imageUrl === "string" && data.imageUrl.trim() !== "") {
+            //     imageUrl = data.imageUrl.trim();
+            // }
 
             // Tạo danh mục mới
             const category = await db.Category.create({
                 name: data.name,
                 description: data.description,
-                imageUrl: imageUrl
+                imageUrl: data.imageUrl,
             });
 
             resolve({
@@ -56,8 +56,6 @@ const createCategory = (data) => {
         }
     });
 };
-
-
 
 
 const getAllCategories = (searchQuery = "", id) => {
@@ -116,8 +114,6 @@ const getAllCategories = (searchQuery = "", id) => {
         }
     });
 };
-
-
 
 const updateCategory = (data) => {
     return new Promise((resolve, reject) => {
