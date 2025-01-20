@@ -269,11 +269,12 @@ class ProductManage extends Component {
                                             <td>{item.stock}</td>
                                             <td>
                                                 {item.imageUrl ? (
-                                                    <img src={item.imageUrl} alt="Product Image" width="50" />
+                                                    <img src={item.imageUrl} width="50" />
                                                 ) : (
                                                     <span>No Image</span>
                                                 )}
                                             </td>
+
                                             <td>{item.status}</td>
 
                                             <td>

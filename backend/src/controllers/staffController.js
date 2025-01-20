@@ -1,5 +1,5 @@
 import staffService from '../services/staffService';
-const { uploadSingleImage } = require('../config/multerConfig');
+const { uploadSingleImage } = require('../config/upload.js');
 
 
 let handleStaffLogin = async (req, res) => {

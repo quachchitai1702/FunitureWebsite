@@ -9,6 +9,7 @@ const salt = bcrypt.genSaltSync(10);
 const createCategory = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log('data from FE: ', data)
             // Kiểm tra dữ liệu bắt buộc
             if (!data.name || !data.description) {
                 return resolve({

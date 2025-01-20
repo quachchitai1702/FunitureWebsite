@@ -1,5 +1,5 @@
 import orderService from '../services/orderService';
-const { uploadSingleImage } = require('../config/multerConfig');
+const { uploadSingleImage } = require('../config/upload.js');
 
 
 const handleCreateOrder = async (req, res) => {

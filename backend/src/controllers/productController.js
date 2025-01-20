@@ -1,5 +1,5 @@
 import productService from '../services/productService';
-const { uploadSingleImage } = require('../config/multerConfig');
+const { uploadSingleImage } = require('../config/upload.js');
 
 
 const handleCreateProduct = async (req, res) => {

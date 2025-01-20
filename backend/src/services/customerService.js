@@ -5,7 +5,7 @@ import multer from 'multer';
 const { Op } = require('sequelize');
 
 
-const { uploadSingleImage } = require('../config/multerConfig');
+const { uploadSingleImage } = require('../config/upload.js');
 const fs = require('fs');
 const path = require('path');
 

@@ -8,6 +8,7 @@ import cartController from "../controllers/cartController.js";
 import paymentController from "../controllers/paymentController.js";
 import orderController from "../controllers/orderController.js";
 
+const upload = require('../config/upload');
 
 
 
@@ -32,7 +33,7 @@ let initWebRoute = (app) => {
     router.post('/api/login', customerController.handleLogin);
     router.get('/api/get-all-customers', customerController.handleGetAllCustomer);
 
-    router.post('/api/create-new-customer', customerController.handleCreateNewCustomer);
+    router.post('/api/create-new-customer', upload.single('image'), customerController.handleCreateNewCustomer);
     router.put('/api/edit-customer', customerController.handleEditCustomer);
     router.delete('/api/delete-customer', customerController.handleDeleteCustomer);
 
@@ -79,6 +80,8 @@ let initWebRoute = (app) => {
     router.get('/api/get-order-by-customerID-status', orderController.handleGetOrderByCustomerIdStatus);
     router.put('/api/update-order-status', orderController.handleUpdateOrderStatus);
     router.delete('/api/delete-order', orderController.handleDeleteOrder);
+
+
 
 
 

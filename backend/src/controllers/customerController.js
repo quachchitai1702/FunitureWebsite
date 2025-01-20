@@ -1,5 +1,5 @@
 import customerService from '../services/customerService';
-const { uploadSingleImage } = require('../config/multerConfig');
+const { uploadSingleImage } = require('../config/upload.js');
 
 
 let handleLogin = async (req, res) => {

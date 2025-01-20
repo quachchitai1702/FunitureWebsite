@@ -1,5 +1,5 @@
 import paymentService from '../services/paymentService';
-const { uploadSingleImage } = require('../config/multerConfig');
+const { uploadSingleImage } = require('../config/upload.js');
 
 
 const handleCreatePaymentMethod = async (req, res) => {

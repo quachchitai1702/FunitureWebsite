@@ -1,11 +1,18 @@
 import categoryService from '../services/categoryService';
-const { uploadSingleImage } = require('../config/multerConfig');
+import upload from '../config/upload';
 
 
 const handleCreateCategory = async (req, res) => {
     try {
-        const data = req.body;
-        console.log('data from react: ', data)
+        let data = req.body;
+
+        // Nếu có ảnh, gán đường dẫn ảnh
+        if (req.file) {
+            data.imageUrl = `/uploads/${req.file.filename}`;
+        }
+
+        console.log('data to Api: ', data);
+
         const response = await categoryService.createCategory(data);
         return res.status(response.errCode === 0 ? 200 : 400).json(response);
     } catch (error) {
@@ -17,34 +24,22 @@ const handleCreateCategory = async (req, res) => {
     }
 };
 
-// const handleCreateCategory = (req, res) => {
-//     uploadSingleImage(req, res, async (err) => {
-//         if (err) {
-//             return res.status(400).json({
-//                 errCode: 5,
-//                 errMessage: 'Error uploading image: ' + err.message
-//             });
-//         }
 
-//         try {
-//             let data = req.body;
-
-//             // Nếu có file ảnh, gán đường dẫn ảnh vào database
-//             if (req.file) {
-//                 data.imageUrl = `/uploads/${req.file.filename}`;
-//             }
-
-//             const response = await categoryService.createCategory(data);
-//             return res.status(response.errCode === 0 ? 200 : 400).json(response);
-//         } catch (error) {
-//             console.error("Error in createCategory controller:", error);
-//             return res.status(500).json({
-//                 errCode: 3,
-//                 errMessage: "Error creating category!"
-//             });
-//         }
-//     });
+// const handleCreateCategory = async (req, res) => {
+//     try {
+//         const data = req.body;
+//         console.log('data from react: ', data)
+//         const response = await categoryService.createCategory(data);
+//         return res.status(response.errCode === 0 ? 200 : 400).json(response);
+//     } catch (error) {
+//         console.error("Error in createCategory controller:", error);
+//         return res.status(500).json({
+//             errCode: 3,
+//             errMessage: "Error creating category!"
+//         });
+//     }
 // };
+
 
 
 const handleGetAllCategories = async (req, res) => {

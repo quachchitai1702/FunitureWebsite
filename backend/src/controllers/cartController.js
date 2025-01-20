@@ -1,5 +1,4 @@
 import cartService from '../services/cartService';
-const { uploadSingleImage } = require('../config/multerConfig');
 
 
 const handleCreateCart = async (req, res) => {
