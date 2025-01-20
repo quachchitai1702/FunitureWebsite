@@ -11,6 +11,7 @@ import orderController from "../controllers/orderController.js";
 
 
 
+
 let router = express.Router();
 
 let initWebRoute = (app) => {
@@ -40,6 +41,7 @@ let initWebRoute = (app) => {
     router.post('/api/staff-login', staffController.handleStaffLogin);
     router.get('/api/get-all-staffs', staffController.handleGetAllStaff);
     router.post('/api/create-new-staff', staffController.handleCreateNewStaff);
+
     router.put('/api/edit-staff', staffController.handleEditStaff);
     router.delete('/api/delete-staff', staffController.handleDeleteStaff);
 

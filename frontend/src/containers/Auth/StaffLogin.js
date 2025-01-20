@@ -49,23 +49,17 @@ class StaffLogin extends Component {
         try {
             let data = await handleStaffLoginApi(this.state.email, this.state.password)
 
-            // Log dữ liệu trả về từ API
             // console.log('API response:', data);
 
             if (data && data.errCode !== 0) {
                 this.setState({
-                    errMessage: data.message,
+                    errMessage: data.errMessage,
                 })
             }
 
             if (data && data.errCode === 0) {
-                // console.log('Staff data:', data.staff);
-
-                // Gọi action lưu vào Redux
                 this.props.staffLoginSuccess(data.staff);
-
-                // Chuyển hướng sau khi đăng nhập thành công
-                this.props.navigate('/account-information');
+                this.props.navigate('/system/account-information');
             }
 
 
@@ -73,7 +67,7 @@ class StaffLogin extends Component {
             if (e.response) {
                 if (e.response.data) {
                     this.setState({
-                        errMessage: e.response.data.message,
+                        errMessage: e.response.data.errMessage,
                     })
                 }
             }
@@ -97,9 +91,9 @@ class StaffLogin extends Component {
                         <div className="image-container">
                             <img src={image1} alt="StaffLogin Illustration" className="stafflogin-image" />
                         </div>
-                        <div className="stafflogin-form-container">
+                        <div className="login-form-container">
                             <div className='text-36'>Staff Sign In</div>
-                            <form className="stafflogin-form">
+                            <form className="login-form">
                                 <input
                                     type="email"
                                     placeholder="email"
@@ -124,13 +118,22 @@ class StaffLogin extends Component {
 
                                 </div>
 
-                                <button className='forgotpassword'>Forgot pasword? </button>
-                                <div style={{ color: 'red' }}>
-                                    {this.state.errMessage}
+                                <div>
+                                    {/* Thêm dòng hiển thị thông báo lỗi dưới trường mật khẩu */}
+
+                                    {this.state.errMessage && (
+                                        <div style={{ color: 'red', marginTop: '10px' }}>
+                                            {this.state.errMessage}
+                                        </div>
+                                    )}
                                 </div>
+
+
+                                <button className='forgotpassword'>Forgot pasword? </button>
+
                                 <button
                                     type="submit"
-                                    className="stafflogin-btn" onClick={(event) => this.handleStaffLogin(event)} >Sign In</button>
+                                    className="login-btn" onClick={(event) => this.handleStaffLogin(event)} >Sign In</button>
                                 <div className='text-16'>or</div>
                                 <button
                                     type="submit"

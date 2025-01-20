@@ -11,6 +11,7 @@ app.use(cors({ credentials: true, origin: true }));
 
 
 
+app.use('/uploads', express.static('uploads'));
 
 
 //config app

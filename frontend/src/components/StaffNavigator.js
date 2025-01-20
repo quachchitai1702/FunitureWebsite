@@ -11,14 +11,13 @@ class StaffNavigator extends Component {
         const { menus, onLinkClick, processLogout } = this.props;
         return (
             <Fragment>
+
+
                 <ul className="staff-navigator-menu list-unstyled">
                     {
                         menus.map((menuGroup, groupIndex) => (
                             <Fragment key={groupIndex}>
                                 <li className="menu-group">
-                                    {/* <div className="menu-group-name">
-                                        <FormattedMessage id={menuGroup.name} />
-                                    </div> */}
                                     <ul className="menu-list">
                                         {menuGroup.menus.map((menu, menuIndex) => (
                                             <li key={menuIndex} className="menu-item">

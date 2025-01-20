@@ -13,6 +13,7 @@ class ModalAddStaff extends React.Component {
             name: '',
             phone: '',
             address: '',
+            imageUrl: '',
         }
 
         this.listenToEmitter();

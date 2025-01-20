@@ -58,7 +58,6 @@ class Login extends Component {
 
             if (data && data.errCode === 0) {
                 this.props.customerLoginSuccess(data.customer);
-
                 this.props.navigate('/home');
             }
 

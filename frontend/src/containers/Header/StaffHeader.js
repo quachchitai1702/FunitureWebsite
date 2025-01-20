@@ -12,7 +12,7 @@ import logo3 from '../../assets/logo/logo3.png';
 class StoreHeader extends Component {
 
     render() {
-        // const { processLogout } = this.props;
+        const { processLogout } = this.props;
 
         return (
             <div className='header'>
@@ -26,9 +26,9 @@ class StoreHeader extends Component {
                     </div>
 
                     {/* nút logout */}
-                    {/* <div className="btn btn-logout" onClick={processLogout}>
+                    <div className="btn btn-logout" onClick={processLogout}>
                         <i className="fas fa-sign-out-alt"></i>
-                    </div> */}
+                    </div>
 
                 </div>
             </div>
@@ -46,7 +46,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        // processLogout: () => dispatch(actions.processLogout()),
+        processLogout: () => dispatch(actions.processLogout()),
     };
 };
 
