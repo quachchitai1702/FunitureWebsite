@@ -14,9 +14,45 @@ class Address extends Component {
 
 
     render() {
+        // const { customerInfor, isModalOpen } = this.state;
+
         return (
-            <div className="text-center" >Manage products</div>
-        )
+
+            <div className="profile-container">
+
+
+
+                {/* Left Side - Menu */}
+                <div className="profile-left">
+                    <h3>Dashboard</h3>
+                    <ul>
+                        <li><a href="/storesystem/profile"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="/storesystem/profile/purchase"><i class="fas fa-shopping-cart"></i> Purchase</a></li>
+                        <li><a href="/storesystem/profile/address"><i class="fas fa-map-marker-alt"></i> Address</a></li>
+                        <li><a href="/storesystem/profile/setting"><i class="fas fa-cog"></i> Setting</a></li>
+                    </ul>
+                    {/* <button className="logout-btn" onClick={this.handleLogout}>Logout</button> */}
+                </div>
+
+                {/* Right Side - User Information */}
+                <div className="profile-right">
+                    <h2>User Profile</h2>
+                    {/* {customerInfor ? (
+                        <div className="customer-infor">
+                            <p><strong>Name:</strong> {customerInfor?.customers?.name || 'N/A'}</p>
+                            <p><strong>Email:</strong> {customerInfor?.customers?.email || 'N/A'}</p>
+                            <p><strong>Phone:</strong> {customerInfor?.customers?.phone || 'N/A'}</p>
+                            <p><strong>Address:</strong> {customerInfor?.customers?.address || 'N/A'}</p>
+                        </div>
+                    ) : (
+                        <p>Loading user data...</p>
+                    )} */}
+
+                    {/* <button className="edit-btn" onClick={() => this.handleEditCustomer(customerInfor)}>Edit</button> */}
+
+                </div>
+            </div>
+        );
     }
 
 }

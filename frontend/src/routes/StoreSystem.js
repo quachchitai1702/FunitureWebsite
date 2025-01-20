@@ -19,16 +19,21 @@ class StoreSystem extends Component {
             <div className="system-container">
                 <div className="system-list">
                     <Switch>
+                        {/* Các route cho trang chính */}
                         <Route path="/storesystem/home" component={Home} />
                         <Route path="/storesystem/about" component={About} />
-                        <Route path="/storesystem/profile/address" component={Address} />
                         <Route path="/storesystem/cart" component={Cart} />
-                        <Route path="/storesystem/profile" component={Profile} />
-                        <Route path="/storesystem/profile/purchase" component={Purchase} />
-                        <Route path="/storesystem/profile/setting" component={Setting} />
                         <Route path="/storesystem/shop" component={Shop} />
                         <Route path="/storesystem/register-package-group-or-account" component={RegisterPackageGroupOrAcc} />
-                        <Route component={() => { return (<Redirect to={systemMenuPath} />) }} />
+
+                        {/* Route cho các trang con của Profile */}
+                        <Route exact path="/storesystem/profile" component={Profile} />
+                        <Route exact path="/storesystem/profile/purchase" component={Purchase} />
+                        <Route exact path="/storesystem/profile/address" component={Address} />
+                        <Route exact path="/storesystem/profile/setting" component={Setting} />
+
+                        {/* Redirect nếu không tìm thấy route */}
+                        <Route component={() => <Redirect to={systemMenuPath} />} />
                     </Switch>
                 </div>
             </div>

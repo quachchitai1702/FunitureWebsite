@@ -155,6 +155,19 @@ const getAllCustomer = (id, status, searchQuery) => {
                     raw: true,
                 });
             }
+
+
+            // Đánh dấu nếu có mật khẩu
+            if (Array.isArray(customers)) {
+                customers = customers.map(customer => ({
+                    ...customer,
+                    hasPassword: customer['account.password'] ? true : false
+                }));
+            } else if (customers) {
+                customers.hasPassword = customers['account.password'] ? true : false;
+            }
+
+
             resolve(customers);
         } catch (e) {
             reject(e);
@@ -293,15 +306,101 @@ let deleteCustomer = (customerid) => {
 
 
 
+// let updateCustomer = (data) => {
+//     return new Promise(async (resolve, reject) => {
+//         const transaction = await db.sequelize.transaction();
+//         try {
+
+//             // console.log('data id:', data.id)
+
+//             if (!data.id) {
+//                 console.log('Missing customer ID:', data);
+//                 return resolve({
+//                     errCode: 2,
+//                     errMessage: 'Missing required parameters',
+//                 });
+//             }
+
+//             if (!isValidPhoneNumber(data.phone)) {
+//                 return resolve({
+//                     errCode: 4,
+//                     errMessage: 'Phone number must start with 0 and have 10 digits!',
+//                 });
+//             }
+
+//             let customer = await db.Customer.findOne({
+//                 where: { id: data.id },
+//                 raw: false,
+//             });
+
+//             // console.log('customer: ', customer)
+
+
+//             if (!customer) {
+//                 await transaction.rollback();  // Rollback transaction
+//                 return resolve({
+//                     errCode: 1,
+//                     errMessage: 'Customer not found!',
+//                 });
+//             }
+
+//             // Tìm Account liên kết với Customer
+//             let account = await db.Account.findOne({
+//                 where: { id: customer.accountId },
+//                 raw: false,
+//             });
+
+//             // console.log('account: ', account)
+
+
+//             if (!account) {
+//                 await transaction.rollback();  // Rollback transaction
+//                 return resolve({
+//                     errCode: 3,
+//                     errMessage: 'Account not found!',
+//                 });
+//             }
+
+//             // Cập nhật thông tin Customer
+//             customer.name = data.name;
+//             customer.phone = data.phone;
+//             customer.address = data.address;
+//             customer.status = data.status;
+
+//             // Cập nhật trạng thái trong Account
+//             account.status = data.status;
+
+//             // Cập nhật ảnh nếu có
+//             if (data.imageUrl) {
+//                 customer.imageUrl = data.imageUrl;  // Chỉ cập nhật giá trị imageUrl từ dữ liệu nhận được
+//             }
+
+//             // Lưu cả Customer và Account
+//             await customer.save({ transaction });
+//             await account.save({ transaction });
+
+//             // Hoàn thành transaction
+//             await transaction.commit();
+
+//             return resolve({
+//                 errCode: 0,
+//                 errMessage: 'Update succeeds',
+//             });
+//         } catch (e) {
+//             await transaction.rollback();  // Rollback transaction
+//             console.error('Error during customer update:', e);
+//             reject(e);
+//         }
+//     });
+// };
+
+
+//new
 let updateCustomer = (data) => {
     return new Promise(async (resolve, reject) => {
         const transaction = await db.sequelize.transaction();
         try {
-
-            // console.log('data id:', data.id)
-
             if (!data.id) {
-                console.log('Missing customer ID:', data);
                 return resolve({
                     errCode: 2,
                     errMessage: 'Missing required parameters',
@@ -320,28 +419,21 @@ let updateCustomer = (data) => {
                 raw: false,
             });
 
-            // console.log('customer: ', customer)
-
-
             if (!customer) {
-                await transaction.rollback();  // Rollback transaction
+                await transaction.rollback();
                 return resolve({
                     errCode: 1,
                     errMessage: 'Customer not found!',
                 });
             }
 
-            // Tìm Account liên kết với Customer
             let account = await db.Account.findOne({
                 where: { id: customer.accountId },
                 raw: false,
             });
 
-            // console.log('account: ', account)
-
-
             if (!account) {
-                await transaction.rollback();  // Rollback transaction
+                await transaction.rollback();
                 return resolve({
                     errCode: 3,
                     errMessage: 'Account not found!',
@@ -353,20 +445,21 @@ let updateCustomer = (data) => {
             customer.phone = data.phone;
             customer.address = data.address;
             customer.status = data.status;
-
-            // Cập nhật trạng thái trong Account
             account.status = data.status;
 
-            // Cập nhật ảnh nếu có
             if (data.imageUrl) {
-                customer.imageUrl = data.imageUrl;  // Chỉ cập nhật giá trị imageUrl từ dữ liệu nhận được
+                customer.imageUrl = data.imageUrl;
             }
 
-            // Lưu cả Customer và Account
+            // Chỉ cập nhật mật khẩu nếu người dùng nhập mật khẩu mới
+            if (data.password && data.password.length >= 8) {
+                let hashedPassword = await bcrypt.hash(data.password, salt);
+                account.password = hashedPassword;
+            }
+
             await customer.save({ transaction });
             await account.save({ transaction });
 
-            // Hoàn thành transaction
             await transaction.commit();
 
             return resolve({
@@ -374,12 +467,12 @@ let updateCustomer = (data) => {
                 errMessage: 'Update succeeds',
             });
         } catch (e) {
-            await transaction.rollback();  // Rollback transaction
-            console.error('Error during customer update:', e);
+            await transaction.rollback();
             reject(e);
         }
     });
 };
+
 
 
 

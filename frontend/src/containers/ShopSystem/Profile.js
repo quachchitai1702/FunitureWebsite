@@ -2,8 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom'; // Thêm useHistory
 import * as actions from "../../store/actions";
-import { getAllCustomers } from '../../services/customerService';
+import {
+    getAllCustomers,
+    editCustomerService
+} from '../../services/customerService';
 import './Profile.scss';
+
+import ModalEditProfile from './ModalEditProfile';
+import { emitter } from '../../utils/emitter';
+
 
 class Profile extends Component {
     constructor(props) {
@@ -32,7 +39,6 @@ class Profile extends Component {
             console.log('customer: ', response)
 
             if (response && response.errCode === 0) {
-                // Lưu thông tin người dùng vào state nếu lấy thành công
                 this.setState({
                     customerInfor: response, // Giả sử response trả về có key `data`
                 });
@@ -44,26 +50,76 @@ class Profile extends Component {
         }
     };
 
-    handleLogout = () => {
-        this.props.processLogout(); // Gọi logout action
-        this.props.history.push('/login'); // Điều hướng về trang đăng nhập
+    // handleLogout = () => {
+    //     this.props.processLogout(); // Gọi logout action
+    //     this.props.history.push('/login'); // Điều hướng về trang đăng nhập
+    // };
+
+    toggleEditModal = () => {
+        this.setState(prevState => ({
+            isModalOpen: !prevState.isModalOpen,
+
+        }));
     };
 
+
+    handleEditCustomer = (customer) => {
+        console.log('customer: ', customer);
+        this.setState({
+            isModalOpen: true,
+            customerInfor: customer,
+        })
+
+    }
+
+    doEditCustomer = async (customer) => {
+        try {
+            let res = await editCustomerService(customer);
+            if (res && res.errCode === 0) {
+                this.setState({
+                    isModalOpen: false
+                });
+
+                // Lấy lại dữ liệu người dùng sau khi sửa
+                await this.fetchCustomerData(customer.id);
+            } else {
+                alert(res.errMessage);
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+
     render() {
-        const { customerInfor } = this.state;
+        const { customerInfor, isModalOpen } = this.state;
 
         return (
+
             <div className="profile-container">
+
+                {
+                    this.state.isModalOpen &&
+                    <ModalEditProfile
+                        isOpen={this.state.isModalOpen}
+                        toggle={this.toggleEditModal}
+                        currentCustomer={this.state.customerInfor.customers}
+                        editCustomer={this.doEditCustomer}
+                    />
+                }
+
+
+
                 {/* Left Side - Menu */}
                 <div className="profile-left">
                     <h3>Dashboard</h3>
                     <ul>
-                        <li><a href="/storesystem/profile">Profile</a></li>
-                        <li><a href="/storesystem/profile/purchase">Purchase</a></li>
-                        <li><a href="/storesystem/profile/address">Address</a></li>
-                        <li><a href="/storesystem/profile/setting">Setting</a></li>
+                        <li><a href="/storesystem/profile"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="/storesystem/profile/purchase"><i class="fas fa-shopping-cart"></i> Purchase</a></li>
+                        <li><a href="/storesystem/profile/address"><i class="fas fa-map-marker-alt"></i> Address</a></li>
+                        <li><a href="/storesystem/profile/setting"><i class="fas fa-cog"></i> Setting</a></li>
                     </ul>
-                    <button className="logout-btn" onClick={this.handleLogout}>Logout</button>
+                    {/* <button className="logout-btn" onClick={this.handleLogout}>Logout</button> */}
                 </div>
 
                 {/* Right Side - User Information */}
@@ -79,6 +135,9 @@ class Profile extends Component {
                     ) : (
                         <p>Loading user data...</p>
                     )}
+
+                    <button className="edit-btn" onClick={() => this.handleEditCustomer(customerInfor)}>Edit</button>
+
                 </div>
             </div>
         );

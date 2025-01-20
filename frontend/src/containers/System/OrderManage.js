@@ -103,7 +103,7 @@ class OrderManage extends Component {
         try {
             let res = await updateOrderStatus(order.id, order.status = 'shipped');
 
-            if (res && res.errCode === 0) {  // Sử dụng res.data để kiểm tra kết quả từ backend
+            if (res && res.errCode === 0) {
                 await this.getAllOrderFromReact();
             } else {
                 alert(res.errMessage);

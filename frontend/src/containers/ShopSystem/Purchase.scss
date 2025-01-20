@@ -1,0 +1,70 @@
+@import '../styles/variables';
+
+.profile-container {
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: 100vh;
+    padding: 20px 110px;
+    background-color: $color2;
+    width: 100%;
+    gap: 20px;
+
+
+
+    .profile-left {
+        display: flex;
+        flex-direction: column;
+        background-color: $color5;
+        width: 19%;
+        padding: 10px 20px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        height: fit-content;
+
+        ul {
+            list-style-type: none;
+            padding: 10px 0px;
+            margin: 0;
+        }
+
+        li {
+            margin: 10px 0px;
+            padding: 0;
+
+
+            a {
+                display: block;
+                padding: 10px;
+                background-color: $color5;
+                font-size: large;
+                color: $color1;
+                text-decoration: none;
+                border: 2px solid transparent;
+                border-radius: 4px;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background-color: $color44;
+                    border: 2px;
+                    border-color: $color4;
+                    color: $color5;
+                }
+            }
+        }
+    }
+
+    .profile-right {
+        display: flex;
+        flex-direction: column;
+        background-color: $color5;
+        width: 79%;
+        padding: 10px 20px;
+        height: fit-content;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
+
+    }
+
+
+}
