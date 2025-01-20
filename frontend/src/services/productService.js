@@ -40,7 +40,6 @@ const getCartByCustomerId = async (customerId) => {
 };
 
 
-
 const addProductToCart = async (customerId, productId, quantity) => {
     console.log('check data from service: ', customerId, productId, quantity);
     return axios.post('/api/add-product-to-cart', {
@@ -65,14 +64,13 @@ const updateCartDetail = async (cartDetailId, newQuantity) => {
 }
 
 const removeProductFromCart = async (cartDetailId) => {
-    // console.log('check data from service: ', id);
-    return axios.post('/api/remove-product-from-cart', {
+    console.log('check data from service: ', cartDetailId);
+    return axios.delete('/api/remove-product-from-cart', {
         params: {
-            cartDetailId: cartDetailId
+            cartDetailId
         }
     });
 }
-
 
 
 export {

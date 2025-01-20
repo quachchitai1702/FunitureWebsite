@@ -4,6 +4,7 @@ import { emitter } from '../../utils/emitter';
 import './ProductDetailModal.scss';
 import _ from 'lodash';
 
+
 const ModalProductDetail = ({ isOpen, toggleModal, product, handleAddToCart }) => {
     const [quantity, setQuantity] = useState(1); // Khởi tạo state cho quantity
 

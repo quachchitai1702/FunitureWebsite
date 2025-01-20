@@ -3,11 +3,11 @@ const { uploadSingleImage } = require('../config/multerConfig');
 
 
 const handleCreateOrder = async (req, res) => {
-    const { customerId, paymentMethod } = req.body;
-    // console.log("Request received:", req.body);
+    const { id, paymentMethod } = req.body.data;  // Lấy dữ liệu từ `req.body.data`
+    console.log("Request received:", req.body);
 
     try {
-        const result = await orderService.createOrder(customerId, paymentMethod);
+        const result = await orderService.createOrder(id, paymentMethod);
         return res.status(201).json(result);
     } catch (error) {
         return res.status(400).json({

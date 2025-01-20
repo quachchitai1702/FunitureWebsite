@@ -2,7 +2,7 @@ import axios from '../axios';
 
 
 const createOrder = (customerId, paymentMethod) => {
-    // console.log('check data from service: ', id);
+    console.log('check data from service: ', customerId, paymentMethod);
     return axios.post('/api/create-order', {
         data: {
             id: customerId,

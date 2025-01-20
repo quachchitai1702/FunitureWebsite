@@ -10,6 +10,8 @@ const salt = bcrypt.genSaltSync(10);
 const createOrder = (customerId, paymentMethod) => {
     return new Promise(async (resolve, reject) => {
         try {
+
+            console.log('data from FE: ', customerId, paymentMethod)
             // Lấy giỏ hàng của khách hàng từ bảng Cart
             const cart = await db.Cart.findOne({ where: { customerId } });
             if (!cart) {

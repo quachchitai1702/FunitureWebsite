@@ -18,7 +18,7 @@ const handleCreateCart = async (req, res) => {
 const handleGetCartByCustomerId = async (req, res) => {
     try {
         const { customerId } = req.query;
-        console.log('Received customerId:', customerId);  // Log giá trị customerId
+        // console.log('Received customerId:', customerId);  // Log giá trị customerId
 
         const response = await cartService.getCartByCustomerId(customerId);
         return res.status(200).json(response);
@@ -89,7 +89,9 @@ const handleUpdateCartDetail = async (req, res) => {
 
 const handleRemoveProductFromCart = async (req, res) => {
     try {
-        const { cartDetailId } = req.body;
+
+        const { cartDetailId } = req.query;
+        console.log('id to remove', cartDetailId)
         const response = await cartService.removeProductFromCart(cartDetailId);
         return res.status(200).json(response);
     } catch (error) {

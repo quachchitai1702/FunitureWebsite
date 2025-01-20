@@ -33,7 +33,7 @@ const getCartByCustomerId = async (customerId) => {
     return new Promise(async (resolve, reject) => {
         try {
 
-            console.log('Id: ', customerId)
+            // console.log('Id: ', customerId)
             const cart = await db.Cart.findOne({
                 where: { customerId },
                 include: [{
@@ -70,7 +70,7 @@ const getCartByCustomerId = async (customerId) => {
 
 
 
-            console.log('cart: ', cart)
+            // console.log('cart: ', cart)
 
             if (!cart) {
                 return reject({
@@ -78,7 +78,7 @@ const getCartByCustomerId = async (customerId) => {
                     errMessage: "Cart not found!"
                 });
             }
-            console.log('cart: ', cart)
+            // console.log('cart: ', cart)
 
             resolve({
                 errCode: 0,
@@ -280,6 +280,8 @@ const updateCartDetail = async (cartDetailId, newQuantity) => {
 const removeProductFromCart = async (cartDetailId) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log('Date from FE', cartDetailId)
+
             const cartDetail = await db.CartDetail.findOne({
                 where: { id: cartDetailId }
             });
