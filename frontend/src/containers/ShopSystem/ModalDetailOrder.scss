@@ -3,148 +3,114 @@
 
 //Add Custoner Modal
 .modal-staff-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    .modal-header {
+        background-color: #007bff;
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 15px;
+    }
 
-    .modal-staff-body {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
+    .modal-body {
         padding: 20px;
+        width: 100%;
 
-        .form-section {
-            width: 60%;
-            /* Phần chỉnh sửa thông tin khách hàng */
+        .modal-order-body {
             display: flex;
             flex-direction: column;
             gap: 20px;
+            width: 100%;
 
-            .input-container {
-                margin-bottom: 15px;
-                width: 100%;
 
-                &.input-m-width {
-                    width: 100%;
-                }
-
-                label {
-                    font-weight: bold;
-                    margin-bottom: 5px;
-                }
-
-                input {
-                    width: 100%;
-                    padding: 10px;
-                    font-size: 16px;
-                    border: 1px solid #ccc;
-                    border-radius: 5px;
-                    box-sizing: border-box;
-                }
-
-                select {
-                    width: 100%;
-                    padding: 6px;
-                    font-size: 16px;
-                    border: 1px solid #ccc;
-                    border-radius: 5px;
-                }
-
-                select {
-                    padding: 10px;
-                }
-            }
-
-            .input-m-width {
-                width: 50%;
-                /* Giới hạn chiều rộng của trường địa chỉ */
-            }
-        }
-
-        .image-preview-section {
-            width: 35%;
-            /* Phần hiển thị ảnh bên phải */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-
-            label {
-                font-weight: bold;
-            }
-
-            input[type="file"] {
-                margin-top: 10px;
-            }
-
-            .Btn-upload {
-                background-color: #007bff;
-                color: white;
-                font-size: 16px;
-                padding: 8px 15px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-
-                &:hover {
-                    background-color: #0056b3;
-                }
-            }
-
-            .image-preview-container {
-                margin-top: 20px;
+            .form-section {
                 display: flex;
-                justify-content: center;
-                align-items: center;
-                max-width: 150px;
+                flex-direction: column;
+                gap: 20px;
+                margin-bottom: 20px;
 
-                .preview-image {
+                .input-container {
+                    display: flex;
+                    flex-direction: column;
+                    flex-wrap: nowrap;
                     width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    border-radius: 8px;
-                }
+                    text-align: justify;
 
-                p {
-                    color: #888;
+                    label {
+                        font-weight: bold;
+                        color: #333;
+                        font-size: 16px;
+                        margin-bottom: 5px;
+                    }
+
+                    p {
+                        font-size: 14px;
+                        color: #555;
+                        margin: 0;
+                    }
+                }
+            }
+
+            /* Thanh ngang (hr) */
+            .order-items-divider {
+                border: 0;
+                border-top: 2px;
+                border-color: $color1;
+                /* Màu sắc cho thanh ngang */
+                margin: 10px 0;
+            }
+
+            .order-details-container {
+                .order-details-section {
+                    margin-top: 10px;
+                    text-align: justify;
+
+                    h5 {
+                        font-size: 18px;
+                        font-weight: bold;
+                        margin-bottom: 10px;
+                        color: #333;
+                    }
+
+                    .order-detail {
+                        margin-bottom: 15px;
+
+                        p {
+                            font-size: 14px;
+                            margin: 5px 0;
+                        }
+
+                        strong {
+                            color: $color4;
+                        }
+
+                        hr {
+                            margin: 15px 0;
+                            border: 1px solid #ddd;
+                        }
+                    }
                 }
             }
         }
     }
 
-    .Btn-cancel {
-        padding-left: 7px;
-        padding-right: 7px;
-        border: 1px;
-        background-color: $color5;
-        color: $color4;
-        outline: 1px solid #532E1C;
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        padding: 15px;
+
+        .Btn-cancel {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &:hover {
+                background-color: #e53935;
+            }
+        }
     }
-
-    .Btn-create {
-        width: 100px;
-        font-size: 16px;
-        margin: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .Btn-cancel {
-        background-color: #f8f9fa;
-        border: 1px solid #ccc;
-    }
-
-    .Btn-submit {
-        padding-left: 10px;
-        padding-right: 10px;
-        background-color: $color4;
-    }
-
-    // .Btn-submit:hover {
-    //     background-color: #218838;
-    // }
-
-    // .Btn-cancel:hover {
-    //     background-color: #e2e6ea;
-    // }
 }

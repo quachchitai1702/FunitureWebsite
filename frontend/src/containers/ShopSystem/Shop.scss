@@ -42,6 +42,16 @@
                 flex-direction: column;
                 width: 100%;
 
+                .product-description {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 1; // Chỉ hiển thị 1 dòng
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis; // Thêm dấu "..."
+                    font-size: 14px; // Đặt kích thước chữ phù hợp
+                    margin-bottom: 10px; // Cung cấp khoảng cách dưới đoạn mô tả
+                }
+
                 .product-price {
                     font-size: 25px;
                     text-align: right;
@@ -67,6 +77,7 @@
                     }
                 }
             }
+
         }
     }
 }

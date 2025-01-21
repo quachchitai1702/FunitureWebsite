@@ -27,18 +27,24 @@ const ModalProductDetail = ({ isOpen, toggleModal, product, handleAddToCart }) =
                             src={product.imageUrl ? product.imageUrl : 'default-image.jpg'}
                             className="modal-product-image"
                         />
-                        <p className="product-description">{product.description}</p>
+                        <div className="description-container">Description
+                            <p className="product-description">{product.description}</p>
+
+
+                        </div>
+
                     </div>
 
                     {/* Bên phải: Thông tin sản phẩm */}
                     <div className="modal-right">
                         <h2>{product.name}</h2>
-                        <p className="product-info"><strong>Price:</strong> ${product.price}</p>
+                        <p className="product-info"><strong>Stock:</strong> {product.stock} available</p>
                         <p className="product-info"><strong>Color:</strong> {product.colors && product.colors.length > 0 ? product.colors.map(c => c.color).join(', ') : 'N/A'}</p>
                         <p className="product-info"><strong>Category:</strong> {product.productCategory?.name || 'N/A'}</p>
                         <p className="product-info"><strong>Material:</strong> {product.material}</p>
-                        <p className="product-info"><strong>Status:</strong> {product.status}</p>
-                        <p className="product-info"><strong>Stock:</strong> {product.stock} available</p>
+                        {/* <p className="product-info"><strong>Status:</strong> {product.status}</p> */}
+                        <p className="product-info"><strong>Price:</strong> ${product.price}</p>
+
 
                         {/* Thêm ô nhập quantity */}
                         <div className="quantity-input">

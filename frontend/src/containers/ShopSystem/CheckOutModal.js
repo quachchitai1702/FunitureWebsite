@@ -77,7 +77,7 @@ const CheckOutModal = ({ isOpen, toggleModal, customerId, paymentMethod }) => {
     if (!isOpen) return null;
 
     return (
-        <Modal isOpen={isOpen} toggle={toggleModal} className="checkout-modal modal-sm">
+        <Modal isOpen={isOpen} toggle={toggleModal} className="checkout-modal modal-md">
             <ModalHeader toggle={toggleModal}>Checkout</ModalHeader>
             <ModalBody>
                 {loading ? (

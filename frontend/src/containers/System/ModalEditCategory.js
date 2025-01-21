@@ -2,6 +2,8 @@ import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import './ModalEditCategory.scss';
 import _ from 'lodash';
+import { CommonUtils } from '../../utils';
+
 
 class ModalEditCategory extends React.Component {
     constructor(props) {
@@ -19,24 +21,33 @@ class ModalEditCategory extends React.Component {
     componentDidMount() {
         let category = this.props.currentCategory;
         if (category) {
+
+            // console.log('Staff data:', staff);  // Kiểm tra dữ liệu hiện tại
+            let imageBase64 = '';
+            if (category.imageUrl) {
+                imageBase64 = new Buffer(category.imageUrl, 'base64').toString('binary');
+            }
+
             this.setState({
                 id: category.id,
                 name: category.name,
                 description: category.description,
                 imageUrl: category.imageUrl,
-                previewImageUrl: category.imageUrl,
+                previewImageUrl: imageBase64,
             });
         }
     }
 
-    handleFileChange = (event) => {
-        const file = event.target.files[0];
+    handleFileChange = async (event) => {
+        let file = event.target.files[0];
         if (file) {
-            const previewUrl = URL.createObjectURL(file);
+            let base64 = await CommonUtils.getBase64(file);
+            console.log('File base64:', base64);
+            let previewUrl = URL.createObjectURL(file);
             this.setState({
                 selectedFile: file,
                 previewImageUrl: previewUrl,
-                imageUrl: previewUrl,
+                imageUrl: base64, // Cập nhật trực tiếp vào trường imageUrl
             });
         }
     };
@@ -104,7 +115,6 @@ class ModalEditCategory extends React.Component {
                                 {previewImageUrl ? (
                                     <img
                                         src={previewImageUrl}
-                                        alt="Category Preview"
                                         className="preview-image"
                                     />
                                 ) : (

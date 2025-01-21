@@ -23,6 +23,7 @@
             .input-container {
                 margin-bottom: 15px;
                 width: 100%;
+                text-align: justify;
 
                 &.input-m-width {
                     width: 100%;
@@ -132,11 +133,13 @@
     .Btn-cancel {
         background-color: #f8f9fa;
         border: 1px solid #ccc;
+        padding: 0px 15px;
+
     }
 
     .Btn-submit {
-        padding-left: 10px;
-        padding-right: 10px;
+        padding: 0px 20px;
+        justify-content: center;
         background-color: $color4;
     }
 

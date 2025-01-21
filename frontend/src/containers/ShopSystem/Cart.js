@@ -174,8 +174,9 @@ class Cart extends Component {
 
                 <div className="cart-summary">
                     <div className="payment-method">
-                        <label htmlFor="paymentMethod">Payment Method: </label>
+                        <label className='payment-meyhod-text' htmlFor="paymentMethod">Payment Method: </label>
                         <select
+                            className='option-payment'
                             id="paymentMethod"
                             value={paymentMethod}
                             onChange={this.handlePaymentMethodChange}

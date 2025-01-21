@@ -3,6 +3,8 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { emitter } from '../../utils/emitter';
 import './ModalEditCustomer.scss';
 import _ from 'lodash';
+import { CommonUtils } from '../../utils';
+
 
 class ModalEditCustomer extends React.Component {
 
@@ -28,7 +30,12 @@ class ModalEditCustomer extends React.Component {
     componentDidMount() {
         let customer = this.props.currentCustomer;
         if (customer && !_.isEmpty(customer)) {
-            console.log('Customer data:', customer);
+            // console.log('Customer data:', customer);
+            let imageBase64 = '';
+            if (customer.imageUrl) {
+                imageBase64 = new Buffer(customer.imageUrl, 'base64').toString('binary');
+            }
+
 
             this.setState({
                 id: customer.id,
@@ -38,24 +45,27 @@ class ModalEditCustomer extends React.Component {
                 phone: customer.phone,
                 address: customer.address,
                 imageUrl: customer.imageUrl,
-                previewImageUrl: customer.imageUrl,
+                previewImageUrl: imageBase64,
                 status: customer.status,
             })
         }
         console.log('dimount edit modal:', this.props.currentCustomer)
     }
 
-    handleFileChange = (event) => {
+    handleFileChange = async (event) => {
         let file = event.target.files[0];
         if (file) {
+            let base64 = await CommonUtils.getBase64(file);
+            // console.log('File base64:', base64);
             let previewUrl = URL.createObjectURL(file);
             this.setState({
                 selectedFile: file,
                 previewImageUrl: previewUrl,
-                imageUrl: previewUrl,
+                imageUrl: base64,
             });
         }
     };
+
 
 
 

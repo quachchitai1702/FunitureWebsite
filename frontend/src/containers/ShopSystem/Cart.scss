@@ -82,7 +82,15 @@
 
         .payment-method {
             margin-bottom: 10px;
-            gap: 10px;
+            gap: 20px;
+
+            .payment-meyhod-text {
+                margin-right: 10px;
+            }
+
+            .option-payment {
+                border: none;
+            }
         }
 
         .total {

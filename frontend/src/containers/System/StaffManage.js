@@ -138,7 +138,8 @@ class StaffManage extends Component {
     }, 500);
 
     handleEditStaff = (staff) => {
-        console.log('staff: ', staff);
+        // console.log('staff: ', staff);
+
         this.setState({
             isOpenEditModal: true,
             staffEdit: staff,

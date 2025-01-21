@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { debounce, flatMap, startCase } from 'lodash';
+import { CommonUtils } from '../../utils';
 
 
 
@@ -64,7 +65,37 @@ class CategoryManage extends Component {
         }
     };
 
+    // getAllCategories = async () => {
+    //     try {
+    //         let response = await getAllCategories(this.state.searchQuery);
+    //         if (response && response.errCode === 0) {
+    //             let categories = response.categories.map(category => {
+    //                 let imageBase64 = '';
+    //                 if (category.imageUrl) {
+    //                     // Chuyển đổi chuỗi base64 để có thể sử dụng trong ảnh
+    //                     imageBase64 = `data:image/png;base64,${category.imageUrl}`;
+    //                 }
+    //                 return {
+    //                     ...category,
+    //                     previewImageUrl: imageBase64, // Lưu lại preview imageUrl trong category
+    //                 };
+    //             });
+
+    //             this.setState({
+    //                 categories: categories
+    //             });
+    //         } else {
+    //             console.error('Error:', response.errMessage);
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching categories:", error);
+    //     }
+    // };
+
+
     // Xóa danh mục
+
+
     handleDeleteCategory = async (categoryId) => {
         const isConfirmed = window.confirm('Are you sure you want to delete this category?');
         if (isConfirmed) {
@@ -244,7 +275,7 @@ class CategoryManage extends Component {
                                             <td>{category.description}</td>
                                             <td>
                                                 {category.imageUrl ? (
-                                                    <img src={category.imageUrl} width="50" />
+                                                    <img src={`data:image/png;base64,${category.imageUrl}`} width="50" alt="category" />
                                                 ) : "No Image"}
                                             </td>
                                             <td>

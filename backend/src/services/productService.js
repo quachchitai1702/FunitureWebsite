@@ -35,9 +35,14 @@ const createProduct = (data) => {
 
             // Tạo mới sản phẩm và lưu categoryId
             const product = await db.Product.create({
-                name, price,
+                name,
+                price,
+                category: category.name,
                 categoryId,
-                material, stock, description, status
+                material,
+                stock,
+                description,
+                status
             });
 
             // Thêm ProductTypes

@@ -31,46 +31,62 @@ class ModalDetailOrder extends React.Component {
                 isOpen={this.props.isOpenDetailModal}
                 toggle={this.props.toggle}
                 className='modal-staff-container'
-                size='lg'
+                size='true'
             >
                 <ModalHeader toggle={this.props.toggle}>Order Details</ModalHeader>
                 <ModalBody>
                     <div className="modal-order-body">
                         <div className="form-section">
-                            <div className="input-container">
-                                <label><strong>Order ID</strong></label>
-                                <p>{currentOrder.id}</p>
-                            </div>
-                            <div className="input-container">
-                                <label><strong>Customer ID</strong></label>
-                                <p>{currentOrder.customerId}</p>
-                            </div>
-                            <div className="input-container">
-                                <label><strong>Total Amount</strong></label>
-                                <p>{currentOrder.totalAmount}</p>
-                            </div>
-                            <div className="input-container">
-                                <label><strong>Status</strong></label>
-                                <p>{currentOrder.status}</p>
-                            </div>
-                            <div className="input-container">
-                                <label><strong>Payment Method</strong></label>
-                                <p>{currentOrder.paymentMethod}</p>
-                            </div>
-                            <div className="input-container">
-                                <label><strong>Shipping Address</strong></label>
-                                <p>{currentOrder.shippingAddress}</p>
-                            </div>
-                            <div className="input-container">
-                                <label><strong>Order Date</strong></label>
-                                <p>{new Date(currentOrder.orderDate).toLocaleString()}</p>
+                            <div className='input-container'>
+                                <div className="input-container">
+                                    <label><strong>Order ID</strong></label>
+                                    <p>{currentOrder.id}</p>
+                                </div>
+                                <div className="input-container">
+                                    <label><strong>Order Date</strong></label>
+                                    <p>{new Date(currentOrder.orderDate).toLocaleString()}</p>
+                                </div>
+
+
+                                <div className="input-container">
+                                    <label><strong>Customer ID</strong></label>
+                                    <p>{currentOrder.customerId}</p>
+                                </div>
+
+                                <div className="input-container">
+                                    <label><strong>Total Amount</strong></label>
+                                    <p>{currentOrder.totalAmount}</p>
+                                </div>
+
+                                <div className="input-container">
+                                    <label><strong>Status</strong></label>
+                                    <p>{currentOrder.status}</p>
+                                </div>
+
+                                <div className="input-container">
+                                    <label><strong>Payment Method</strong></label>
+                                    <p>{currentOrder.paymentMethod}</p>
+                                </div>
+
+                                <div className="input-container">
+                                    <label><strong>Shipping Address</strong></label>
+                                    <p>{currentOrder.shippingAddress}</p>
+                                </div>
+
+
                             </div>
 
-                            <hr />
-                            <div className="order-details-section">
-                                <h5>Order Items:</h5>
-                                {this.renderOrderDetails(currentOrder.orderDetails)}
+
+
+                            <hr className="order-items-divider" /> {/* Thanh ngang thêm vào đây */}
+
+                            <div className='order-details-container'>
+                                <div className="order-details-section">
+                                    <h5>Order Items:</h5>
+                                    {this.renderOrderDetails(currentOrder.orderDetails)}
+                                </div>
                             </div>
+
                         </div>
                     </div>
                 </ModalBody>

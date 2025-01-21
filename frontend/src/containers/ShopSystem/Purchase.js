@@ -137,16 +137,19 @@ class Purchase extends Component {
 
                 {/* Right Side - User Information */}
                 <div className="profile-right">
-                    <h2>History Purchase</h2>
+                    <div className='content-header'>
+                        <h2 className='text'>History Purchase</h2>
 
-                    <div className="search-filter">
-                        <select className="status-filter" onChange={this.handleFilterStatus}>
-                            <option value="pending">Pending</option>
-                            <option value="shipped">Shipped</option>
-                            <option value="completed">Completed</option>
-                            <option value="cancelled">Cancelled</option>
-                        </select>
+                        <div className="search-filter">
+                            <select className="status-filter" onChange={this.handleFilterStatus}>
+                                <option value="pending">Pending</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
                     </div>
+
 
                     {orders.length > 0 ? (
                         <table className="information-table">

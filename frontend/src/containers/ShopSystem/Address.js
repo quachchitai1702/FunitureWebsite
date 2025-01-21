@@ -36,7 +36,7 @@ class Address extends Component {
 
                 {/* Right Side - User Information */}
                 <div className="profile-right">
-                    <h2>User Profile</h2>
+                    <h2>Address</h2>
                     {/* {customerInfor ? (
                         <div className="customer-infor">
                             <p><strong>Name:</strong> {customerInfor?.customers?.name || 'N/A'}</p>

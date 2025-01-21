@@ -3,6 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { emitter } from '../../utils/emitter';
 import './ModalEditStaff.scss';
 import _ from 'lodash';
+import { CommonUtils } from '../../utils';
 
 class ModalEditStaff extends React.Component {
 
@@ -27,7 +28,12 @@ class ModalEditStaff extends React.Component {
     componentDidMount() {
         let staff = this.props.currentStaff;
         if (staff && !_.isEmpty(staff)) {
-            console.log('Staff data:', staff);  // Kiểm tra dữ liệu hiện tại
+            // console.log('Staff data:', staff);  // Kiểm tra dữ liệu hiện tại
+            let imageBase64 = '';
+            if (staff.imageUrl) {
+                imageBase64 = new Buffer(staff.imageUrl, 'base64').toString('binary');
+            }
+
 
             this.setState({
                 id: staff.id,
@@ -36,21 +42,23 @@ class ModalEditStaff extends React.Component {
                 name: staff.name,
                 phone: staff.phone,
                 imageUrl: staff.imageUrl,
-                previewImageUrl: staff.imageUrl,
+                previewImageUrl: imageBase64,
                 status: staff.status,
             })
         }
         console.log('dimount edit modal:', this.props.currentStaff)
     }
 
-    handleFileChange = (event) => {
+    handleFileChange = async (event) => {
         let file = event.target.files[0];
         if (file) {
+            let base64 = await CommonUtils.getBase64(file);
+            console.log('File base64:', base64);
             let previewUrl = URL.createObjectURL(file);
             this.setState({
                 selectedFile: file,
                 previewImageUrl: previewUrl,
-                imageUrl: previewUrl, // Cập nhật trực tiếp vào trường imageUrl
+                imageUrl: base64, // Cập nhật trực tiếp vào trường imageUrl
             });
         }
     };
@@ -161,7 +169,6 @@ class ModalEditStaff extends React.Component {
                                 {this.state.previewImageUrl ? (
                                     <img
                                         src={this.state.previewImageUrl}
-                                        alt="Staff Preview"
                                         className="preview-image"
                                     />
                                 ) : (
