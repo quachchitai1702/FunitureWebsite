@@ -7,7 +7,7 @@ const { Op } = require('sequelize');
 const salt = bcrypt.genSaltSync(10);
 
 const createProduct = (data) => {
-    // console.log('Data received in service:', data); // Kiểm tra dữ liệu
+    console.log('Data received in service:', data); // Kiểm tra dữ liệu
     return new Promise(async (resolve, reject) => {
         const {
             name,
@@ -54,6 +54,15 @@ const createProduct = (data) => {
                 await db.ProductType.bulkCreate(types);
             }
 
+            // Thêm ProductColors
+            if (productColors && productColors.length > 0) {
+                const colors = productColors.map(color => ({
+                    productId: product.id,
+                    color
+                }));
+                await db.ProductColor.bulkCreate(colors);
+            }
+
             // Thêm ProductImages
             if (productImages && productImages.length > 0) {
                 const images = productImages.map(imageUrl => ({
@@ -63,14 +72,7 @@ const createProduct = (data) => {
                 await db.ProductImage.bulkCreate(images);
             }
 
-            // Thêm ProductColors
-            if (productColors && productColors.length > 0) {
-                const colors = productColors.map(color => ({
-                    productId: product.id,
-                    color
-                }));
-                await db.ProductColor.bulkCreate(colors);
-            }
+
 
             // Trả về sản phẩm cùng với tên category và categoryId
             resolve({

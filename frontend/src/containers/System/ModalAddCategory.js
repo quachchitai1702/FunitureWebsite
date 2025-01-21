@@ -3,6 +3,8 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { emitter } from '../../utils/emitter';
 import './ModalAddCategory.scss';
 import axios from 'axios';
+import { CommonUtils } from '../../utils';
+
 
 class ModalAddCategory extends React.Component {
 
@@ -39,10 +41,21 @@ class ModalAddCategory extends React.Component {
         })
     }
 
-    handleOnChangeImage = (event) => {
-        this.setState({ imageUrl: event.target.files[0] }); // Lưu file thực tế
 
-    }
+    handleOnChangeImage = async (event) => {
+        let file = event.target.files[0];
+        if (file) {
+            let base64 = await CommonUtils.getBase64(file);
+            console.log('File base64:', base64);
+            let previewUrl = URL.createObjectURL(file);
+            this.setState({
+                selectedFile: file,
+                previewImageUrl: previewUrl,
+                imageUrl: base64, // Cập nhật trực tiếp vào trường imageUrl
+            });
+        }
+    };
+
 
     checkValidInput = () => {
         let isValid = true;
@@ -56,54 +69,54 @@ class ModalAddCategory extends React.Component {
         return isValid;
     }
 
-    // handleAddNewCategory = async () => {
-    //     let isValid = this.checkValidInput();
-    //     if (isValid) {
-    //         // Thực hiện gọi API để tạo danh mục mới
-    //         console.log("Data to be sent:", this.state);
-
-    //         this.props.createNewCategory(this.state);
-    //     }
-    // }
-
     handleAddNewCategory = async () => {
         let isValid = this.checkValidInput();
         if (isValid) {
-            // Gọi API upload ảnh lên server
-            const formData = new FormData();
-            formData.append('image', this.state.imageUrl); // Thêm ảnh vào formData
+            // Thực hiện gọi API để tạo danh mục mới
+            console.log("Data to be sent:", this.state);
 
-            try {
-                // Gửi request upload ảnh
-                const uploadResponse = await axios.post('http://localhost:8080/upload', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-
-                console.log('uploadResponse: ', uploadResponse);
-
-                if (uploadResponse.data.errCode === 0) {
-                    const imageUrl = uploadResponse.data.imageUrl; // Lấy URL của ảnh đã upload thành công
-
-                    // Gửi thông tin danh mục cùng với URL ảnh
-                    const categoryData = {
-                        name: this.state.name,
-                        description: this.state.description,
-                        imageUrl: imageUrl, // Đưa URL ảnh vào dữ liệu danh mục
-                    };
-
-                    // Gọi API tạo danh mục mới
-                    this.props.createNewCategory(categoryData);
-                } else {
-                    alert('Error uploading image: ' + uploadResponse.data.errMessage);
-                }
-            } catch (err) {
-                console.error('Error uploading image:', err);
-                alert('Error uploading image.');
-            }
+            this.props.createNewCategory(this.state);
         }
-    };
+    }
+
+    // handleAddNewCategory = async () => {
+    //     let isValid = this.checkValidInput();
+    //     if (isValid) {
+    //         // Gọi API upload ảnh lên server
+    //         const formData = new FormData();
+    //         formData.append('image', this.state.imageUrl); // Thêm ảnh vào formData
+
+    //         try {
+    //             // Gửi request upload ảnh
+    //             const uploadResponse = await axios.post('http://localhost:8080/upload', formData, {
+    //                 headers: {
+    //                     'Content-Type': 'multipart/form-data',
+    //                 },
+    //             });
+
+    //             console.log('uploadResponse: ', uploadResponse);
+
+    //             if (uploadResponse.data.errCode === 0) {
+    //                 const imageUrl = uploadResponse.data.imageUrl; // Lấy URL của ảnh đã upload thành công
+
+    //                 // Gửi thông tin danh mục cùng với URL ảnh
+    //                 const categoryData = {
+    //                     name: this.state.name,
+    //                     description: this.state.description,
+    //                     imageUrl: imageUrl, // Đưa URL ảnh vào dữ liệu danh mục
+    //                 };
+
+    //                 // Gọi API tạo danh mục mới
+    //                 this.props.createNewCategory(categoryData);
+    //             } else {
+    //                 alert('Error uploading image: ' + uploadResponse.data.errMessage);
+    //             }
+    //         } catch (err) {
+    //             console.error('Error uploading image:', err);
+    //             alert('Error uploading image.');
+    //         }
+    //     }
+    // };
 
     render() {
         return (
@@ -145,11 +158,14 @@ class ModalAddCategory extends React.Component {
                         {/* Preview ảnh sau khi chọn */}
                         {this.state.previewImageUrl && (
                             <div className="image-preview-container">
-                                <img
-                                    src={this.state.previewImageUrl}
-                                    alt="Preview"
-                                    className="image-preview"
-                                />
+                                {this.state.previewImageUrl ? (
+                                    <img
+                                        src={this.state.previewImageUrl}
+                                        className="preview-image"
+                                    />
+                                ) : (
+                                    <p>No image selected</p>
+                                )}
                             </div>
                         )}
                     </div>

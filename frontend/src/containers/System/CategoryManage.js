@@ -50,39 +50,12 @@ class CategoryManage extends Component {
 
 
     // Lấy danh sách tất cả các danh mục (hỗ trợ tìm kiếm)
-    getAllCategories = async () => {
-        try {
-            let response = await getAllCategories(this.state.searchQuery);
-            if (response && response.errCode === 0) {
-                this.setState({
-                    categories: response.categories
-                });
-            } else {
-                console.error('Error:', response.errMessage);
-            }
-        } catch (error) {
-            console.error("Error fetching categories:", error);
-        }
-    };
-
     // getAllCategories = async () => {
     //     try {
     //         let response = await getAllCategories(this.state.searchQuery);
     //         if (response && response.errCode === 0) {
-    //             let categories = response.categories.map(category => {
-    //                 let imageBase64 = '';
-    //                 if (category.imageUrl) {
-    //                     // Chuyển đổi chuỗi base64 để có thể sử dụng trong ảnh
-    //                     imageBase64 = `data:image/png;base64,${category.imageUrl}`;
-    //                 }
-    //                 return {
-    //                     ...category,
-    //                     previewImageUrl: imageBase64, // Lưu lại preview imageUrl trong category
-    //                 };
-    //             });
-
     //             this.setState({
-    //                 categories: categories
+    //                 categories: response.categories
     //             });
     //         } else {
     //             console.error('Error:', response.errMessage);
@@ -91,6 +64,69 @@ class CategoryManage extends Component {
     //         console.error("Error fetching categories:", error);
     //     }
     // };
+
+    // getAllCategories = async () => {
+    //     try {
+    //         let response = await getAllCategories(this.state.searchQuery);
+    //         if (response && response.errCode === 0) {
+    //             let categories = response.categories.map(category => {
+    //                 let imageBase64 = '';
+
+    //                 if (category.imageUrl && category.imageUrl.data) {
+    //                     imageBase64 = new Buffer.from(category.imageUrl.data, 'base64').toString();
+    //                 }
+
+    //                 return {
+    //                     ...category,
+    //                     previewImageUrl: category.imageUrl ? `data:image/jpeg;base64,${imageBase64}` : null
+    //                 };
+    //             });
+
+    //             this.setState({ categories });
+    //         } else {
+    //             console.error('Error:', response.errMessage);
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching categories:", error);
+    //     }
+    // };
+
+    getAllCategories = async () => {
+        try {
+            let response = await getAllCategories(this.state.searchQuery);
+            if (response && response.errCode === 0) {
+                let categories = response.categories.map(category => {
+                    let imageBase64 = '';
+                    if (category.imageUrl && category.imageUrl.data) {
+                        imageBase64 = Buffer.from(category.imageUrl.data, 'base64').toString('utf-8'); // Đổi từ 'binary' thành 'base64'
+
+                        console.log("Category Image Base64:", imageBase64); // Kiểm tra
+                    }
+                    const previewImageUrl = imageBase64;
+                    // console.log("previewImageUrl:", previewImageUrl); // Kiểm tra
+                    return {
+                        ...category,
+                        previewImageUrl
+                    };
+                });
+
+                console.log("API Response:", response.categories); // Kiểm tra phản hồi từ API
+
+                this.setState({ categories });
+            } else {
+                console.error('Error:', response.errMessage);
+            }
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+        }
+    };
+
+
+
+
+
+
+
 
 
     // Xóa danh mục
@@ -274,8 +310,8 @@ class CategoryManage extends Component {
                                             <td>{category.name}</td>
                                             <td>{category.description}</td>
                                             <td>
-                                                {category.imageUrl ? (
-                                                    <img src={`data:image/png;base64,${category.imageUrl}`} width="50" alt="category" />
+                                                {category.previewImageUrl ? (
+                                                    <img src={category.previewImageUrl} width="50" alt={category.name} />
                                                 ) : "No Image"}
                                             </td>
                                             <td>

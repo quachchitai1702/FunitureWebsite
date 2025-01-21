@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label } from 'reactstrap';
 import { emitter } from '../../utils/emitter';
+import { CommonUtils } from '../../utils';
+
 
 import './ModalAddProduct.scss';
 
@@ -52,16 +54,56 @@ class ModalAddProduct extends React.Component {
         this.setState(copyState);
     };
 
-    handleImageUpload = (event) => {
+    // handleImageUpload = (event) => {
+    //     const files = event.target.files;
+    //     let fileArray = [];
+    //     for (let i = 0; i < files.length; i++) {
+    //         fileArray.push(URL.createObjectURL(files[i]));
+    //     }
+    //     this.setState({
+    //         productImages: fileArray
+    //     });
+    // };
+
+    // handleImageUpload = async (event) => {
+    //     const files = event.target.files;
+    //     let fileArray = [];
+
+    //     for (let i = 0; i < files.length; i++) {
+    //         let file = files[i];
+    //         if (file) {
+    //             let imageUrl = await CommonUtils.getBase64(file); // Chuyển đổi file thành base64
+    //             let previewUrl = URL.createObjectURL(file); // Tạo URL xem trước ảnh
+    //             fileArray.push({ imageUrl, previewUrl }); // Thêm ảnh vào mảng với base64 và previewUrl
+    //         }
+    //     }
+
+    //     this.setState({
+    //         productImages: fileArray
+    //     });
+    // };
+
+    handleImageUpload = async (event) => {
         const files = event.target.files;
         let fileArray = [];
+
         for (let i = 0; i < files.length; i++) {
-            fileArray.push(URL.createObjectURL(files[i]));
+            let file = files[i];
+            if (file) {
+                let imageUrl = await CommonUtils.getBase64(file); // Chuyển đổi file thành base64
+                fileArray.push(imageUrl); // Lưu trực tiếp chuỗi base64 vào mảng
+            }
         }
+
         this.setState({
-            productImages: fileArray
+            productImages: fileArray // Lưu trực tiếp mảng base64
         });
     };
+
+
+
+
+
 
     checkValidInput = () => {
         const { name, price, categoryInput, material, stock, description } = this.state;
@@ -72,6 +114,25 @@ class ModalAddProduct extends React.Component {
         return true;
     };
 
+    // handleAddNewProduct = async () => {
+    //     let isValid = this.checkValidInput();
+    //     if (isValid) {
+    //         let newProductData = { ...this.state };
+
+    //         // Thay đổi categoryInput thành categoryId
+    //         newProductData.categoryId = newProductData.categoryInput;
+    //         delete newProductData.categoryInput;
+
+    //         console.log('data input: ', newProductData);
+    //         this.props.createNewProduct(newProductData);
+
+    //         this.setState({
+    //             isOpenAddModal: false
+    //         });
+    //         emitter.emit('EVENT_CLEAR_MODAL_DATA');
+    //     }
+    // };
+
     handleAddNewProduct = async () => {
         let isValid = this.checkValidInput();
         if (isValid) {
@@ -81,7 +142,11 @@ class ModalAddProduct extends React.Component {
             newProductData.categoryId = newProductData.categoryInput;
             delete newProductData.categoryInput;
 
-            // console.log('data input: ', newProductData);
+            // Truyền mảng base64 của ảnh
+            newProductData.productImages = newProductData.productImages;
+
+            console.log('data image input: ', newProductData.productImages);
+            console.log('data input: ', newProductData);
             this.props.createNewProduct(newProductData);
 
             this.setState({
@@ -92,19 +157,52 @@ class ModalAddProduct extends React.Component {
     };
 
 
+
+
+    // renderImagePreview = () => {
+    //     const { productImages } = this.state;
+    //     return productImages.map((imageUrl, index) => {
+    //         if (imageUrl.trim()) {
+    //             return (
+    //                 <div key={index} className="image-preview-container">
+    //                     <img src={imageUrl} alt={`Product Image ${index}`} className="image-preview" />
+    //                 </div>
+    //             );
+    //         }
+    //         return null;
+    //     });
+    // };
+
+    // renderImagePreview = () => {
+    //     const { productImages } = this.state;
+    //     return productImages.map((image, index) => {
+    //         if (image.previewUrl.trim()) {
+    //             return (
+    //                 <div key={index} className="image-preview-container">
+    //                     <img src={image.previewUrl} alt={`Product Image ${index}`} className="image-preview" />
+    //                 </div>
+    //             );
+    //         }
+    //         return null;
+    //     });
+    // };
+
     renderImagePreview = () => {
         const { productImages } = this.state;
-        return productImages.map((imageUrl, index) => {
-            if (imageUrl.trim()) {
+        return productImages.map((imageBase64, index) => {
+            if (imageBase64.trim()) {
                 return (
                     <div key={index} className="image-preview-container">
-                        <img src={imageUrl} alt={`Product Image ${index}`} className="image-preview" />
+                        <img src={imageBase64} alt={`Product Image ${index}`} className="image-preview" />
                     </div>
                 );
             }
             return null;
         });
     };
+
+
+
 
     render() {
         return (

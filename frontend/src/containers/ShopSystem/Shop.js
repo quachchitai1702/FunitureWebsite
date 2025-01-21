@@ -27,16 +27,55 @@ class Shop extends Component {
         await this.getAllProductFromReact();
     }
 
-    getAllProductFromReact = async () => {
-        let response = await getAllProducts('ALL', '', '');
-        console.log('Response from API:', response);  // Debugging line to check the API response
+    // getAllProductFromReact = async () => {
+    //     let response = await getAllProducts('ALL', '', '');
+    //     console.log('Response from API:', response);  // Debugging line to check the API response
 
-        if (response && response.errCode === 0) {
-            this.setState({
-                arrProduct: response.products  // Ensure the state is updated with the correct data
-            });
-        } else {
-            console.error('Failed to fetch products:', response.errMessage);
+    //     if (response && response.errCode === 0) {
+    //         this.setState({
+    //             arrProduct: response.products  // Ensure the state is updated with the correct data
+    //         });
+    //     } else {
+    //         console.error('Failed to fetch products:', response.errMessage);
+    //     }
+    // };
+
+    getAllProductFromReact = async () => {
+        try {
+            // Lấy tất cả sản phẩm
+            let response = await getAllProducts('ALL', '', '');
+            console.log('Response from API (Products):', response);
+
+            if (response && response.errCode === 0) {
+                let products = response.products;
+
+                // Chuyển đổi buffer ảnh trong imageUrl sang Base64 cho mỗi sản phẩm
+                let productsWithImages = products.map(product => {
+                    let base64Image = '';
+
+                    // Kiểm tra nếu có imageUrl và nó là Buffer
+                    if (product.imageUrl && product.imageUrl.data) {
+                        // Chuyển Buffer thành Base64
+                        base64Image = new Buffer(product.imageUrl.data, 'basase64').toString('binary');
+                        // imageBase64 = new Buffer(category.imageUrl, 'base64').toString('binary');
+
+                        // console.log("Converted Base64 Image for Product ID " + product.id + ":", base64Image);
+                    }
+
+                    return {
+                        ...product,
+                        previewImageUrl: base64Image, // Thêm Base64 Image vào sản phẩm
+                    };
+                });
+
+                this.setState({
+                    arrProduct: productsWithImages,
+                });
+            } else {
+                console.error('Failed to fetch products:', response.errMessage);
+            }
+        } catch (error) {
+            console.error('Error fetching products:', error);
         }
     };
 
@@ -132,12 +171,11 @@ class Shop extends Component {
                     {arrProduct && arrProduct.map((product, index) => (
                         <div key={index} className="product-item">
                             <img
-                                src={product.imageUrl ? product.imageUrl : 'default-image.jpg'}
+                                src={product.previewImageUrl}
                                 className="product-image"
                             />
                             <div className="product-info">
                                 <h3>{product.name}</h3>
-                                {/* Kiểm tra và hiển thị nếu có */}
                                 <p>Color: {product.colors && product.colors.length > 0 ? product.colors.map(c => c.color).join(', ') : 'N/A'}</p>
                                 <p>Category: {product.productCategory?.name || 'N/A'}</p>
                                 <p>{product.description}</p>
@@ -154,10 +192,12 @@ class Shop extends Component {
                                     ></button>
                                 </div>
                             </div>
-
                         </div>
                     ))}
                 </div>
+
+
+
             </div>
         );
     }

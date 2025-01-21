@@ -1,116 +1,115 @@
 @import '../styles/variables';
 // @import '../styles/base';
 
-//Add Custoner Modal
-.modal-add-product-container {
+/* ModalEditProduct.scss */
 
-    .modal-header {
-        background-color: $color4; // Màu nền cho tiêu đề modal
-        border-bottom: 1px solid #ddd;
-        font-size: 20px;
-        font-weight: bold;
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 20px;
 
-
-
-        button.close {
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: large;
-        }
-    }
-
-    .modal-body {
+    .input-container {
         display: flex;
-        flex-wrap: wrap;
-        /* Đảm bảo các phần tử không bị chồng lên nhau */
-        gap: 20px;
-        /* Khoảng cách giữa các phần tử */
+        flex-direction: column;
+        gap: 8px;
 
-        /* Phần bên trái (form fields) */
-        .left-container {
-            flex: 1;
-            max-width: 60%;
-            /* Chiếm 60% chiều rộng */
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            /* Khoảng cách giữa các trường */
-
-            .input-container {
-                display: flex;
-                flex-direction: column;
-
-                label {
-                    font-weight: bold;
-                    margin-bottom: 5px;
-                }
-
-                input,
-                textarea,
-                select {
-                    padding: 8px;
-                    font-size: 14px;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                }
-            }
+        label {
+            font-size: 14px;
+            color: #333;
         }
 
-        /* Phần bên phải (product images preview) */
-        .right-container {
-            flex: 1;
-            max-width: 35%;
-            /* Chiếm 35% chiều rộng */
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        input,
+        textarea,
+        select {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+        }
 
-            .image-preview-section {
-                .image-preview-container {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 10px;
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
 
-                    .image-preview {
-                        width: 100px;
-                        height: 100px;
-                        object-fit: cover;
-                        border-radius: 8px;
-                        border: 1px solid #ccc;
-                    }
-                }
-            }
+        .error-message {
+            font-size: 12px;
+            color: red;
+            margin-top: 5px;
         }
     }
 
-    .modal-footer {
+    .image-preview-section {
         display: flex;
-        justify-content: right;
-        padding: 15px;
-        border-top: 1px solid #ddd;
-        gap: 10px;
+        flex-direction: column;
+        gap: 12px;
+        padding-top: 20px;
 
-        .Btn-cancel {
-            background-color: #6c757d;
-            color: white;
-            padding-left: 10px;
-            padding-right: 10px;
-
-            &:hover {
-                background-color: #5a6268;
-            }
+        label {
+            font-size: 14px;
+            color: #333;
         }
 
-        .Btn-create {
-            background-color: $color4;
-            color: white;
-            padding-left: 10px;
-            padding-right: 10px;
+        .image-preview-container {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
 
-            &:hover {
-                background-color: $color44;
+            .image-preview {
+                object-fit: cover;
+                width: 100%;
+                height: 100%;
             }
         }
     }
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 15px 20px;
+    border-top: 1px solid #ddd;
+
+    button {
+        font-size: 14px;
+        padding: 8px 12px;
+        border-radius: 4px;
+    }
+
+    .btn-secondary {
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        color: #333;
+
+        &:hover {
+            background-color: #ddd;
+        }
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
+}
+
+input[type="file"] {
+    padding: 8px;
+    font-size: 14px;
+}
+
+input[type="file"]:focus {
+    outline: none;
+    border-color: #007bff;
 }
